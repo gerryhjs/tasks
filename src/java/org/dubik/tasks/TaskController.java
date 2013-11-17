@@ -33,7 +33,7 @@ import java.util.List;
  * @author Sergiy Dubovik
  */
 public class TaskController implements TreeSelectionListener {
-    private static final ITask[] EMPTY_SELECTIOM = new ITask[0];
+    private static final ITask[] EMPTY_SELECTION = new ITask[0];
     private static ITask DUMMY_ROOT_TASK = new ITask() {
 
         public String getTitle() {
@@ -126,7 +126,7 @@ public class TaskController implements TreeSelectionListener {
     @NotNull
     synchronized public ITask[] getSelectedTasks() {
         if (selectedTasks == null) {
-            return EMPTY_SELECTIOM;
+            return EMPTY_SELECTION;
         }
 
         return selectedTasks;
@@ -233,7 +233,7 @@ public class TaskController implements TreeSelectionListener {
         TreePath[] selectedPaths = ((JTree) e.getSource()).getSelectionPaths();
 
         if (selectedPaths == null || selectedPaths.length == 0) {
-            selectedTasks = EMPTY_SELECTIOM;
+            selectedTasks = EMPTY_SELECTION;
         }
         else {
             selectedTasks = new ITask[selectedPaths.length];
