@@ -35,10 +35,11 @@ public class MoveTaskDownAction extends BaseTaskAction {
 
     protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
         if (selectedTasks.length == 1 && selectedTasks[0] instanceof ITask &&
-                !(selectedTasks[0] instanceof ITaskGroup)) {
+            !(selectedTasks[0] instanceof ITaskGroup)) {
             ITask task = selectedTasks[0];
             presentation.setEnabled(controller.canMoveDown(task));
-        } else {
+        }
+        else {
             presentation.setEnabled(false);
         }
     }

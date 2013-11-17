@@ -21,7 +21,8 @@ import org.dubik.tasks.model.ITaskGroup;
 import org.dubik.tasks.model.TaskPriority;
 import org.dubik.tasks.ui.forms.TaskForm;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sergiy Dubovik
@@ -34,26 +35,27 @@ class TasksActionUtils {
             try {
                 TaskPriority priority = TaskPriority.parse(selectedTask[0].getTitle());
                 form.setPriority(priority);
-            } catch (IllegalArgumentException e) {
+            }
+            catch (IllegalArgumentException e) {
             }
         }
     }
 
     static void preselectParentTask(TaskController controller, TaskForm form) {
-        Set<ITask> allTasks = controller.getAllTasks();
+        List<ITask> allTasks = controller.getAllTasks();
         ITask[] selectedTasks = controller.getSelectedTasks();
         if (selectedTasks.length == 1 && !(selectedTasks[0] instanceof ITaskGroup)) {
             ITask selectedTask = selectedTasks[0];
-            Set<ITask> subTasks = controller.getSubTasks(selectedTask);
+            List<ITask> subTasks = controller.getSubTasks(selectedTask);
             subTasks.remove(selectedTask);
             allTasks.removeAll(subTasks);
             form.setSelectedParentTask(selectedTask);
-        } else {
+        }
+        else {
             form.setSelectedParentTask(controller.getDummyRootTaskInstance());
         }
 
-        ITask[] parentTasks = new ITask[allTasks.size()];
-        parentTasks = allTasks.toArray(parentTasks);
+        List<ITask> parentTasks = new ArrayList<ITask>(allTasks);
         form.setParentTasksList(controller.getDummyRootTaskInstance(), parentTasks);
     }
 }

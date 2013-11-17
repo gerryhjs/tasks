@@ -17,9 +17,10 @@ package org.dubik.tasks.model.impl;
 
 import org.dubik.tasks.model.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author Sergiy Dubovik
@@ -32,22 +33,20 @@ public class TaskGroup implements ITaskGroup {
     private ITaskModel model;
 
     public TaskGroup(String name) {
-        taskGroups = new Vector<ITaskGroup>();
+        taskGroups = new ArrayList<ITaskGroup>();
         this.title = name;
     }
 
-    public TaskGroup(ITaskModel model) {
-        this.model = model;
-    }
-
     public void add(ITaskGroup taskGroup) {
-        if (model == null)
+        if (model == null) {
             taskGroups.add(taskGroup);
+        }
     }
 
     public int size() {
-        if (model != null)
+        if (model != null) {
             return sizeOfModel();
+        }
 
         return taskGroups.size();
     }
@@ -80,6 +79,11 @@ public class TaskGroup implements ITaskGroup {
 
     public String getTitle() {
         return title;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return null; //groups don't have descriptions
     }
 
     public void setTaskModel(ITaskModel model) {
@@ -121,7 +125,11 @@ public class TaskGroup implements ITaskGroup {
     }
 
     public void add(@NotNull ITask task) {
+        //noop
+    }
 
+    public void add(int index, @NotNull ITask task) {
+        //noop
     }
 
     public String toString() {
@@ -129,34 +137,41 @@ public class TaskGroup implements ITaskGroup {
     }
 
     private int sizeOfModel() {
-        if (model == null)
+        if (model == null) {
             throw new IllegalStateException("taskmodel is not set, you are trying to access it");
+        }
 
         int size = 0;
         if (filter != null) {
-            for (int i = 0; i < model.size(); i++)
-                if (filter.accept(model.getTask(i)))
+            for (int i = 0; i < model.size(); i++) {
+                if (filter.accept(model.getTask(i))) {
                     ++size;
+                }
+            }
             return size;
-        } else {
+        }
+        else {
             return model.size();
         }
     }
 
     private ITask getFromModel(int index) {
-        if (model == null)
+        if (model == null) {
             throw new IllegalStateException("taskmodel is not set, you are trying to access it");
+        }
 
         if (filter != null) {
             for (int i = 0; i < model.size(); i++) {
                 if (filter.accept(model.getTask(i))) {
-                    if (index == 0)
+                    if (index == 0) {
                         return model.getTask(i);
+                    }
 
                     --index;
                 }
             }
-        } else {
+        }
+        else {
             return model.getTask(index);
         }
 

@@ -40,13 +40,14 @@ public class NewChangeListAction extends BaseTaskAction {
         newChangelistDlg.show();
 
         if (newChangelistDlg.getExitCode() == DialogWrapper.OK_EXIT_CODE &&
-                newChangelistDlg.getName().length() > 0) {
+            newChangelistDlg.getName().length() > 0) {
             ChangeListManager changeListManager = ChangeListManager.getInstance(getProject(e));
             LocalChangeList list = changeListManager.addChangeList(newChangelistDlg.getName(),
-                    newChangelistDlg.getDescription());
+                                                                   newChangelistDlg.getDescription());
 
-            if (newChangelistDlg.isNewChangelistActive())
+            if (newChangelistDlg.isNewChangelistActive()) {
                 changeListManager.setDefaultChangeList(list);
+            }
         }
     }
 
@@ -55,14 +56,16 @@ public class NewChangeListAction extends BaseTaskAction {
     }
 
     private String generateChangelistTitle(ITask[] selectedTasks) {
-        if (selectedTasks == null || selectedTasks.length == 0)
+        if (selectedTasks == null || selectedTasks.length == 0) {
             return "";
+        }
 
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < selectedTasks.length; i++) {
             buf.append(selectedTasks[i].getTitle());
-            if (i + 1 < selectedTasks.length)
+            if (i + 1 < selectedTasks.length) {
                 buf.append(", ");
+            }
         }
 
         return buf.toString();

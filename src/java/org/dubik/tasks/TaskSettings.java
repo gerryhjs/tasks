@@ -15,9 +15,7 @@
  */
 package org.dubik.tasks;
 
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import org.dubik.tasks.utils.ExternalizeSupport;
 import org.jdom.Element;
 
@@ -108,8 +106,9 @@ public class TaskSettings extends PropertyChangeSupport implements JDOMExternali
 
     public void readExternal(Element element) throws InvalidDataException {
         Element xTasksSettings = element.getChild(TASKS_SETTINGS_OPTIONS);
-        if (xTasksSettings == null)
+        if (xTasksSettings == null) {
             return;
+        }
 
         enableActualTime =
                 ExternalizeSupport.getSafelyBoolean(xTasksSettings, TASKS_SETTINGS_ENABLE_ACTUAL_TIME, false);

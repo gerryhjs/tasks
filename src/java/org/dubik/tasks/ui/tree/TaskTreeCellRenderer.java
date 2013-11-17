@@ -17,16 +17,17 @@ package org.dubik.tasks.ui.tree;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ui.ColoredTreeCellRenderer;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.SimpleTextAttributes;
 import org.dubik.tasks.TaskSettings;
 import org.dubik.tasks.TasksApplicationComponent;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.ITaskGroup;
 import org.dubik.tasks.model.TaskPriority;
 import org.dubik.tasks.ui.TasksUIManager;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Renders items in task tree.
@@ -34,10 +35,8 @@ import java.awt.*;
  * @author Sergiy Dubovik
  */
 public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
-    private static final SimpleTextAttributes STRIKEOUT_REGULAR_ATTRIBUTES =
-            new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, null);
-    private static final SimpleTextAttributes STRIKEOUT_GRAY_ATTRIBUTES =
-            new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, Color.GRAY);
+    private static final SimpleTextAttributes STRIKEOUT_REGULAR_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
+    private static final SimpleTextAttributes STRIKEOUT_GRAY_ATTRIBUTES =new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
 
     private TaskSettings settings;
 
@@ -50,8 +49,9 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     public void customizeCellRenderer(JTree tree, Object value,
                                       boolean selected, boolean expanded,
                                       boolean leaf, int row, boolean hasFocus) {
-        if (!(value instanceof ITask))
+        if (!(value instanceof ITask)) {
             return;
+        }
 
         ITask task = (ITask) value;
 
@@ -69,7 +69,8 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             try {
                 TaskPriority groupPriority = TaskPriority.parse(taskGroup.getTitle());
                 setIcon(TasksUIManager.findIcon(groupPriority));
-            } catch (IllegalArgumentException e) {
+            }
+            catch (IllegalArgumentException e) {
                 setIcon(TasksUIManager.getIcon(TasksUIManager.ICON_TASK));
             }
 
@@ -77,7 +78,8 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             append(" ", titleAttr);
             String details = makeDetailsForGroup(taskGroup);
             append(details, restAttr);
-        } else {
+        }
+        else {
             setIcon(TasksUIManager.createIcon(task));
             append(task.getTitle(), titleAttr);
             String details = makeDetailsForTask(task);
@@ -91,23 +93,35 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         setToolTipText(tooltip);
 
         setIconTextGap(3);
+
+        boolean isDropCell = false;
+
+        JTree.DropLocation dropLocation = tree.getDropLocation();
+        if (dropLocation != null && dropLocation.getChildIndex() == -1 && tree.getRowForPath(dropLocation.getPath()) == row) {
+            isDropCell = true;
+        }
+
+        setBorder(isDropCell ? BorderFactory.createLineBorder(JBColor.RED) : null);
+
     }
 
     private String makeDetailsForTask(ITask task) {
         int totalTasks = task.size();
         long estimated = task.getEstimatedTime();
-        StringBuffer details = new StringBuffer();
+        StringBuilder details = new StringBuilder();
         long actual = task.getActualTime();
         if (totalTasks == 0) {
             if (settings.isEnableActualTime()) {
-                if (estimated != 0 || actual != 0)
+                if (estimated != 0 || actual != 0) {
                     details.append("(");
+                }
 
                 if (estimated != 0) {
                     details.append("Estimated: ");
                     details.append(makeStringFromTime(estimated));
-                    if (actual != 0)
+                    if (actual != 0) {
                         details.append(", ");
+                    }
                 }
 
                 if (actual != 0) {
@@ -116,17 +130,20 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
                 }
 
 
-                if (estimated != 0 || actual != 0)
+                if (estimated != 0 || actual != 0) {
                     details.append(")");
+                }
 
-            } else {
+            }
+            else {
                 if (estimated != 0) {
                     details.append("(");
                     details.append(makeStringFromTime(estimated));
                     details.append(")");
                 }
             }
-        } else {
+        }
+        else {
             details.append("(");
             details.append(totalTasks);
             details.append(" Tasks, ");
@@ -149,7 +166,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     }
 
     private String makePercentageForTask(ITask task) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int complInPerc = task.getCompletionRatio();
         buffer.append(Integer.toString(complInPerc));
         return buffer.toString();
@@ -160,17 +177,19 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         int completedTasks = 0;
         for (int i = 0; i < totalTasks; i++) {
             ITask task = taskGroup.get(i);
-            if (task.isCompleted())
+            if (task.isCompleted()) {
                 completedTasks++;
+            }
         }
 
-        StringBuffer details = new StringBuffer();
+        StringBuilder details = new StringBuilder();
         details.append("(");
         details.append(totalTasks);
         details.append(" Tasks, ");
         int complInPerc = 0;
-        if (totalTasks > 0)
+        if (totalTasks > 0) {
             complInPerc = completedTasks * 100 / totalTasks;
+        }
         details.append(complInPerc);
         details.append("% Completed)");
 
@@ -182,7 +201,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         int hours = estimatedInMins / 60;
         int min = estimatedInMins - (hours * 60);
 
-        StringBuffer timeStr = new StringBuffer();
+        StringBuilder timeStr = new StringBuilder();
 
         if (hours != 0) {
             timeStr.append(Integer.toString(hours));
@@ -190,8 +209,9 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         }
 
         if (min != 0) {
-            if (hours != 0)
+            if (hours != 0) {
                 timeStr.append(" ");
+            }
             timeStr.append(Integer.toString(min));
             timeStr.append(" min");
         }
@@ -200,32 +220,21 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     }
 
     private String makeTooltipFromTask(ITask task) {
-        StringBuffer tooltip = new StringBuffer();
-        int subTasks = task.size();
-        int complete = completed(task);
-        int incomplete = subTasks - complete;
-        tooltip.append("<html><b>");
-        tooltip.append(task.getTitle());
-        tooltip.append("</b>");
         if (task.size() != 0) {
-            tooltip.append("<br>");
-            tooltip.append("Total: ");
-            tooltip.append(task.size());
-            tooltip.append(" (Complete: ");
-            tooltip.append(complete);
-            tooltip.append(", Incomplete: ");
-            tooltip.append(incomplete);
-            tooltip.append(")");
+            int subTasks = task.size();
+            int complete = completed(task);
+            int incomplete = subTasks - complete;
+            return TasksBundle.message("tree.tooltip.template", task.getTitle(), task.size(), complete, incomplete);
         }
-        tooltip.append("</html>");
-        return tooltip.toString();
+        return null;
     }
 
     private int completed(ITask task) {
         int completed = 0;
         for (int i = 0; i < task.size(); i++) {
-            if (task.get(i).isCompleted())
+            if (task.get(i).isCompleted()) {
                 completed++;
+            }
         }
 
         return completed;

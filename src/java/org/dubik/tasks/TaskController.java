@@ -18,13 +18,14 @@ package org.dubik.tasks;
 import org.dubik.tasks.model.*;
 import org.dubik.tasks.model.impl.TaskGroup;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Task controller class.
@@ -32,9 +33,86 @@ import java.util.Set;
  * @author Sergiy Dubovik
  */
 public class TaskController implements TreeSelectionListener {
+    private static final ITask[] EMPTY_SELECTIOM = new ITask[0];
+    private static ITask DUMMY_ROOT_TASK = new ITask() {
+
+        public String getTitle() {
+            return "Root";
+        }
+
+        @Nullable
+        public String getDescription() {
+            return "Dummy root object";
+        }
+
+        @NotNull
+        public TaskPriority getPriority() {
+            return TaskPriority.Normal;
+        }
+
+        public long getEstimatedTime() {
+            return 0;
+        }
+
+        public long getCreationTime() {
+            return 0;
+        }
+
+        public boolean isCompleted() {
+            return false;
+        }
+
+        public boolean isHighlighted() {
+            return false;
+        }
+
+        @NotNull
+        public TaskHighlightingType getHighlightingType() {
+            return TaskHighlightingType.Red;
+        }
+
+        public void add(@NotNull ITask task) {
+            //noop
+        }
+
+        public void add(int index, @NotNull ITask task) {
+            //noop
+        }
+
+        public int size() {
+            return 0;
+        }
+
+        public ITask get(int index) {
+            return null;
+        }
+
+        public ITask getParent() {
+            return null;
+        }
+
+        public int indexOf(ITask subTask) {
+            return 0;
+        }
+
+        public void moveUp(ITask task) {
+
+        }
+
+        public void moveDown(ITask task) {
+        }
+
+        public int getCompletionRatio() {
+            return 0;
+        }
+
+        public long getActualTime() {
+            return 0;
+        }
+    };
     private ITaskModel taskModel;
     private ITask[] selectedTasks;
-    private static final ITask[] EMPTY_SELECTIOM = new ITask[0];
+
 
     /**
      * Creates task controller.
@@ -45,11 +123,11 @@ public class TaskController implements TreeSelectionListener {
         this.taskModel = taskModel;
     }
 
-
     @NotNull
     synchronized public ITask[] getSelectedTasks() {
-        if (selectedTasks == null)
+        if (selectedTasks == null) {
             return EMPTY_SELECTIOM;
+        }
 
         return selectedTasks;
     }
@@ -106,8 +184,8 @@ public class TaskController implements TreeSelectionListener {
      * @param priority              task priority
      * @param estimatedTimeInMillis completion estimation time
      */
-    public void addTask(String title, TaskPriority priority, long estimatedTimeInMillis) {
-        taskModel.addTask(title, priority, estimatedTimeInMillis);
+    public void addTask(String title, String description, TaskPriority priority, long estimatedTimeInMillis) {
+        taskModel.addTask(title, description, priority, estimatedTimeInMillis);
     }
 
     /**
@@ -118,8 +196,8 @@ public class TaskController implements TreeSelectionListener {
      * @param priority              task priority
      * @param estimatedTimeInMillis completion estimation time
      */
-    public void addTask(ITask parentTask, String title, TaskPriority priority, long estimatedTimeInMillis) {
-        taskModel.addTask(parentTask, title, priority, estimatedTimeInMillis);
+    public void addTask(ITask parentTask, String title, String description, TaskPriority priority, long estimatedTimeInMillis) {
+        taskModel.addTask(parentTask, title, description, priority, estimatedTimeInMillis);
     }
 
     /**
@@ -131,8 +209,8 @@ public class TaskController implements TreeSelectionListener {
      * @param priority      new priority
      * @param estimatedTime new estimated time
      */
-    public void updateTask(ITask sTask, ITask parent, String title, TaskPriority priority, long estimatedTime) {
-        taskModel.updateTask(sTask, parent, title, priority, estimatedTime);
+    public void updateTask(ITask sTask, ITask parent, String title, String description, TaskPriority priority, long estimatedTime) {
+        taskModel.updateTask(sTask, parent, title, description, priority, estimatedTime);
     }
 
     /**
@@ -141,8 +219,9 @@ public class TaskController implements TreeSelectionListener {
      * @param task task to delete
      */
     public void deleteTask(ITask task) {
-        if (canDelete(task))
+        if (canDelete(task)) {
             taskModel.deleteTask(task);
+        }
     }
 
     /**
@@ -155,7 +234,8 @@ public class TaskController implements TreeSelectionListener {
 
         if (selectedPaths == null || selectedPaths.length == 0) {
             selectedTasks = EMPTY_SELECTIOM;
-        } else {
+        }
+        else {
             selectedTasks = new ITask[selectedPaths.length];
             for (int i = 0; i < selectedPaths.length; i++) {
                 selectedTasks[i] = (ITask) selectedPaths[i].getLastPathComponent();
@@ -170,8 +250,9 @@ public class TaskController implements TreeSelectionListener {
      */
     public void completeTask(ITask task) {
         assert task != null;
-        if (canComplete(task))
+        if (canComplete(task)) {
             taskModel.completeTask(task);
+        }
     }
 
     /**
@@ -182,8 +263,9 @@ public class TaskController implements TreeSelectionListener {
     public void uncompleteTask(ITask task) {
         assert task != null;
 
-        if (canBeUncomplete(task))
+        if (canBeUncomplete(task)) {
             taskModel.uncompleteTask(task);
+        }
     }
 
     /**
@@ -218,8 +300,9 @@ public class TaskController implements TreeSelectionListener {
     public void highlightTask(ITask task) {
         assert task != null;
 
-        if (canHighlight(task))
+        if (canHighlight(task)) {
             taskModel.highlightTask(task);
+        }
     }
 
     /**
@@ -230,8 +313,9 @@ public class TaskController implements TreeSelectionListener {
     public void unhighlightTask(ITask task) {
         assert task != null;
 
-        if (canBeUnhighlighted(task))
+        if (canBeUnhighlighted(task)) {
             taskModel.unhighlightTask(task);
+        }
     }
 
     /**
@@ -252,10 +336,11 @@ public class TaskController implements TreeSelectionListener {
      *
      * @return all tasks with their sub tasks
      */
-    public Set<ITask> getAllTasks() {
-        Set<ITask> allTasks = new HashSet<ITask>();
-        for (int i = 0; i < taskModel.size(); i++)
+    public List<ITask> getAllTasks() {
+        List<ITask> allTasks = new ArrayList<ITask>();
+        for (int i = 0; i < taskModel.size(); i++) {
             addTasksRecursively(taskModel.getTask(i), allTasks);
+        }
 
         return allTasks;
     }
@@ -266,17 +351,18 @@ public class TaskController implements TreeSelectionListener {
      * @param task parent task
      * @return all sub tasks
      */
-    public Set<ITask> getSubTasks(ITask task) {
-        Set<ITask> subTasks = new HashSet<ITask>();
+    public List<ITask> getSubTasks(ITask task) {
+        List<ITask> subTasks = new ArrayList<ITask>();
         addTasksRecursively(task, subTasks);
 
         return subTasks;
     }
 
-    private void addTasksRecursively(ITask task, Set<ITask> allTasks) {
+    private void addTasksRecursively(ITask task, List<ITask> allTasks) {
         allTasks.add(task);
-        for (int i = 0; i < task.size(); i++)
+        for (int i = 0; i < task.size(); i++) {
             addTasksRecursively(task.get(i), allTasks);
+        }
     }
 
     /**
@@ -285,22 +371,21 @@ public class TaskController implements TreeSelectionListener {
      * @param sTask task for which possible parents should be found
      * @return array of possible parents
      */
-    public ITask[] findPossibleParents(ITask sTask) {
-        Set<ITask> allTasks = getAllTasks();
-        Set<ITask> subTasks = getSubTasks(sTask);
+    public List<ITask> findPossibleParents(ITask sTask) {
+        List<ITask> allTasks = getAllTasks();
+        List<ITask> subTasks = getSubTasks(sTask);
         allTasks.removeAll(subTasks);
 
-        ITask[] possibleParents = new ITask[allTasks.size()];
-        possibleParents = allTasks.toArray(possibleParents);
-        return possibleParents;
+        return new ArrayList<ITask>(allTasks);
     }
 
     public ITask findParentFor(ITask task) {
         ITask parent = null;
         for (int i = 0; i < taskModel.size(); i++) {
             parent = findParentForRecursively(taskModel.getTask(i), task);
-            if (parent != null)
+            if (parent != null) {
                 return parent;
+            }
         }
 
         return parent;
@@ -311,10 +396,12 @@ public class TaskController implements TreeSelectionListener {
             ITask t = task.get(i);
             if (t == childTask) {
                 return task;
-            } else {
+            }
+            else {
                 ITask t1 = findParentForRecursively(task, childTask);
-                if (t1 != null)
+                if (t1 != null) {
                     return t1;
+                }
             }
 
         }
@@ -352,71 +439,8 @@ public class TaskController implements TreeSelectionListener {
         return DUMMY_ROOT_TASK;
     }
 
-    private static ITask DUMMY_ROOT_TASK = new ITask() {
+    public void moveTask(ITask task, ITask newParent, int childIndex) {
+        taskModel.moveTask(task, newParent, childIndex);
+    }
 
-        public String getTitle() {
-            return "Root";
-        }
-
-        @NotNull
-        public TaskPriority getPriority() {
-            return TaskPriority.Normal;
-        }
-
-        public long getEstimatedTime() {
-            return 0;
-        }
-
-        public long getCreationTime() {
-            return 0;
-        }
-
-        public boolean isCompleted() {
-            return false;
-        }
-
-        public boolean isHighlighted() {
-            return false;
-        }
-
-        @NotNull
-        public TaskHighlightingType getHighlightingType() {
-            return TaskHighlightingType.Red;
-        }
-
-        public void add(@NotNull ITask task) {
-
-        }
-
-        public int size() {
-            return 0;
-        }
-
-        public ITask get(int index) {
-            return null;
-        }
-
-        public ITask getParent() {
-            return null;
-        }
-
-        public int indexOf(ITask subTask) {
-            return 0;
-        }
-
-        public void moveUp(ITask task) {
-
-        }
-
-        public void moveDown(ITask task) {
-        }
-
-        public int getCompletionRatio() {
-            return 0;
-        }
-
-        public long getActualTime() {
-            return 0;
-        }
-    };
 }

@@ -18,8 +18,8 @@ package org.dubik.tasks.ui.tree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Provides support for JTree.
@@ -27,7 +27,7 @@ import java.util.Vector;
  * @author Sergiy Dubovik
  */
 abstract public class AbstractTreeModel implements TreeModel {
-    private List<TreeModelListener> listeners = new Vector<TreeModelListener>();
+    private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
 
     public void addTreeModelListener(TreeModelListener listener) {
         if (listener != null && !listeners.contains(listener)) {

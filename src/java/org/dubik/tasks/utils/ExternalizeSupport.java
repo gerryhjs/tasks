@@ -28,7 +28,8 @@ public class ExternalizeSupport {
         String attrStr = el.getAttributeValue(attrName);
         try {
             return Boolean.parseBoolean(attrStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -37,7 +38,8 @@ public class ExternalizeSupport {
         String attrStr = el.getAttributeValue(attrName);
         try {
             return Long.parseLong(attrStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -47,7 +49,8 @@ public class ExternalizeSupport {
         String attrStr = el.getAttributeValue(attrName);
         try {
             return TaskPriority.valueOf(attrStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -57,7 +60,8 @@ public class ExternalizeSupport {
         String attrStr = el.getAttributeValue(attrName);
         try {
             return TaskHighlightingType.valueOf(attrStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return defaultValue;
         }
     }

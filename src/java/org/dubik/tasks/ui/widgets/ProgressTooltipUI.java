@@ -44,8 +44,9 @@ public class ProgressTooltipUI extends MetalToolTipUI {
             g.fillRect(4, (int) d.getHeight() - 6, middlePoint, 3);
 
             g.setColor(new Color(0xB00000));
-            if (middlePoint < 4)
+            if (middlePoint < 4) {
                 middlePoint = 4;
+            }
             g.fillRect(middlePoint, (int) d.getHeight() - 6, (int) d.getWidth() - middlePoint - 4, 3);
         }
     }

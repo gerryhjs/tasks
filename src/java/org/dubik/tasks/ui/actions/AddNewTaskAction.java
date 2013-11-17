@@ -16,7 +16,7 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataConstants;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.dubik.tasks.TaskController;
@@ -32,29 +32,34 @@ import org.dubik.tasks.ui.tree.TreeController;
 public class AddNewTaskAction extends BaseTaskAction {
 
     public void actionPerformed(AnActionEvent e) {
-        Project project = (Project) e.getDataContext().getData(DataConstants.PROJECT);
+        Project project = DataKeys.PROJECT.getData(e.getDataContext());
         if (project != null) {
             actionPerformed(project, "");
         }
     }
 
-    public void actionPerformed(Project project, String defaultDescription) {
+    public void actionPerformed(Project project, String title) {
         TaskController controller = getController(project);
 
         TaskForm newTaskForm = new TaskForm(project, getSettings());
-        newTaskForm.setTaskTitle(defaultDescription);
+        newTaskForm.setTaskTitle(title);
+        newTaskForm.setTaskDescription(null);
         newTaskForm.setActualsVisible(false);
         TasksActionUtils.preselectPriority(controller, newTaskForm);
         TasksActionUtils.preselectParentTask(controller, newTaskForm);
 
         newTaskForm.show();
+
         if (newTaskForm.getExitCode() == DialogWrapper.OK_EXIT_CODE && newTaskForm.getTaskTitle().trim().length() != 0) {
             ITask parentTask = newTaskForm.getSelectedParent();
-            if (parentTask == controller.getDummyRootTaskInstance() || newTaskForm.isAddToRoot())
-                controller.addTask(newTaskForm.getTaskTitle(), newTaskForm.getPriority(), newTaskForm.getEstimatedTime());
-            else {
-                controller.addTask(parentTask, newTaskForm.getTaskTitle(),
+            if (parentTask == controller.getDummyRootTaskInstance() || newTaskForm.isAddToRoot()) {
+                controller.addTask(newTaskForm.getTaskTitle(), newTaskForm.getTaskDescription(),
                         newTaskForm.getPriority(), newTaskForm.getEstimatedTime());
+            }
+            else {
+                controller.addTask(parentTask, newTaskForm.getTaskTitle(), newTaskForm.getTaskDescription(),
+                                   newTaskForm.getPriority(), newTaskForm.getEstimatedTime());
+
                 expendIfNeeded(getTreeController(project), parentTask);
             }
         }

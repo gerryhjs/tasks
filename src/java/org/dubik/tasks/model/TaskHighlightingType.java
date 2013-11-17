@@ -21,5 +21,7 @@ package org.dubik.tasks.model;
  * @author Sergiy Dubovik
  */
 public enum TaskHighlightingType {
-    Red, Yellow, Green
+    Red,
+    Yellow,
+    Green
 }

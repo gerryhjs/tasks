@@ -21,7 +21,9 @@ package org.dubik.tasks.model;
  * @author Sergiy Dubovik
  */
 public enum TaskPriority {
-    Important("High", 100), Normal("Normal", 50), Questionable("Low", 10);
+    Important("High", 100),
+    Normal("Normal", 50),
+    Questionable("Low", 10);
 
     private String friendlyName;
     private int priority;
@@ -36,8 +38,9 @@ public enum TaskPriority {
     }
 
     public TaskPriority max(TaskPriority taskPriority) {
-        if (priority < taskPriority.getPriority())
+        if (priority < taskPriority.getPriority()) {
             return taskPriority;
+        }
 
         return this;
     }
@@ -58,14 +61,17 @@ public enum TaskPriority {
      * @throws IllegalArgumentException if enum was not find with specified name
      */
     public static TaskPriority parse(String enumName) {
-        if (enumName.equals(Normal.friendlyName))
+        if (enumName.equals(Normal.friendlyName)) {
             return Normal;
+        }
 
-        if (enumName.equals(Important.friendlyName))
+        if (enumName.equals(Important.friendlyName)) {
             return Important;
+        }
 
-        if (enumName.equals(Questionable.friendlyName))
+        if (enumName.equals(Questionable.friendlyName)) {
             return Questionable;
+        }
 
         throw new IllegalArgumentException("enum is not found - " + enumName);
     }

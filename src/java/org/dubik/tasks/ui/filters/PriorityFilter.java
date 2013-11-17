@@ -15,9 +15,7 @@
  */
 package org.dubik.tasks.ui.filters;
 
-import org.dubik.tasks.model.ITask;
-import org.dubik.tasks.model.ITaskFilter;
-import org.dubik.tasks.model.TaskPriority;
+import org.dubik.tasks.model.*;
 import org.jetbrains.annotations.NotNull;
 
 /**

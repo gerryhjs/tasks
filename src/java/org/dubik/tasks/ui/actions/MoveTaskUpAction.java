@@ -25,6 +25,7 @@ import org.dubik.tasks.model.ITaskGroup;
  * @author Sergiy Dubovik
  */
 public class MoveTaskUpAction extends BaseTaskAction {
+
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
         ITask selectedTask = controller.getSelectedTasks()[0];
@@ -34,10 +35,11 @@ public class MoveTaskUpAction extends BaseTaskAction {
 
     protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
         if (selectedTasks.length == 1 && selectedTasks[0] instanceof ITask &&
-                !(selectedTasks[0] instanceof ITaskGroup)) {
+            !(selectedTasks[0] instanceof ITaskGroup)) {
             ITask task = selectedTasks[0];
             presentation.setEnabled(controller.canMoveUp(task));
-        } else {
+        }
+        else {
             presentation.setEnabled(false);
         }
     }

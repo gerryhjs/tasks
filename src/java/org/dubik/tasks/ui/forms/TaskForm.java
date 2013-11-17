@@ -17,32 +17,35 @@ package org.dubik.tasks.ui.forms;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.ColoredListCellRenderer;
 import org.dubik.tasks.TaskSettings;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.TaskPriority;
 import org.dubik.tasks.ui.TasksUIManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 /**
  * @author Sergiy Dubovik
  */
 public class TaskForm extends DialogWrapper {
+    private static long ONE_MINUTE = 60 * 1000L;
     private JTextField titleTextField;
-    private JComboBox priorityComboBox;
+    private JComboBox<TaskPriority> priorityComboBox;
     private JSpinner minutesSpinner;
     private JPanel container;
-    private JComboBox parentTasksComboBox;
+    private JComboBox<ITask> parentTasksComboBox;
     private JSpinner actualMinutesSpinner;
     private JLabel actualTimeLabel;
     private JLabel actualMinutesLabel;
-
-    private static long ONE_MINUTE = 60 * 1000L;
+    private JTextPane description;
     private ITask selectedParentTask;
-
     private Action addAction;
     private Action addToRootAction;
     private boolean addToRoot = false;
@@ -50,15 +53,17 @@ public class TaskForm extends DialogWrapper {
     public TaskForm(Project project, TaskSettings settings) {
         super(project, false);
 
-        setTitle("New Task");
+        setValidationDelay(1);
+        setTitle(TasksBundle.message("form.task.title"));
 
         SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, 9000, 15);
         minutesSpinner.setModel(minutesSpinnerModel);
 
         TaskPriority[] priorities = TaskPriority.values();
         priorityComboBox.setRenderer(new PriorityComboBoxRenderer());
-        for (TaskPriority priority : priorities)
+        for (TaskPriority priority : priorities) {
             priorityComboBox.addItem(priority);
+        }
 
         priorityComboBox.setSelectedItem(TaskPriority.Normal);
 
@@ -70,6 +75,10 @@ public class TaskForm extends DialogWrapper {
         setActualsVisible(settings.isEnableActualTime());
 
         init();
+
+        getOKAction().setEnabled(false);
+        doValidate();
+
     }
 
     @Nullable
@@ -87,6 +96,7 @@ public class TaskForm extends DialogWrapper {
         return addToRoot;
     }
 
+    @NotNull
     protected Action[] createActions() {
         return new Action[]{addToRootAction, addAction, getCancelAction()};
     }
@@ -99,16 +109,36 @@ public class TaskForm extends DialogWrapper {
         return titleTextField.getText();
     }
 
+    public void setTaskTitle(String title) {
+        titleTextField.setText(title);
+    }
+
+    public String getTaskDescription() {
+        return description.getText();
+    }
+
+    public void setTaskDescription(String description) {
+        this.description.setText(description);
+    }
+
     public long getEstimatedTime() {
         int minutes = (Integer) minutesSpinner.getValue();
 
         return minutes * ONE_MINUTE;
     }
 
+    public void setEstimatedTime(long time) {
+        minutesSpinner.setValue((int) (time / ONE_MINUTE));
+    }
+
     public long getActualTime() {
         int minutes = (Integer) actualMinutesSpinner.getValue();
 
         return minutes * ONE_MINUTE;
+    }
+
+    public void setActualTime(long actualTime) {
+        actualMinutesSpinner.setValue((int) (actualTime / ONE_MINUTE));
     }
 
     public TaskPriority getPriority() {
@@ -119,31 +149,25 @@ public class TaskForm extends DialogWrapper {
         priorityComboBox.setSelectedItem(priority);
     }
 
-    public void setEstimatedTime(long time) {
-        minutesSpinner.setValue((int) (time / ONE_MINUTE));
-    }
-
-    public void setTaskTitle(String title) {
-        titleTextField.setText(title);
-    }
-
     public JPanel getContainer() {
         return container;
     }
 
-    public void setParentTasksList(ITask rootTask, ITask[] parentTaskList) {
+    public void setParentTasksList(ITask rootTask, List<ITask> parentTaskList) {
         parentTasksComboBox.addItem(rootTask);
 
-        for (ITask task : parentTaskList)
+        for (ITask task : parentTaskList) {
             parentTasksComboBox.addItem(task);
+        }
 
         parentTasksComboBox.setSelectedItem(selectedParentTask);
     }
 
     public ITask getSelectedParent() {
         Object selectedParent = parentTasksComboBox.getSelectedItem();
-        if (selectedParent instanceof ITask)
+        if (selectedParent instanceof ITask) {
             return (ITask) selectedParent;
+        }
 
         return null;
     }
@@ -158,67 +182,51 @@ public class TaskForm extends DialogWrapper {
         actualMinutesSpinner.setVisible(visible);
     }
 
-    public void setActualTime(long actualTime) {
-        actualMinutesSpinner.setValue((int) (actualTime / ONE_MINUTE));
+    @Nullable
+    @Override
+    protected ValidationInfo doValidate() {
+        if (titleTextField.getText().trim().isEmpty()) {
+            return new ValidationInfo(TasksBundle.message("error.no-title", titleTextField));
+        }
+
+        return null;
     }
 
     /**
      * Combo box priority cell renderer.
      */
-    class PriorityComboBoxRenderer extends JLabel implements ListCellRenderer {
+    class PriorityComboBoxRenderer extends ColoredListCellRenderer {
         public PriorityComboBoxRenderer() {
             setOpaque(true);
         }
 
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                                                      boolean cellHasFocus) {
+        @Override
+        protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             TaskPriority priority = (TaskPriority) value;
-
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-
             setIcon(TasksUIManager.findIcon(priority));
-            setText(priority.toString());
-            setFont(list.getFont());
-
-            return this;
+            append(priority.toString());
         }
     }
 
     /**
      * Combo box tasks cell renderer.
      */
-    class TaskComboBoxRenderer extends JLabel implements ListCellRenderer {
+    class TaskComboBoxRenderer extends ColoredListCellRenderer {
         public TaskComboBoxRenderer() {
             setOpaque(true);
         }
 
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                                                      boolean cellHasFocus) {
+        @Override
+        protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             ITask task = (ITask) value;
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-
-            setText(task.getTitle());
+            append(task.getTitle());
             setIcon(TasksUIManager.createIcon(task));
-
-            return this;
         }
     }
 
     private class AddAction extends AbstractAction {
         public AddAction() {
-            putValue(Action.NAME, "&Add");
+            putValue(Action.NAME, TasksBundle.message("actions.add"));
             putValue(DEFAULT_ACTION, Boolean.TRUE);
         }
 
@@ -230,7 +238,7 @@ public class TaskForm extends DialogWrapper {
 
     private class AddToRootAction extends AbstractAction {
         public AddToRootAction() {
-            putValue(Action.NAME, "Add to &Root");
+            putValue(Action.NAME, TasksBundle.message("actions.add-to-root"));
         }
 
         public void actionPerformed(ActionEvent event) {

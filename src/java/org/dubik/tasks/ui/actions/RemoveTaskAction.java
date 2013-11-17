@@ -18,6 +18,7 @@ package org.dubik.tasks.ui.actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import org.dubik.tasks.TaskController;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 
 import javax.swing.*;
@@ -33,12 +34,13 @@ public class RemoveTaskAction extends BaseTaskAction {
             ITask[] selectedTasks = controller.getSelectedTasks();
 
             if (selectedTasks.length > 1) {
-                if (JOptionPane.showConfirmDialog(null, "Are you sure want to delete "
-                        + selectedTasks.length + " tasks?", "Delete Tasks",
-                        JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                if (JOptionPane.showConfirmDialog(null, TasksBundle.message("removetask.confirm",
+                        selectedTasks.length), TasksBundle.message("removetask.title"),
+                                                  JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                     deleteTasks(selectedTasks, controller);
                 }
-            } else {
+            }
+            else {
                 deleteTasks(selectedTasks, controller);
             }
         }

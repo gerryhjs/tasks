@@ -19,6 +19,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import org.dubik.tasks.TaskController;
 import org.dubik.tasks.TaskSettings;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.ActualTimeForm;
 
@@ -42,7 +43,7 @@ public class MarkCompletedAction extends BaseTaskAction {
         TaskSettings settings = getSettings();
         if (settings.isEnableActualTime() && settings.isAskActualWhenCompleteTask()) {
             ActualTimeForm actualTimeForm = new ActualTimeForm(getProject(e), selectedTask.getTitle());
-            actualTimeForm.setTitle("Actual Time");
+            actualTimeForm.setTitle(TasksBundle.message("form.actualtime.title"));
             actualTimeForm.setActualTime(selectedTask.getActualTime());
             actualTimeForm.show();
             if (actualTimeForm.isOK()) {

@@ -15,8 +15,6 @@
  */
 package org.dubik.tasks;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -27,7 +25,9 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
-import org.dubik.tasks.intention.CreateTaskFromTodoIntention;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.treeStructure.Tree;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
@@ -46,7 +46,7 @@ import java.beans.PropertyChangeListener;
  * @author Sergiy Dubovik
  */
 public class TasksProjectComponent implements ProjectComponent {
-    private static final String TASKS_ID = "Tasks";
+    private static final String TASKS_ID = TasksBundle.message("toolwindow.title");
 
     private Project project;
 
@@ -57,11 +57,8 @@ public class TasksProjectComponent implements ProjectComponent {
     private TreeController treeController;
     private PropertyChangeListener settingsChangeListener;
 
-    public TasksProjectComponent(Project project, IntentionManager intentionManager) {
+    public TasksProjectComponent(Project project) {
         this.project = project;
-
-        IntentionAction taskFromTodoIntention = new CreateTaskFromTodoIntention();
-        intentionManager.registerIntentionAndMetaData(taskFromTodoIntention, "Tasks");
     }
 
     public void initComponent() {
@@ -79,46 +76,26 @@ public class TasksProjectComponent implements ProjectComponent {
 
             TaskTreeModel treeModel = TasksUIManager.createTaskTreeModel(taskModel);
 
-            JTree tasksTree = TasksUIManager.createTaskTree(
+            Tree tasksTree = TasksUIManager.createTaskTree(
                     treeModel,
-                    taskController, TasksUIManager.createTaskTreePopup("TasksPopupGroup")
+                    taskController,
+                    TasksUIManager.createTaskTreePopup("TasksPopupGroup")
             );
 
             tasksTree.addTreeSelectionListener(taskController);
-            tasksContainer.add(new JScrollPane(tasksTree), BorderLayout.CENTER);
+            tasksContainer.add(new JBScrollPane(tasksTree), BorderLayout.CENTER);
 
             treeController = new TreeController(treeModel, tasksTree);
             treeModel.setRefresher(new TreeRefresher(tasksTree, treeController));
             settingsChangeListener = new TreeUpdater(treeController);
             settings.addPropertyChangeListener(settingsChangeListener);
         }
-
-/*
-        if (expTasksContainer == null) {
-            expTasksContainer = new JPanel(new BorderLayout(1, 1));
-            expTasksContainer.setBorder(null);
-
-            DefaultMutableTreeNode root =
-                    new DefaultMutableTreeNode(new NewTask("New Task", TaskPriority.Important, 10000));
-            root.add(new DefaultMutableTreeNode(new NewTask("One more task", TaskPriority.Important, hashCode())));
-            root.add(new DefaultMutableTreeNode(new NewTask("One more task", TaskPriority.Normal, hashCode())));
-            root.add(new DefaultMutableTreeNode(new NewTask("One more task", TaskPriority.Important, hashCode())));
-
-            DefaultTreeModel m = new DefaultTreeModel(root, false);
-            
-            JTree tasksTree = TasksUIManager.createNewTaskTree(
-                    m, TasksUIManager.createTaskTreePopup("TasksPopupGroup")
-            );
-
-            tasksTree.addTreeSelectionListener(taskController);
-            expTasksContainer.add(new JScrollPane(tasksTree), BorderLayout.CENTER);
-        }
-*/
     }
 
     public void disposeComponent() {
-        if (settingsChangeListener != null)
+        if (settingsChangeListener != null) {
             settings.removePropertyChangeListener(settingsChangeListener);
+        }
     }
 
     @NotNull
@@ -128,18 +105,9 @@ public class TasksProjectComponent implements ProjectComponent {
 
     public void projectOpened() {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        ToolWindow tasksToolWindow =
-                toolWindowManager.registerToolWindow(TasksProjectComponent.TASKS_ID,
-                        tasksContainer, ToolWindowAnchor.BOTTOM);
-
-        /*
-        ContentManager contentManager = tasksToolWindow.getContentManager();
-        Content tasksContent =
-                PeerFactory.getInstance().getContentFactory().createContent(tasksContainer, "Tasks", false);
-        contentManager.addContent(tasksContent);
-        contentManager.setSelectedContent(tasksContent);
-        */
-
+        ToolWindow tasksToolWindow = toolWindowManager.registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
+        tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.globaltasks"), true));
+//        tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.projecttasks"), true));
         Icon icon = IconLoader.getIcon(TasksUIManager.ICON_TASK);
         tasksToolWindow.setIcon(icon);
 
@@ -148,13 +116,10 @@ public class TasksProjectComponent implements ProjectComponent {
 
     private void registerActions() {
         ActionGroup actionGroup = (ActionGroup) ActionManager.getInstance().getAction("TasksActionGroup");
-        ActionToolbar toolBar =
-                ActionManager.getInstance().createActionToolbar("TasksActionGroupPlace", actionGroup, false);
+        ActionToolbar toolBar = ActionManager.getInstance().createActionToolbar("TasksActionGroupPlace", actionGroup, false);
 
-        ActionGroup additionalActionGroup =
-                (ActionGroup) ActionManager.getInstance().getAction("TasksAdditionalToolBarGroup");
-        ActionToolbar additionalToolbar =
-                ActionManager.getInstance().createActionToolbar("TasksActionGroupPlace", additionalActionGroup, false);
+        ActionGroup additionalActionGroup = (ActionGroup) ActionManager.getInstance().getAction("TasksAdditionalToolBarGroup");
+        ActionToolbar additionalToolbar = ActionManager.getInstance().createActionToolbar("TasksActionGroupPlace", additionalActionGroup, false);
 
         JPanel toolBarPanel = new JPanel(new BorderLayout(1, 1));
         toolBarPanel.add(toolBar.getComponent(), BorderLayout.WEST);

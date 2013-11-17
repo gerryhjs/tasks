@@ -32,6 +32,14 @@ public interface ITask {
     @Nullable
     public String getTitle();
 
+
+    /**
+     * Returns the task's description
+     * @return
+     */
+    @Nullable
+    public String getDescription();
+
     /**
      * Return's task's priority.
      *
@@ -97,6 +105,14 @@ public interface ITask {
      * @param task reference to a sub task, can't be null.
      */
     public void add(@NotNull ITask task);
+
+    /**
+     * Adds sub task at a specified location.
+     *
+     * @param index the index to insert the task at
+     * @param task reference to a sub task, can't be null.
+     */
+    public void add(int index, @NotNull ITask task);
 
     /**
      * Returns amount of sub tasks.

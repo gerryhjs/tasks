@@ -16,10 +16,7 @@
 package org.dubik.tasks.ui.tree;
 
 import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -38,11 +35,11 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             maybeShowPopup(e);
-        } else if (e.getClickCount() == 2) {
-            DataContext context = DataManager.getInstance().getDataContext();
+        }
+        else if (e.getClickCount() == 2) {
+            DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
             AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");
-            AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(),
-                    ActionManager.getInstance(), 0);
+            AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(), ActionManager.getInstance(), 0);
             anAction.actionPerformed(event);
         }
     }

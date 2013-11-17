@@ -19,7 +19,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
-import org.dubik.tasks.ui.TasksUIManager;
 
 /**
  * Highlight task.
@@ -27,49 +26,47 @@ import org.dubik.tasks.ui.TasksUIManager;
  * @author Sergiy Dubovik
  */
 @SuppressWarnings({"WeakerAccess"})
-public class HighlightTaskAction extends BaseTaskAction {
-    public void actionPerformed(AnActionEvent e) {
-        TaskController controller = getController(e);
+public class HighlightTaskAction extends BaseToggleTaskAction {
+
+    @Override
+    public boolean isSelected(AnActionEvent e) {
+        return areAllHighlighted(getTaskController(e).getSelectedTasks());
+    }
+
+    @Override
+    public void setSelected(AnActionEvent e, boolean state) {
+        TaskController controller = getTaskController(e);
         if (controller != null) {
             ITask[] selectedTasks = controller.getSelectedTasks();
             if (canHighlightOrUnhighlight(selectedTasks, controller)) {
-                if (areAllHighlighted(selectedTasks)) {
-                    for (ITask task : selectedTasks) {
-                        controller.unhighlightTask(task);
-                    }
-                } else {
-                    for (ITask task : selectedTasks) {
+                for (ITask task : selectedTasks) {
+                    if (state) {
                         controller.highlightTask(task);
+                    }
+                    else {
+                        controller.unhighlightTask(task);
                     }
                 }
             }
         }
+
     }
 
     protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
         if (selectedTasks.length == 0) {
-            presentation.setIcon(null);
             presentation.setEnabled(false);
             return;
         }
 
-        if (canHighlightOrUnhighlight(selectedTasks, controller)) {
-            presentation.setEnabled(true);
-            if (areAllHighlighted(selectedTasks)) {
-                presentation.setIcon(TasksUIManager.getIcon(TasksUIManager.ICON_CHECK));
-            } else {
-                presentation.setIcon(null);
-            }
-        } else {
-            presentation.setEnabled(false);
-        }
+        presentation.setEnabled(canHighlightOrUnhighlight(selectedTasks, controller));
     }
 
     private boolean areAllHighlighted(ITask[] tasks) {
         boolean highlighted = true;
 
-        for (ITask task : tasks) {
-            highlighted = highlighted && task.isHighlighted();
+        for (int i = 0; i < tasks.length && highlighted; i++) {
+            ITask task = tasks[i];
+            highlighted = task.isHighlighted();
         }
 
         return highlighted;

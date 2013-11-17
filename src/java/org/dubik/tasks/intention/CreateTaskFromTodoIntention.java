@@ -23,10 +23,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.PsiSearchHelper;
+import com.intellij.psi.search.PsiTodoSearchHelper;
 import com.intellij.psi.search.TodoItem;
 import com.intellij.util.IncorrectOperationException;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.ui.actions.AddNewTaskAction;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public class CreateTaskFromTodoIntention implements IntentionAction {
      */
     @NotNull
     public String getText() {
-        return "Create task";
+        return TasksBundle.message("intention.create.task");
     }
 
     /**
@@ -54,11 +54,11 @@ public class CreateTaskFromTodoIntention implements IntentionAction {
      */
     @NotNull
     public String getFamilyName() {
-        return "Create Task";
+        return TasksBundle.message("intention.familyname");
     }
 
     /**
-     * Checks if intentetion is available for specified project, editor and file.
+     * Checks if intention is available for specified project, editor and file.
      *
      * @param project current project reference
      * @param editor  current editor reference
@@ -69,8 +69,9 @@ public class CreateTaskFromTodoIntention implements IntentionAction {
         int offset = editor.getCaretModel().getOffset();
         final PsiElement element = file.findElementAt(offset);
 
-        if (element == null || !element.isWritable())
+        if (element == null || !element.isWritable()) {
             return false;
+        }
 
         if (element instanceof PsiComment) {
             PsiComment psiComment = (PsiComment) element;
@@ -119,15 +120,14 @@ public class CreateTaskFromTodoIntention implements IntentionAction {
      * @return instance of to do item if found, otherwise <code>null</code>
      */
     private TodoItem getTodoItem(PsiFile file, PsiComment comment, int editorOffset) {
-        final PsiManager psiManager = comment.getManager();
-        final PsiSearchHelper searchHelper = psiManager.getSearchHelper();
+        PsiTodoSearchHelper todoSearchHelper = PsiTodoSearchHelper.SERVICE.getInstance(file.getProject());
         TextRange commentTextRange = comment.getTextRange();
-        final TodoItem[] todoItems = searchHelper.findTodoItems(file,
-                commentTextRange.getStartOffset(), commentTextRange.getEndOffset());
+        final TodoItem[] todoItems = todoSearchHelper.findTodoItems(file, commentTextRange.getStartOffset(), commentTextRange.getEndOffset());
         for (final TodoItem todoItem : todoItems) {
             final TextRange todoTextRange = todoItem.getTextRange();
-            if (todoTextRange.contains(editorOffset))
+            if (todoTextRange.contains(editorOffset)) {
                 return todoItem;
+            }
         }
 
         return null;

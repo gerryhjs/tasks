@@ -15,24 +15,16 @@
  */
 package org.dubik.tasks.ui;
 
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPopupMenu;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
+import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.UIUtil;
-import org.dubik.tasks.TaskController;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.TasksApplicationComponent;
-import org.dubik.tasks.model.ITask;
-import org.dubik.tasks.model.ITaskModel;
-import org.dubik.tasks.model.TaskHighlightingType;
-import org.dubik.tasks.model.TaskPriority;
-import org.dubik.tasks.ui.tree.TaskTreeCellRenderer;
-import org.dubik.tasks.ui.tree.TaskTreeModel;
-import org.dubik.tasks.ui.tree.TaskTreeMouseAdapter;
-import org.dubik.tasks.ui.tree.dnd.DNDTree;
+import org.dubik.tasks.*;
+import org.dubik.tasks.model.*;
+import org.dubik.tasks.ui.tree.*;
+import org.dubik.tasks.ui.tree.TasksTree;
 import org.dubik.tasks.ui.widgets.ProgressTooltipUI;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +46,6 @@ public class TasksUIManager {
     private static final String ICON_DEFAULT_PRIORITY = "/general/todoDefault.png";
     private static final String ICON_IMPORTANT_PRIORITY = "/general/todoImportant.png";
     private static final String ICON_QUESTION_PRIORITY = "/org/dubik/tasks/ui/icons/lowPriority.png";
-    public static final String ICON_CHECK = "/gutter/check.png";
     private static final String ICON_STAR_RED = "/org/dubik/tasks/ui/icons/star_red.png";
     private static final String ICON_STAR_YELLOW = "/org/dubik/tasks/ui/icons/star_yellow.png";
     private static final String ICON_STAR_GREEN = "/org/dubik/tasks/ui/icons/star_green.png";
@@ -78,10 +69,11 @@ public class TasksUIManager {
         Icon taskIcon;
         if (task.isHighlighted()) {
             LayeredIcon layeredIcon = new LayeredIcon(2);
-            layeredIcon.setIcon(findIcon(task.getHighlightingType()), 0, 0, 0);
-            layeredIcon.setIcon(findIcon(task), 1, 17, 0);
+            layeredIcon.setIcon(findIcon(task), 0, 0, 0);
+            layeredIcon.setIcon(findIcon(task.getHighlightingType()), 1, 17, 0);
             taskIcon = layeredIcon;
-        } else {
+        }
+        else {
             taskIcon = findIcon(task);
         }
 
@@ -98,7 +90,8 @@ public class TasksUIManager {
 
         if (settings.isPropagatePriority()) {
             priority = findHighestPriorityRecursively(task, settings.isPriorityPropagatedOneLevelOnly());
-        } else {
+        }
+        else {
             priority = task.getPriority();
         }
 
@@ -138,25 +131,27 @@ public class TasksUIManager {
         for (int i = 0; i < task.size(); i++) {
             ITask subTask = task.get(i);
 
-            if (!onlyFirstLevel)
+            if (!onlyFirstLevel) {
                 taskPriority = taskPriority.max(findHighestPriorityRecursively(subTask, false));
-            else
+            }
+            else {
                 taskPriority = taskPriority.max(subTask.getPriority());
+            }
         }
 
         return taskPriority;
     }
 
     @NotNull
-    public static JTree createTaskTree(@NotNull TreeModel model, @NotNull TaskController taskController,
-                                       @NotNull JPopupMenu popupMenu) {
-        DNDTree tasksTree = new DNDTree();
-        tasksTree.setShowsRootHandles(true);
+    public static Tree createTaskTree(@NotNull TreeModel model, @NotNull TaskController taskController,
+                                      @NotNull JPopupMenu popupMenu) {
+
+        TasksTree tasksTree = new TasksTree(taskController);
         UIUtil.setLineStyleAngled(tasksTree);
+        tasksTree.setShowsRootHandles(true);
         tasksTree.setCellRenderer(createTasksTreeCellRenderer());
         tasksTree.setRootVisible(false);
         tasksTree.setModel(model);
-        tasksTree.setTaskController(taskController);
         tasksTree.addMouseListener(new TaskTreeMouseAdapter(popupMenu));
 
         ToolTipManager.sharedInstance().registerComponent(tasksTree);

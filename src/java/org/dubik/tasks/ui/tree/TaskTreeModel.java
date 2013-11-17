@@ -21,9 +21,7 @@ import org.dubik.tasks.ui.filters.PriorityFilter;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreePath;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Task tree model. Feeds tree with the data.
@@ -63,13 +61,15 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
 
                 for (taskIndex = 0; taskIndex < task.size(); taskIndex++) {
                     if (taskFilter.accept(task.get(taskIndex))) {
-                        if (index == 0)
+                        if (index == 0) {
                             return task.get(taskIndex);
+                        }
 
                         index--;
                     }
                 }
-            } else {
+            }
+            else {
                 return task.get(index);
             }
         }
@@ -84,8 +84,9 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
             size = task.size();
             if (taskFilter != null) {
                 for (int i = 0; i < task.size(); i++) {
-                    if (!taskFilter.accept(task.get(i)))
+                    if (!taskFilter.accept(task.get(i))) {
                         size--;
+                    }
                 }
             }
         }
@@ -102,8 +103,9 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
 
     public int getIndexOfChild(Object parent, Object child) {
         for (int i = 0; i < getChildCount(parent); i++) {
-            if (getChild(parent, i) == child)
+            if (getChild(parent, i) == child) {
                 return i;
+            }
         }
 
         return -1;
@@ -115,10 +117,12 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     }
 
     private void updateTree() {
-        if (refresher != null)
+        if (refresher != null) {
             refresher.refresh();
-        else
+        }
+        else {
             fireTreeStructureChanged(new TreeModelEvent(this, new Object[]{root}));
+        }
 
     }
 
@@ -141,7 +145,7 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     }
 
     public Object[] findPathToObject(Object root, Object task) {
-        List<Object> path = new Vector<Object>();
+        List<Object> path = new ArrayList<Object>();
         findPathToObject(root, task, path);
         Collections.reverse(path);
         Object[] oPath = new Object[path.size()];
@@ -175,7 +179,8 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
 
                 newRoot.add(taskGroup);
             }
-        } else {
+        }
+        else {
             newRoot.setTaskModel(taskModel);
         }
 

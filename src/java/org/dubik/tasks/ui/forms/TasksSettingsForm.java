@@ -28,7 +28,7 @@ public class TasksSettingsForm {
     private JCheckBox enableActualTimeFeatureCheckBox;
     private JCheckBox showEnterActualTimeCheckBox;
     private JPanel container;
-    private JCheckBox enableTasksScopesCheckBox;
+    private JCheckBox enableTaskScopesCheckBox;
     private JCheckBox propagatePriorityCheckBox;
     private JCheckBox oneLevelOnlyCheckBox;
 
@@ -66,9 +66,9 @@ public class TasksSettingsForm {
 
     public boolean isModified(TaskSettings data) {
         return data.isAskActualWhenCompleteTask() != showEnterActualTimeCheckBox.isSelected()
-                || data.isEnableActualTime() != enableActualTimeFeatureCheckBox.isSelected()
-                || data.isPropagatePriority() != propagatePriorityCheckBox.isSelected()
-                || data.isPriorityPropagatedOneLevelOnly() != oneLevelOnlyCheckBox.isSelected();
+               || data.isEnableActualTime() != enableActualTimeFeatureCheckBox.isSelected()
+               || data.isPropagatePriority() != propagatePriorityCheckBox.isSelected()
+               || data.isPriorityPropagatedOneLevelOnly() != oneLevelOnlyCheckBox.isSelected();
     }
 
     private void updateControls() {

@@ -17,6 +17,7 @@ package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.clipboard.TextTransfer;
 import org.dubik.tasks.ui.forms.ExportToFileForm;
@@ -46,14 +47,16 @@ public class ExportToTextFileAction extends BaseTaskAction {
             if (!form.isExportToClipboard()) {
                 File file = form.getFile();
                 if (file.exists()) {
-                    if (JOptionPane.showConfirmDialog(null, "File already exists, do you really want to overwrite it?",
-                            "Export Tasks", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (JOptionPane.showConfirmDialog(null, TasksBundle.message("export.overwrite"),
+                                                      TasksBundle.message("export.overwrite.title"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         writeTasks(file, os.toString());
                     }
-                } else {
+                }
+                else {
                     writeTasks(file, os.toString());
                 }
-            } else {
+            }
+            else {
                 new TextTransfer().setClipboardContent(os.toString());
             }
         }
@@ -65,15 +68,19 @@ public class ExportToTextFileAction extends BaseTaskAction {
             os = new FileOutputStream(file);
             os.write(text.getBytes());
             os.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (os != null)
+        }
+        finally {
+            if (os != null) {
                 try {
                     os.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace(System.err);
                 }
+            }
         }
     }
 
@@ -100,7 +107,7 @@ public class ExportToTextFileAction extends BaseTaskAction {
     }
 
     private String makeIndent(int depthLevel) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < depthLevel; i++) {
             buf.append("    ");
         }

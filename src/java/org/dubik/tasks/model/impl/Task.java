@@ -19,15 +19,17 @@ import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.TaskHighlightingType;
 import org.dubik.tasks.model.TaskPriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author Sergiy Dubovik
  */
 public class Task implements ITask {
     private String title;
+    private String description;
     private TaskPriority priority = TaskPriority.Normal;
     private long estimatedTime;
     private long actualTime;
@@ -35,29 +37,38 @@ public class Task implements ITask {
     private boolean completed;
     private boolean highlighted;
     private TaskHighlightingType highlightingType = TaskHighlightingType.Red;
-    private List<ITask> subTasks = new Vector<ITask>();
+    private List<ITask> subTasks = new ArrayList<ITask>();
     private ITask parent;
 
     public Task() {
     }
 
-    public Task(String title) {
+    public Task(String title, String description) {
         this.title = title;
+        this.description = description;
     }
 
-    public Task(String title, TaskPriority priority) {
-        this.title = title;
+    public Task(String title, String description, TaskPriority priority) {
+        this(title, description);
         this.priority = priority;
     }
 
-    public Task(String title, TaskPriority priority, long estimatedTime) {
-        this.title = title;
-        this.priority = priority;
+    public Task(String title, String description, TaskPriority priority, long estimatedTime) {
+        this(title, description, priority);
         this.estimatedTime = estimatedTime;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setTitle(String title) {
@@ -66,8 +77,9 @@ public class Task implements ITask {
 
     @NotNull
     public TaskPriority getPriority() {
-        if (priority == null)
+        if (priority == null) {
             return TaskPriority.Normal;
+        }
 
         return priority;
     }
@@ -79,9 +91,11 @@ public class Task implements ITask {
     public long getEstimatedTime() {
         long estimated = 0;
         if (subTasks.size() > 0) {
-            for (ITask task : subTasks)
+            for (ITask task : subTasks) {
                 estimated += task.getEstimatedTime();
-        } else {
+            }
+        }
+        else {
             estimated = estimatedTime;
         }
 
@@ -91,9 +105,11 @@ public class Task implements ITask {
     public long getActualTime() {
         long actual = 0;
         if (subTasks.size() > 0) {
-            for (ITask task : subTasks)
+            for (ITask task : subTasks) {
                 actual += task.getActualTime();
-        } else {
+            }
+        }
+        else {
             actual = actualTime;
         }
 
@@ -116,10 +132,12 @@ public class Task implements ITask {
         boolean compl;
         if (subTasks.size() > 0) {
             compl = true;
-            for (ITask task : subTasks)
+            for (ITask task : subTasks) {
                 compl = compl && task.isCompleted();
+            }
             return compl;
-        } else {
+        }
+        else {
             compl = completed;
         }
 
@@ -145,8 +163,9 @@ public class Task implements ITask {
 
     public int getCompletionRatio() {
         int totalTasks = subTasks.size();
-        if (totalTasks == 0)
+        if (totalTasks == 0) {
             return isCompleted() ? 100 : 0;
+        }
 
         int cumCompletionRatio = 0;
         for (ITask task : subTasks) {
@@ -217,4 +236,6 @@ public class Task implements ITask {
             subTasks.add(index + 1, task);
         }
     }
+
+
 }

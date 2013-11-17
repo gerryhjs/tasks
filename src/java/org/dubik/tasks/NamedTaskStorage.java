@@ -17,9 +17,7 @@ package org.dubik.tasks;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.NamedJDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.utils.SerializeSupport;
 import org.jdom.Element;
@@ -53,22 +51,23 @@ public class NamedTaskStorage implements ApplicationComponent, NamedJDOMExternal
     }
 
     public void readExternal(Element element) throws InvalidDataException {
-        if (taskModel == null && taskSettings == null)
+        if (taskModel == null && taskSettings == null) {
             init();
+        }
 
         SerializeSupport.readExternal(taskModel, taskSettings, element);
     }
 
     public void writeExternal(Element element) throws WriteExternalException {
-        if (taskModel == null && taskSettings == null)
+        if (taskModel == null && taskSettings == null) {
             init();
+        }
 
         SerializeSupport.writeExternal(taskModel, taskSettings, element);
     }
 
     private void init() {
-        TasksApplicationComponent tasksApplication =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
+        TasksApplicationComponent tasksApplication = ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
 
         taskModel = tasksApplication.getTaskModel();
         taskSettings = tasksApplication.getSettings();

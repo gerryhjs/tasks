@@ -16,33 +16,26 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TreeController;
-
-import javax.swing.*;
 
 /**
  * @author Sergiy Dubovik
  */
-public class GroupByPriorityAction extends BaseTaskAction {
-    public void actionPerformed(AnActionEvent e) {
+public class GroupByPriorityAction extends BaseToggleTaskAction {
+
+    @Override
+    public boolean isSelected(AnActionEvent e) {
+        return getTreeController(e).isGroupByPriority();
+    }
+
+    @Override
+    public void setSelected(AnActionEvent e, boolean state) {
         TreeController treeController = getTreeController(getProject(e));
         if (treeController != null) {
-            treeController.groupByPriority();
+            treeController.groupByPriority(state);
         }
+
     }
 
 
-    public void update(AnActionEvent e) {
-        super.update(e);
-        TreeController treeController = getTreeController(e);
-        if (treeController != null) {
-            if (treeController.isGroupByPriority()) {
-                Icon check = TasksUIManager.getIcon(TasksUIManager.ICON_CHECK);
-                e.getPresentation().setIcon(check);
-            } else {
-                e.getPresentation().setIcon(null);
-            }
-        }
-    }
 }

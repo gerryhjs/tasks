@@ -18,19 +18,14 @@ package org.dubik.tasks;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.*;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.model.impl.TaskModel;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.forms.TasksSettingsForm;
 import org.dubik.tasks.utils.SerializeSupport;
 import org.jdom.Element;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 
@@ -44,7 +39,7 @@ import javax.swing.*;
  * @author Sergiy Dubovik
  */
 public class TasksApplicationComponent implements ApplicationComponent, JDOMExternalizable,
-        Configurable {
+                                                  Configurable {
 
     private ITaskModel taskModel;
     private TaskSettings taskSettings;
@@ -168,8 +163,11 @@ public class TasksApplicationComponent implements ApplicationComponent, JDOMExte
     }
 
     @Nls
+    /**
+     * This name is displayed in the IntelliJ Settings column
+     */
     public String getDisplayName() {
-        return "Tasks";
+        return TasksBundle.message("application.component.displayname");
     }
 
     /**

@@ -19,10 +19,14 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import org.dubik.tasks.TasksBundle;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 /**
@@ -32,11 +36,8 @@ public class ExportToFileForm extends DialogWrapper {
     private Project project;
     private JTextArea previewTextArea;
     private JPanel container;
-    private JPanel browsePanel;
     private JLabel errorLabel;
-    private TextFieldWithBrowseButton textFieldWithBrowseButton;
-
-
+    private TextFieldWithBrowseButton browse;
     private Action exportToClipboardAction;
     private boolean exportToClipboard;
 
@@ -45,35 +46,27 @@ public class ExportToFileForm extends DialogWrapper {
 
         this.project = project;
 
-        setTitle("Export Tasks");
+        setTitle(TasksBundle.message("form.export.title"));
         init();
         setSize(640, 580);
     }
 
     private void createUIComponents() {
-        textFieldWithBrowseButton = new TextFieldWithBrowseButton();
+        browse = new TextFieldWithBrowseButton();
         FileChooserDescriptor descriptor = new FileChooserDescriptor(true, true, false, false, false, false);
-        textFieldWithBrowseButton.addBrowseFolderListener("Select file", "Choose a file for exported tasks", project, descriptor);
-        this.browsePanel = textFieldWithBrowseButton;
+        browse.addBrowseFolderListener(TasksBundle.message("form.export.title"),
+                TasksBundle.message("form.export.browsefolder.description"), project, descriptor);
 
-        textFieldWithBrowseButton.getTextField().addInputMethodListener(new InputMethodListener() {
-            public void inputMethodTextChanged(InputMethodEvent event) {
+        browse.getTextField().getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
                 validateForm();
             }
 
-            public void caretPositionChanged(InputMethodEvent event) {
+            public void removeUpdate(DocumentEvent e) {
                 validateForm();
             }
-        });
 
-        textFieldWithBrowseButton.getTextField().addKeyListener(new KeyListener() {
-            public void keyTyped(KeyEvent e) {
-            }
-
-            public void keyPressed(KeyEvent e) {
-            }
-
-            public void keyReleased(KeyEvent e) {
+            public void changedUpdate(DocumentEvent e) {
                 validateForm();
             }
         });
@@ -82,19 +75,15 @@ public class ExportToFileForm extends DialogWrapper {
     private void validateForm() {
         File file = getFile();
         if (file.isDirectory()) {
-            errorLabel.setText("Please select or type a valid file path");
+            errorLabel.setText( TasksBundle.message("form.export.not-valid"));
             getOKAction().setEnabled(false);
-        } else {
+        }
+        else {
             errorLabel.setText("");
             getOKAction().setEnabled(true);
         }
     }
 
-    public JPanel getBrowsePanel() {
-        return browsePanel;
-    }
-
-    @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
     public boolean isExportToClipboard() {
         return exportToClipboard;
     }
@@ -118,17 +107,18 @@ public class ExportToFileForm extends DialogWrapper {
         exportToClipboardAction = new ExportToClipboardAction();
     }
 
+    @NotNull
     protected Action[] createActions() {
         return new Action[]{exportToClipboardAction, getOKAction(), getCancelAction()};
     }
 
     public File getFile() {
-        return new File(textFieldWithBrowseButton.getText());
+        return new File(browse.getText());
     }
 
     class ExportToClipboardAction extends AbstractAction {
         public ExportToClipboardAction() {
-            super("Copy to Clipboard");
+            super(TasksBundle.message("form.export.copy-to-clipboard"));
         }
 
         public void actionPerformed(ActionEvent event) {

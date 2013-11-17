@@ -15,18 +15,19 @@
  */
 package org.dubik.tasks.ui.tree;
 
-import javax.swing.*;
+import com.intellij.ui.treeStructure.Tree;
+
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.util.HashSet;
 import java.util.Set;
 
 public class TreeRefresher {
-    private JTree tree;
+    private Tree tree;
     private TreeController treeController;
     private Set<Object> expandedNodes = new HashSet<Object>();
 
-    public TreeRefresher(JTree tree, TreeController treeController) {
+    public TreeRefresher(Tree tree, TreeController treeController) {
         this.tree = tree;
         this.treeController = treeController;
     }

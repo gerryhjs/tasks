@@ -15,9 +15,9 @@
  */
 package org.dubik.tasks.ui.tree;
 
+import com.intellij.ui.treeStructure.Tree;
 import org.dubik.tasks.ui.filters.HideCompletedFilter;
 
-import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreePath;
 
@@ -26,19 +26,23 @@ import javax.swing.tree.TreePath;
  */
 public class TreeController {
     private TaskTreeModel treeModel;
-    private JTree tree;
+    private Tree tree;
     private boolean groupedByPriority;
     private boolean hideCompletedTasks;
 
-    public TreeController(TaskTreeModel treeModel, JTree tree) {
+    public TreeController(TaskTreeModel treeModel, Tree tree) {
         this.treeModel = treeModel;
         this.tree = tree;
         groupedByPriority = false;
         hideCompletedTasks = false;
     }
 
-    public void groupByPriority() {
-        groupedByPriority = !groupedByPriority;
+    public TaskTreeModel getTreeModel() {
+        return treeModel;
+    }
+
+    public void groupByPriority(boolean group) {
+        groupedByPriority = group;
         treeModel.groupByPriority(groupedByPriority);
 
         if (groupedByPriority) {
@@ -46,20 +50,18 @@ public class TreeController {
         }
     }
 
-    public TaskTreeModel getTreeModel() {
-        return treeModel;
-    }
-
     public boolean isGroupByPriority() {
         return groupedByPriority;
     }
 
-    public void hideCompletedTasks() {
-        hideCompletedTasks = !hideCompletedTasks;
-        if (hideCompletedTasks)
+    public void hideCompletedTasks(boolean hide) {
+        hideCompletedTasks = hide;
+        if (hide) {
             treeModel.setTaskFilter(new HideCompletedFilter());
-        else
+        }
+        else {
             treeModel.setTaskFilter(null);
+        }
     }
 
     public boolean isHideCompletedTasks() {
@@ -77,12 +79,14 @@ public class TreeController {
 
     public void expandToObject(Object obj) {
         final Object root = treeModel.getRoot();
-        if (obj == root)
+        if (obj == root) {
             tree.expandPath(new TreePath(root));
+        }
         else {
             Object[] path = treeModel.findPathToObject(root, obj);
-            if (path.length > 0)
+            if (path.length > 0) {
                 tree.expandPath(new TreePath(path).pathByAddingChild(obj));
+            }
         }
     }
 
@@ -109,8 +113,9 @@ public class TreeController {
     }
 
     protected TreePath pathToObject(Object task) {
-        if (task == treeModel.getRoot())
+        if (task == treeModel.getRoot()) {
             return new TreePath(treeModel.getRoot());
+        }
 
         return new TreePath(treeModel.findPathToObject(treeModel.getRoot(), task));
     }

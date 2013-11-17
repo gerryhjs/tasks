@@ -22,5 +22,7 @@ package org.dubik.tasks.model;
  * @author Sergiy Dubovik
  */
 public enum TaskScope {
-    Module, Project, Global
+    Module,
+    Project,
+    Global
 }

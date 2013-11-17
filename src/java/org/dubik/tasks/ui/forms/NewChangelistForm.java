@@ -18,6 +18,7 @@ package org.dubik.tasks.ui.forms;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vcs.changes.ChangeListManager;
+import org.dubik.tasks.TasksBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ public class NewChangelistForm extends DialogWrapper {
         super(project, false);
         this.project = project;
         init();
-        setTitle("New Changelist");
+        setTitle(TasksBundle.message("form.new-changelist.title"));
         makeThisChangelistActiveCheckBox.setSelected(true);
         nameTextField.addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {
@@ -57,7 +58,8 @@ public class NewChangelistForm extends DialogWrapper {
     private void validateForm() {
         if (ChangeListManager.getInstance(project).findChangeList(getName()) != null) {
             setOKActionEnabled(false);
-        } else {
+        }
+        else {
             setOKActionEnabled(true);
         }
     }

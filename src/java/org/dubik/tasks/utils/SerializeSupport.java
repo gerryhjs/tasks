@@ -17,6 +17,7 @@ package org.dubik.tasks.utils;
 
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import org.dubik.tasks.TaskSettings;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.ITaskModel;
@@ -40,6 +41,7 @@ public class SerializeSupport {
     private static final String TASK_HIGHLIGHTING_TYPE = "highlightingtype";
     private static final String TASK_TITLE = "title";
     private static final String TASK_ACTUAL = "actual";
+    private static final String TASK_DESCRIPTION = "description";
 
     static public void writeDummy(Element element) {
         Element dummyRoot = new Element(TASKS);
@@ -76,6 +78,8 @@ public class SerializeSupport {
         xTask.setAttribute(TASK_HIGHLIGHTED, Boolean.toString(task.isHighlighted()));
         xTask.setAttribute(TASK_HIGHLIGHTING_TYPE, task.getHighlightingType().toString());
         xTask.setAttribute(TASK_TITLE, task.getTitle());
+        xTask.setAttribute(TASK_DESCRIPTION, StringUtil.escapeXml(task.getDescription() == null ? "" : task.getDescription()) );
+
         taskRoot.addContent(xTask);
 
         return xTask;
@@ -84,8 +88,9 @@ public class SerializeSupport {
     static public void readExternal(ITaskModel taskModel, TaskSettings taskSettings, Element element)
             throws InvalidDataException {
         Element tasksRoot = element.getChild(TASKS);
-        if (tasksRoot == null)
+        if (tasksRoot == null) {
             return;
+        }
 
         List tasks = tasksRoot.getChildren();
 
@@ -109,13 +114,17 @@ public class SerializeSupport {
         String oldVersionTitle = taskElem.getText();
         String newVersionTitle = taskElem.getAttributeValue(TASK_TITLE);
         String title;
-        if (newVersionTitle != null && newVersionTitle.length() != 0)
+        if (newVersionTitle != null && newVersionTitle.length() != 0) {
             title = newVersionTitle;
-        else
+        }
+        else {
             title = oldVersionTitle;
+        }
 
-        ITask task = model.addTask(parentTask, title, priority, estimated, actual,
-                created, completed, highlighted);
+        String description = StringUtil.unescapeXml(taskElem.getAttributeValue(TASK_DESCRIPTION));
+
+        ITask task = model.addTask(parentTask, title, description, priority, estimated, actual,
+                                   created, completed, highlighted);
         model.setTaskHighlightingType(task, type);
 
         for (Object subTaskElem : taskElem.getChildren()) {

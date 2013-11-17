@@ -18,34 +18,33 @@ package org.dubik.tasks.model.impl;
 import org.dubik.tasks.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author Sergiy Dubovik
  */
 public class TaskModel implements ITaskModel {
     private List<ITask> tasks;
-
-    private List<ITaskModelChangeListener> changeListeners = new Vector<ITaskModelChangeListener>();
+    private List<ITaskModelChangeListener> changeListeners = new ArrayList<ITaskModelChangeListener>();
 
     public TaskModel() {
-        tasks = new Vector<ITask>();
+        tasks = new ArrayList<ITask>();
     }
 
-    public ITask addTask(String title, TaskPriority priority, long estimatedTime) {
+    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime) {
         assert title != null;
 
-        return addTask(title, priority, estimatedTime, System.currentTimeMillis());
+        return addTask(title, description, priority, estimatedTime, System.currentTimeMillis());
     }
 
-    public ITask addTask(String title, TaskPriority priority, long estimatedTime, long creationTime) {
-        return addTask(null, title, priority, estimatedTime, creationTime, false, false);
+    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime, long creationTime) {
+        return addTask(null, title, description, priority, estimatedTime, creationTime, false, false);
     }
 
-    public ITask addTask(ITask parent, String title, TaskPriority priority, long estimatedTime,
+    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime,
                          long creationTime, boolean completed, boolean highlighed) {
-        Task task = new Task(title, priority, estimatedTime);
+        Task task = new Task(title, description, priority, estimatedTime);
         task.setCreationTime(creationTime);
         task.setCompleted(completed);
         task.setHighlighted(highlighed);
@@ -53,7 +52,8 @@ public class TaskModel implements ITaskModel {
 
         if (parent == null) {
             tasks.add(task);
-        } else {
+        }
+        else {
             parent.add(task);
         }
 
@@ -62,58 +62,79 @@ public class TaskModel implements ITaskModel {
         return task;
     }
 
-    public ITask addTask(ITask parent, String title, TaskPriority priority, long estimatedTime, long actualTime,
+    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime, long actualTime,
                          long creationTime, boolean completed, boolean highlighted) {
-        Task task = (Task) addTask(parent, title, priority, estimatedTime, creationTime, completed, highlighted);
+        Task task = (Task) addTask(parent, title, description, priority, estimatedTime, creationTime, completed, highlighted);
         task.setActualTime(actualTime);
 
         return task;
     }
 
-    public void addTask(ITask parentTask, String title, TaskPriority priority, long estimatedTime) {
-        Task task = new Task(title, priority, estimatedTime);
+    public void addTask(ITask parentTask, String title, String description, TaskPriority priority, long estimatedTime) {
+        Task task = new Task(title, description, priority, estimatedTime);
         parentTask.add(task);
         task.setParent(parentTask);
         fireAddTaskEvent(task);
     }
 
-    protected void addTask(ITask task) {
-        assert task != null;
-        tasks.add(task);
-        fireAddTaskEvent(task);
-    }
-
-    public void updateTask(ITask task, ITask parent, String title, TaskPriority priority, long estimatedTime) {
+    public void updateTask(ITask task, ITask parent, String title, String description, TaskPriority priority, long estimatedTime) {
         assert task != null;
 
         firePreChangeTaskEvent(task);
 
         Task mutableTask = (Task) task;
         mutableTask.setTitle(title);
+        mutableTask.setDescription(description);
         mutableTask.setPriority(priority);
         mutableTask.setEstimatedTime(estimatedTime);
 
-        // Update parents only if it was changed
-        if (parent != task.getParent()) {
-            Task mutableOldParent = (Task) task.getParent();
-            if (mutableOldParent != null) {
-                mutableOldParent.remove(task);
-                if (parent == null) {
-                    tasks.add(task);
-                }
-            } else {
-                tasks.remove(task);
-            }
-
-            if (parent != null) {
-                Task mutableParent = (Task) parent;
-                mutableParent.add(task);
-            }
-
-            mutableTask.setParent(parent);
+        if (task.getParent() != parent) {
+            moveTask(task, parent, -1);
         }
 
         fireChangeTaskEvent(task);
+
+    }
+
+    public void moveTask(ITask task, ITask newParent, int index) {
+        Task currentParent = (Task) task.getParent();
+        if (currentParent != null) {
+            currentParent.remove(task);
+        }
+        else {
+            tasks.remove(task);
+        }
+
+        //when moving a task to the end of a node, the index is too big, since
+        //the original node is already removed.
+        if (index > tasks.size()) {
+            index = tasks.size();
+        }
+
+        if (newParent != null) {
+            Task mutableParent = (Task) newParent;
+            if (index > -1) {
+                mutableParent.add(index, task);
+            }
+            else {
+                mutableParent.add(task);
+            }
+        }
+        else {
+            if (index > -1) {
+                tasks.add(index, task);
+            }
+            else {
+                tasks.add(task);
+            }
+        }
+
+        Task mutableTask = (Task) task;
+        mutableTask.setParent(newParent);
+
+        fireChangeTaskEvent(task);
+
+
     }
 
     public void updateActualTime(ITask task, long actualTime) {
@@ -133,8 +154,9 @@ public class TaskModel implements ITaskModel {
 
         firePreDeleteTaskEvent(task);
         ITask parent = task.getParent();
-        if (parent == null)
+        if (parent == null) {
             tasks.remove(task);
+        }
         else {
             Task mutableParent = (Task) parent;
             mutableParent.remove(task);
@@ -189,19 +211,23 @@ public class TaskModel implements ITaskModel {
     public boolean canMoveUp(@NotNull ITask task) {
         ITask parent = task.getParent();
 
-        if (parent == null)
+        if (parent == null) {
             return tasks.indexOf(task) > 0;
-        else
+        }
+        else {
             return parent.indexOf(task) > 0;
+        }
     }
 
     public boolean canMoveDown(@NotNull ITask task) {
         ITask parent = task.getParent();
 
-        if (parent == null)
+        if (parent == null) {
             return tasks.size() - 1 > tasks.indexOf(task);
-        else if (parent.size() > 1)
+        }
+        else if (parent.size() > 1) {
             return parent.size() - 1 > parent.indexOf(task);
+        }
 
         return false;
     }
@@ -218,7 +244,8 @@ public class TaskModel implements ITaskModel {
                 fireDeleteTaskEvent(task);
                 tasks.add(index - 1, task);
             }
-        } else {
+        }
+        else {
             int index = parent.indexOf(task);
             if (index > 0) {
                 parent.remove(task);
@@ -242,7 +269,8 @@ public class TaskModel implements ITaskModel {
                 fireDeleteTaskEvent(task);
                 tasks.add(index + 1, task);
             }
-        } else {
+        }
+        else {
             int index = parent.indexOf(task);
             if (index < parent.size() - 1) {
                 parent.remove(task);
@@ -290,31 +318,36 @@ public class TaskModel implements ITaskModel {
 
     private void fireAddTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners)
+        for (ITaskModelChangeListener listener : changeListeners) {
             listener.handleAddTaskEvent(event);
+        }
     }
 
     private void firePreDeleteTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners)
+        for (ITaskModelChangeListener listener : changeListeners) {
             listener.handlePreDeleteTaskEvent(event);
+        }
     }
 
     private void fireDeleteTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners)
+        for (ITaskModelChangeListener listener : changeListeners) {
             listener.handleDeleteTaskEvent(event);
+        }
     }
 
     private void firePreChangeTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners)
+        for (ITaskModelChangeListener listener : changeListeners) {
             listener.handlePreChangeTaskEvent(event);
+        }
     }
 
     private void fireChangeTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners)
+        for (ITaskModelChangeListener listener : changeListeners) {
             listener.handleChangeTaskEvent(event);
+        }
     }
 }

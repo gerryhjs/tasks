@@ -15,16 +15,10 @@
  */
 package org.dubik.tasks.ui.actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataConstants;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import org.dubik.tasks.TaskController;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.TasksApplicationComponent;
-import org.dubik.tasks.TasksProjectComponent;
+import org.dubik.tasks.*;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +36,7 @@ abstract public class BaseTaskAction extends AnAction {
      * @return project
      */
     protected Project getProject(AnActionEvent e) {
-        return (Project) e.getDataContext().getData(DataConstants.PROJECT);
+        return DataKeys.PROJECT.getData(e.getDataContext());
     }
 
     /**
@@ -78,8 +72,9 @@ abstract public class BaseTaskAction extends AnAction {
         TaskController controller = null;
         if (project != null) {
             TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
-            if (tasksProject != null)
+            if (tasksProject != null) {
                 controller = tasksProject.getTaskController();
+            }
         }
 
         return controller;
@@ -95,20 +90,20 @@ abstract public class BaseTaskAction extends AnAction {
         TreeController controller = null;
         if (project != null) {
             TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
-            if (tasksProject != null)
+            if (tasksProject != null) {
                 controller = tasksProject.getTreeController();
+            }
         }
 
         return controller;
     }
 
     protected TreeController getTreeController(AnActionEvent e) {
-        Project project = (Project) e.getDataContext().getData(DataConstants.PROJECT);
+        Project project = DataKeys.PROJECT.getData(e.getDataContext());
         return getTreeController(project);
     }
 
     public void update(AnActionEvent e) {
-        super.update(e);
         TaskController controller = getController(getProject(e));
         if (controller != null) {
             ITask[] selectedTasks = controller.getSelectedTasks();
