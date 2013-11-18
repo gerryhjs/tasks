@@ -73,12 +73,15 @@ public class TaskTransferHandler extends TransferHandler {
         TaskTreeModel model = (TaskTreeModel) tree.getModel();
 
         if (dropTask instanceof ITaskGroup && model.getRoot() != dropTask ) {
+            //don't drop on TaskGroups, except the root
             return false;
         }
         else if (dropTask == dragTask) {
+            //don't drop on self
             return false;
         }
-        else if (taskController.findPossibleParents(dropTask).contains(dragTask)) {
+        else if ( taskController.getSubTasks(dragTask).contains(dropTask)) {
+            //don't drop on a child.
             return false;
         }
 

@@ -1,0 +1,11 @@
+What's new in version 1.8:
+
+Enhancements
+* Drag and Drop support
+* Button for "Mark uncompleted"
+* Added frequently used functions on the toolbar
+* Tasks now have a long description
+
+Bugfix
+* updated to IntelliJ IDEA 12
+
