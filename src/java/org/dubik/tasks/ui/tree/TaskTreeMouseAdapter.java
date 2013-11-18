@@ -1,12 +1,12 @@
 /*
- * Copyright 2006 Sergiy Dubovik
- * 
+ * Copyright 2013 Sergiy Dubovik, WarnerJan Veldhuis
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,12 @@ package org.dubik.tasks.ui.tree;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.project.Project;
+import org.dubik.tasks.TasksProjectComponent;
+import org.dubik.tasks.model.ITask;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -38,9 +42,21 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
         }
         else if (e.getClickCount() == 2) {
             DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
-            AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");
-            AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(), ActionManager.getInstance(), 0);
-            anAction.actionPerformed(event);
+            Project project = DataKeys.PROJECT.getData(context);
+
+            TasksTree tree = (TasksTree) e.getComponent();
+            TreePath treePath = tree.getPathForLocation(e.getX(), e.getY());
+            if (treePath != null) {
+                ITask clickedTask = (ITask) treePath.getLastPathComponent();
+
+                TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
+                if ( tasksProject.getTaskController().getSubTasks(clickedTask).size() == 0 ) {
+                    AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");
+                    AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(), ActionManager.getInstance(), 0);
+                    anAction.actionPerformed(event);
+                }
+            }
+
         }
     }
 

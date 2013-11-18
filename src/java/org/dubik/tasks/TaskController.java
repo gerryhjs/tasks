@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Sergiy Dubovik
+ * Copyright 2013 Sergiy Dubovik, WarnerJan Veldhuis
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -353,7 +353,9 @@ public class TaskController implements TreeSelectionListener {
      */
     public List<ITask> getSubTasks(ITask task) {
         List<ITask> subTasks = new ArrayList<ITask>();
-        addTasksRecursively(task, subTasks);
+        for (int i = 0; i < task.size(); i++) {
+            addTasksRecursively(task.get(i), subTasks);
+        }
 
         return subTasks;
     }
@@ -366,7 +368,7 @@ public class TaskController implements TreeSelectionListener {
     }
 
     /**
-     * Returns array of possible parents of specified task.
+     * Returns a list of possible parents of specified task.
      *
      * @param sTask task for which possible parents should be found
      * @return array of possible parents
@@ -375,6 +377,7 @@ public class TaskController implements TreeSelectionListener {
         List<ITask> allTasks = getAllTasks();
         List<ITask> subTasks = getSubTasks(sTask);
         allTasks.removeAll(subTasks);
+        allTasks.remove(sTask);
 
         return new ArrayList<ITask>(allTasks);
     }
