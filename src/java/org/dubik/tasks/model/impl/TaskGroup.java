@@ -67,12 +67,6 @@ public class TaskGroup implements ITaskGroup {
         return -1;
     }
 
-    public void moveUp(ITask task) {
-    }
-
-    public void moveDown(ITask task) {
-    }
-
     public void setTaskFilter(ITaskFilter filter) {
         this.filter = filter;
     }
@@ -176,5 +170,15 @@ public class TaskGroup implements ITaskGroup {
         }
 
         return null;
+    }
+
+    public boolean isRunning() {
+        return false;
+    }
+
+    public void start() {
+    }
+
+    public void stop() {
     }
 }

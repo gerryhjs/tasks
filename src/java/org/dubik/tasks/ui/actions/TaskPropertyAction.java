@@ -15,12 +15,12 @@
  */
 package org.dubik.tasks.ui.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.DialogWrapper;
-import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.TaskController;
+import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.TaskForm;
 
@@ -37,9 +37,9 @@ public class TaskPropertyAction extends BaseTaskAction {
             ITask[] selectedTasks = controller.getSelectedTasks();
             if (selectedTasks.length == 1 && controller.canEdit(selectedTasks[0])) {
                 ITask sTask = selectedTasks[0];
-                DialogBuilder dialogBuilder = new DialogBuilder(project);
-                dialogBuilder.setTitle(TasksBundle.message("properties.title"));
+
                 TaskForm taskForm = new TaskForm(project, getSettings());
+                taskForm.setTitle(TasksBundle.message("properties.title"));
                 taskForm.setTaskTitle(sTask.getTitle());
                 taskForm.setTaskDescription(sTask.getDescription());
                 taskForm.setPriority(sTask.getPriority());
@@ -55,16 +55,19 @@ public class TaskPropertyAction extends BaseTaskAction {
 
                 taskForm.setParentTasksList(controller.getDummyRootTaskInstance(), controller.findPossibleParents(sTask));
 
-                dialogBuilder.setCenterPanel(taskForm.getContainer());
-                if (dialogBuilder.show() == DialogWrapper.OK_EXIT_CODE && taskForm.getTaskTitle().trim().length() != 0) {
-                    ITask parent = null;
-                    if (taskForm.getSelectedParent() != controller.getDummyRootTaskInstance()) {
-                        parent = taskForm.getSelectedParent();
+                taskForm.show();
+                int exitCode = taskForm.getExitCode();
+                if (exitCode == TaskForm.EXIT_ADD_TO_ROOT || exitCode == TaskForm.EXIT_ADD) {
+                    ITask parent = exitCode == TaskForm.EXIT_ADD_TO_ROOT ? null : taskForm.getSelectedParent();
+
+                    if (parent == controller.getDummyRootTaskInstance()) {
+                        //user chose root manually
+                        parent = null;
                     }
 
                     controller.updateTask(sTask, parent,
-                                              taskForm.getTaskTitle(), taskForm.getTaskDescription(),
-                                              taskForm.getPriority(), taskForm.getEstimatedTime());
+                            taskForm.getTaskTitle(), taskForm.getTaskDescription(),
+                            taskForm.getPriority(), taskForm.getEstimatedTime());
 
                     controller.updateActualTime(sTask, taskForm.getActualTime());
                 }

@@ -18,6 +18,7 @@ package org.dubik.tasks.model.impl;
 import org.dubik.tasks.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.event.EventListenerList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,31 +26,17 @@ import java.util.List;
  * @author Sergiy Dubovik
  */
 public class TaskModel implements ITaskModel {
+
     private List<ITask> tasks;
-    private List<ITaskModelChangeListener> changeListeners = new ArrayList<ITaskModelChangeListener>();
+    private EventListenerList listeners;
 
     public TaskModel() {
         tasks = new ArrayList<ITask>();
+        listeners = new EventListenerList();
     }
 
-    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime) {
-        assert title != null;
 
-        return addTask(title, description, priority, estimatedTime, System.currentTimeMillis());
-    }
-
-    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime, long creationTime) {
-        return addTask(null, title, description, priority, estimatedTime, creationTime, false, false);
-    }
-
-    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime,
-                         long creationTime, boolean completed, boolean highlighed) {
-        Task task = new Task(title, description, priority, estimatedTime);
-        task.setCreationTime(creationTime);
-        task.setCompleted(completed);
-        task.setHighlighted(highlighed);
-        task.setParent(parent);
-
+    public ITask addTask(ITask parent, ITask task) {
         if (parent == null) {
             tasks.add(task);
         }
@@ -60,21 +47,6 @@ public class TaskModel implements ITaskModel {
         fireAddTaskEvent(task);
 
         return task;
-    }
-
-    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime, long actualTime,
-                         long creationTime, boolean completed, boolean highlighted) {
-        Task task = (Task) addTask(parent, title, description, priority, estimatedTime, creationTime, completed, highlighted);
-        task.setActualTime(actualTime);
-
-        return task;
-    }
-
-    public void addTask(ITask parentTask, String title, String description, TaskPriority priority, long estimatedTime) {
-        Task task = new Task(title, description, priority, estimatedTime);
-        parentTask.add(task);
-        task.setParent(parentTask);
-        fireAddTaskEvent(task);
     }
 
     public void updateTask(ITask task, ITask parent, String title, String description, TaskPriority priority, long estimatedTime) {
@@ -307,46 +279,44 @@ public class TaskModel implements ITaskModel {
     public void addChangeListener(ITaskModelChangeListener listener) {
         assert listener != null;
 
-        changeListeners.add(listener);
+        listeners.add(ITaskModelChangeListener.class, listener);
     }
 
     public void removeChangeListener(ITaskModelChangeListener listener) {
-        assert listener != null;
-
-        changeListeners.remove(listener);
+        listeners.remove(ITaskModelChangeListener.class, listener);
     }
 
     private void fireAddTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners) {
+        for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleAddTaskEvent(event);
         }
     }
 
     private void firePreDeleteTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners) {
+        for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handlePreDeleteTaskEvent(event);
         }
     }
 
     private void fireDeleteTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners) {
+        for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleDeleteTaskEvent(event);
         }
     }
 
     private void firePreChangeTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners) {
+        for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handlePreChangeTaskEvent(event);
         }
     }
 
     private void fireChangeTaskEvent(ITask task) {
         TaskChangeEvent event = new TaskChangeEvent(task);
-        for (ITaskModelChangeListener listener : changeListeners) {
+        for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleChangeTaskEvent(event);
         }
     }

@@ -33,6 +33,7 @@ import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.dubik.tasks.ui.tree.TreeRefresher;
+import org.dubik.tasks.utils.TaskTimer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -96,6 +97,8 @@ public class TasksProjectComponent implements ProjectComponent {
         if (settingsChangeListener != null) {
             settings.removePropertyChangeListener(settingsChangeListener);
         }
+
+        TaskTimer.stopAllTimers();
     }
 
     @NotNull

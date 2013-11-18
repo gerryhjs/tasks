@@ -36,7 +36,9 @@ import javax.swing.*;
  */
 public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     private static final SimpleTextAttributes STRIKEOUT_REGULAR_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
-    private static final SimpleTextAttributes STRIKEOUT_GRAY_ATTRIBUTES =new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
+    private static final SimpleTextAttributes STRIKEOUT_GRAY_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
+    private static final SimpleTextAttributes BOLD = new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD,
+            SimpleTextAttributes.REGULAR_ATTRIBUTES.getFgColor());
 
     private TaskSettings settings;
 
@@ -58,6 +60,10 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         SimpleTextAttributes titleAttr = SimpleTextAttributes.REGULAR_ATTRIBUTES;
         SimpleTextAttributes restAttr = SimpleTextAttributes.GRAY_ATTRIBUTES;
         SimpleTextAttributes groupTitleAttr = SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES;
+
+        if (task.isRunning()) {
+            titleAttr = SimpleTextAttributes.merge(titleAttr, BOLD);
+        }
 
         if (task.isCompleted()) {
             titleAttr = STRIKEOUT_REGULAR_ATTRIBUTES;
@@ -129,7 +135,6 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
                     details.append(makeStringFromTime(actual));
                 }
 
-
                 if (estimated != 0 || actual != 0) {
                     details.append(")");
                 }
@@ -196,24 +201,21 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         return details.toString();
     }
 
-    private String makeStringFromTime(long estimatedTime) {
-        int estimatedInMins = (int) (estimatedTime / (60 * 1000));
-        int hours = estimatedInMins / 60;
-        int min = estimatedInMins - (hours * 60);
+    private String makeStringFromTime(long seconds) {
+        int inMinutes = (int) (seconds / 60);
+        int hours = inMinutes / 60;
+        int minutes = inMinutes % 60;
 
         StringBuilder timeStr = new StringBuilder();
 
         if (hours != 0) {
             timeStr.append(Integer.toString(hours));
-            timeStr.append(" h");
+            timeStr.append("h");
         }
 
-        if (min != 0) {
-            if (hours != 0) {
-                timeStr.append(" ");
-            }
-            timeStr.append(Integer.toString(min));
-            timeStr.append(" min");
+        if (minutes != 0) {
+            timeStr.append(Integer.toString(minutes));
+            timeStr.append("m");
         }
 
         return timeStr.toString();

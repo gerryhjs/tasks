@@ -95,19 +95,22 @@ public class TaskController implements TreeSelectionListener {
             return 0;
         }
 
-        public void moveUp(ITask task) {
-
-        }
-
-        public void moveDown(ITask task) {
-        }
-
         public int getCompletionRatio() {
             return 0;
         }
 
         public long getActualTime() {
             return 0;
+        }
+
+        public boolean isRunning() {
+            return false;
+        }
+
+        public void start() {
+        }
+
+        public void stop() {
         }
     };
     private ITaskModel taskModel;
@@ -180,24 +183,11 @@ public class TaskController implements TreeSelectionListener {
     /**
      * Adds a task to a model.
      *
-     * @param title                 title or description of a task
-     * @param priority              task priority
-     * @param estimatedTimeInMillis completion estimation time
-     */
-    public void addTask(String title, String description, TaskPriority priority, long estimatedTimeInMillis) {
-        taskModel.addTask(title, description, priority, estimatedTimeInMillis);
-    }
-
-    /**
-     * Adds a task to a model.
-     *
      * @param parentTask            parent task
-     * @param title                 title or description of a task
-     * @param priority              task priority
-     * @param estimatedTimeInMillis completion estimation time
+     * @param task                  a task
      */
-    public void addTask(ITask parentTask, String title, String description, TaskPriority priority, long estimatedTimeInMillis) {
-        taskModel.addTask(parentTask, title, description, priority, estimatedTimeInMillis);
+    public void addTask(ITask parentTask, ITask task) {
+        taskModel.addTask(parentTask, task);
     }
 
     /**

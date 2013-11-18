@@ -28,32 +28,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
 /**
  * @author Sergiy Dubovik
  */
 public class TaskForm extends DialogWrapper {
+    public static final int EXIT_ADD_TO_ROOT = NEXT_USER_EXIT_CODE + 1;
+    public static final int EXIT_ADD = NEXT_USER_EXIT_CODE + 2;
     private static long ONE_MINUTE = 60 * 1000L;
+    private JPanel container;
     private JTextField titleTextField;
     private JComboBox<TaskPriority> priorityComboBox;
     private JSpinner minutesSpinner;
-    private JPanel container;
     private JComboBox<ITask> parentTasksComboBox;
     private JSpinner actualMinutesSpinner;
     private JLabel actualTimeLabel;
     private JLabel actualMinutesLabel;
     private JTextPane description;
     private ITask selectedParentTask;
-    private Action addAction;
-    private Action addToRootAction;
-    private boolean addToRoot = false;
 
     public TaskForm(Project project, TaskSettings settings) {
-        super(project, false);
+        super(project);
 
-        setValidationDelay(1);
         setTitle(TasksBundle.message("form.task.title"));
 
         SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, 9000, 15);
@@ -61,10 +58,10 @@ public class TaskForm extends DialogWrapper {
 
         TaskPriority[] priorities = TaskPriority.values();
         priorityComboBox.setRenderer(new PriorityComboBoxRenderer());
+
         for (TaskPriority priority : priorities) {
             priorityComboBox.addItem(priority);
         }
-
         priorityComboBox.setSelectedItem(TaskPriority.Normal);
 
         parentTasksComboBox.setRenderer(new TaskComboBoxRenderer());
@@ -75,10 +72,6 @@ public class TaskForm extends DialogWrapper {
         setActualsVisible(settings.isEnableActualTime());
 
         init();
-
-        getOKAction().setEnabled(false);
-        doValidate();
-
     }
 
     @Nullable
@@ -86,18 +79,11 @@ public class TaskForm extends DialogWrapper {
         return container;
     }
 
-    protected void createDefaultActions() {
-        super.createDefaultActions();
-        addAction = new AddAction();
-        addToRootAction = new AddToRootAction();
-    }
-
-    public boolean isAddToRoot() {
-        return addToRoot;
-    }
-
     @NotNull
     protected Action[] createActions() {
+        Action addAction = new AddAction();
+        Action addToRootAction = new AddToRootAction();
+
         return new Action[]{addToRootAction, addAction, getCancelAction()};
     }
 
@@ -149,10 +135,6 @@ public class TaskForm extends DialogWrapper {
         priorityComboBox.setSelectedItem(priority);
     }
 
-    public JPanel getContainer() {
-        return container;
-    }
-
     public void setParentTasksList(ITask rootTask, List<ITask> parentTaskList) {
         parentTasksComboBox.addItem(rootTask);
 
@@ -185,6 +167,7 @@ public class TaskForm extends DialogWrapper {
     @Nullable
     @Override
     protected ValidationInfo doValidate() {
+        System.out.println("titleTextField = " + titleTextField.getText());
         if (titleTextField.getText().trim().isEmpty()) {
             return new ValidationInfo(TasksBundle.message("error.no-title", titleTextField));
         }
@@ -224,26 +207,16 @@ public class TaskForm extends DialogWrapper {
         }
     }
 
-    private class AddAction extends AbstractAction {
+    private class AddAction extends DialogWrapperExitAction {
         public AddAction() {
-            putValue(Action.NAME, TasksBundle.message("actions.add"));
+            super(TasksBundle.message("actions.add"), EXIT_ADD);
             putValue(DEFAULT_ACTION, Boolean.TRUE);
-        }
-
-        public void actionPerformed(ActionEvent event) {
-            addToRoot = false;
-            doOKAction();
         }
     }
 
-    private class AddToRootAction extends AbstractAction {
+    private class AddToRootAction extends DialogWrapperExitAction {
         public AddToRootAction() {
-            putValue(Action.NAME, TasksBundle.message("actions.add-to-root"));
-        }
-
-        public void actionPerformed(ActionEvent event) {
-            addToRoot = true;
-            doOKAction();
+            super(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT);
         }
     }
 }

@@ -77,58 +77,7 @@ public interface ITaskModel {
      */
     public void completeTask(ITask task);
 
-    /**
-     * Creates and adds task.
-     *
-     * @param title         task title
-     * @param priority      task priority
-     * @param estimatedTime estimated time to complete a task
-     * @return created task
-     */
-    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime);
-
-    /**
-     * Creates and adds task.
-     *
-     * @param title         task title
-     * @param priority      task priority
-     * @param estimatedTime estimated time to complete a task
-     * @param creationTime  time when note has been created
-     * @return created task
-     */
-    public ITask addTask(String title, String description, TaskPriority priority, long estimatedTime, long creationTime);
-
-    /**
-     * Creates and adds task.
-     *
-     * @param parent        parent task
-     * @param title         task title
-     * @param priority      task priority
-     * @param estimatedTime estimated time to complete a task
-     * @param creationTime  time when note has been created
-     * @param completed     indicates if task is completed or not
-     * @param highlighted   indicates if task is highlighted or not
-     * @return created task
-     */
-    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime,
-                         long creationTime, boolean completed, boolean highlighted);
-
-    /**
-     * Creates and adds task.
-     *
-     * @param parent        parent task
-     * @param title         task title
-     * @param priority      task priority
-     * @param estimatedTime estimated time to complete a task
-     * @param actualTime    elapsed time
-     * @param creationTime  time when note has been created
-     * @param completed     indicates if task is completed or not
-     * @param highlighted   indicates if task is highlighted or not
-     * @return created task
-     */
-    public ITask addTask(ITask parent, String title, String description, TaskPriority priority, long estimatedTime,
-                         long actualTime, long creationTime, boolean completed, boolean highlighted);
-
+   public ITask addTask(ITask parent, ITask task);
     /**
      * Update specified task.
      *
@@ -141,18 +90,6 @@ public interface ITaskModel {
     void updateTask(ITask task, ITask parent, String title, String description, TaskPriority priority, long estimatedTime);
 
     void moveTask(ITask task, ITask parent, int index);
-
-
-    /**
-     * Create and add task.
-     *
-     * @param parentTask    parent task
-     * @param title         task title
-     * @param priority      task priority
-     * @param estimatedTime estimated time to complete a task
-     */
-    void addTask(ITask parentTask, String title, String description, TaskPriority priority, long estimatedTime);
-
     /**
      * Sets task to uncomplete state.
      *

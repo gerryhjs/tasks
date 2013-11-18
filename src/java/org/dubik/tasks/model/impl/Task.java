@@ -18,6 +18,7 @@ package org.dubik.tasks.model.impl;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.TaskHighlightingType;
 import org.dubik.tasks.model.TaskPriority;
+import org.dubik.tasks.utils.TaskTimer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +40,7 @@ public class Task implements ITask {
     private TaskHighlightingType highlightingType = TaskHighlightingType.Red;
     private List<ITask> subTasks = new ArrayList<ITask>();
     private ITask parent;
+    private boolean isRunning;
 
     public Task() {
     }
@@ -177,6 +179,7 @@ public class Task implements ITask {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+        stop();
     }
 
     public void setCreationTime(long creationTime) {
@@ -221,21 +224,18 @@ public class Task implements ITask {
         return subTasks.indexOf(subTask);
     }
 
-    public void moveUp(ITask task) {
-        int index = subTasks.indexOf(task);
-        if (index > 1) {
-            subTasks.remove(index);
-            subTasks.add(index - 1, task);
-        }
+    public boolean isRunning() {
+        return isRunning;
     }
 
-    public void moveDown(ITask task) {
-        int index = subTasks.indexOf(task);
-        if (index < subTasks.size() - 1) {
-            subTasks.remove(index);
-            subTasks.add(index + 1, task);
-        }
+    public void start() {
+        isRunning = true;
+        TaskTimer.startTask(this);
     }
 
+    public void stop() {
+        isRunning = false;
+        TaskTimer.stopTask(this);
 
+    }
 }

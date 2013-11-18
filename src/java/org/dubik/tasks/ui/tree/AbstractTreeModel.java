@@ -15,11 +15,10 @@
  */
 package org.dubik.tasks.ui.tree;
 
+import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Provides support for JTree.
@@ -27,40 +26,36 @@ import java.util.List;
  * @author Sergiy Dubovik
  */
 abstract public class AbstractTreeModel implements TreeModel {
-    private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
+    private EventListenerList listeners = new EventListenerList();
 
     public void addTreeModelListener(TreeModelListener listener) {
-        if (listener != null && !listeners.contains(listener)) {
-            listeners.add(listener);
-        }
+        listeners.add(TreeModelListener.class, listener);
     }
 
     public void removeTreeModelListener(TreeModelListener listener) {
-        if (listener != null) {
-            listeners.remove(listener);
-        }
+        listeners.remove(TreeModelListener.class, listener);
     }
 
     public void fireTreeNodesChanged(TreeModelEvent e) {
-        for (TreeModelListener listener : listeners) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
             listener.treeNodesChanged(e);
         }
     }
 
     void fireTreeNodesInserted(TreeModelEvent e) {
-        for (TreeModelListener listener : listeners) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
             listener.treeNodesInserted(e);
         }
     }
 
     void fireTreeNodesRemoved(TreeModelEvent e) {
-        for (TreeModelListener listener : listeners) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
             listener.treeNodesRemoved(e);
         }
     }
 
     void fireTreeStructureChanged(TreeModelEvent e) {
-        for (TreeModelListener listener : listeners) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
             listener.treeStructureChanged(e);
         }
     }

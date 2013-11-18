@@ -15,12 +15,14 @@
  */
 package org.dubik.tasks.model;
 
+import java.util.EventListener;
+
 /**
  * Model change listener. Extend this interface and register it in the model.
  *
  * @author Sergiy Dubovik
  */
-public interface ITaskModelChangeListener {
+public interface ITaskModelChangeListener extends EventListener{
     /**
      * Fired when new task added to a model.
      *

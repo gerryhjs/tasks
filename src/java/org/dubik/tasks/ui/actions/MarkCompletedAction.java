@@ -42,9 +42,8 @@ public class MarkCompletedAction extends BaseTaskAction {
     private void updateActualTime(AnActionEvent e, ITask selectedTask) {
         TaskSettings settings = getSettings();
         if (settings.isEnableActualTime() && settings.isAskActualWhenCompleteTask()) {
-            ActualTimeForm actualTimeForm = new ActualTimeForm(getProject(e), selectedTask.getTitle());
+            ActualTimeForm actualTimeForm = new ActualTimeForm(getProject(e), selectedTask);
             actualTimeForm.setTitle(TasksBundle.message("form.actualtime.title"));
-            actualTimeForm.setActualTime(selectedTask.getActualTime());
             actualTimeForm.show();
             if (actualTimeForm.isOK()) {
                 TaskController controller = getController(e);

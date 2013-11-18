@@ -78,7 +78,7 @@ public interface ITask {
     public boolean isCompleted();
 
     /**
-     * Checks whethe the task is highlighted.
+     * Checks whether the task is highlighted.
      *
      * @return <code>true</code> if complete, <code>false</code> otherwise
      */
@@ -133,7 +133,9 @@ public interface ITask {
 
     public int indexOf(ITask subTask);
 
-    void moveUp(ITask task);
+    public void start();
 
-    void moveDown(ITask task);
+    public void stop();
+
+    public boolean isRunning();
 }

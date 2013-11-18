@@ -15,6 +15,8 @@
  */
 package org.dubik.tasks.ui.widgets;
 
+import com.intellij.ui.JBColor;
+
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToolTipUI;
 import java.awt.*;
@@ -40,10 +42,10 @@ public class ProgressTooltipUI extends MetalToolTipUI {
 
             int middlePoint = (int) ((d.getWidth() - 2) * tooltip.getPercentage());
 
-            g.setColor(new Color(0x00B000));
+            g.setColor(new JBColor(new Color(0x00B000), new Color(0x00B000)));
             g.fillRect(4, (int) d.getHeight() - 6, middlePoint, 3);
 
-            g.setColor(new Color(0xB00000));
+            g.setColor(new JBColor(new Color(0xB00000), new Color(0xB00000)));
             if (middlePoint < 4) {
                 middlePoint = 4;
             }

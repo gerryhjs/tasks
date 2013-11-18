@@ -23,6 +23,7 @@ import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.model.TaskHighlightingType;
 import org.dubik.tasks.model.TaskPriority;
+import org.dubik.tasks.model.impl.TaskBuilder;
 import org.jdom.Element;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class SerializeSupport {
         xTask.setAttribute(TASK_HIGHLIGHTED, Boolean.toString(task.isHighlighted()));
         xTask.setAttribute(TASK_HIGHLIGHTING_TYPE, task.getHighlightingType().toString());
         xTask.setAttribute(TASK_TITLE, task.getTitle());
-        xTask.setAttribute(TASK_DESCRIPTION, StringUtil.escapeXml(task.getDescription() == null ? "" : task.getDescription()) );
+        xTask.setAttribute(TASK_DESCRIPTION, StringUtil.escapeXml(task.getDescription() == null ? "" : task.getDescription()));
 
         taskRoot.addContent(xTask);
 
@@ -123,9 +124,19 @@ public class SerializeSupport {
 
         String description = StringUtil.unescapeXml(taskElem.getAttributeValue(TASK_DESCRIPTION));
 
-        ITask task = model.addTask(parentTask, title, description, priority, estimated, actual,
-                                   created, completed, highlighted);
-        model.setTaskHighlightingType(task, type);
+        ITask task = new TaskBuilder()
+                .setTitle(title)
+                .setDescription(description)
+                .setPriority(priority)
+                .setEstimatedTime(estimated)
+                .setActualTime(actual)
+                .setCreationTime(created)
+                .setCompleted(completed)
+                .setHighlighted(highlighted)
+                .setHighlightingType(type)
+                .build();
+
+        model.addTask(parentTask, task);
 
         for (Object subTaskElem : taskElem.getChildren()) {
             Element xSubTask = (Element) subTaskElem;

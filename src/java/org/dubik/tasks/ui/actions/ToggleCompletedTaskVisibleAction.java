@@ -32,14 +32,7 @@ public class ToggleCompletedTaskVisibleAction extends BaseToggleTaskAction {
 
     @Override
     public void setSelected(AnActionEvent e, boolean state) {
-        TreeController treeController = getTreeController(e);
-        if (state) {
-            treeController.hideCompletedTasks(true);
-        }
-        else {
-            treeController.hideCompletedTasks(false);
-        }
-
+        getTreeController(e).hideCompletedTasks(state);
     }
 
 }

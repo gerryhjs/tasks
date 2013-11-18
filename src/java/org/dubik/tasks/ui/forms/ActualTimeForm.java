@@ -17,6 +17,7 @@ package org.dubik.tasks.ui.forms;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import org.dubik.tasks.model.ITask;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -25,22 +26,21 @@ import javax.swing.*;
  * @author Sergiy Dubovik
  */
 public class ActualTimeForm extends DialogWrapper {
-    private static long ONE_MINUTE = 60 * 1000L;
+    private static long ONE_MINUTE = 60;
 
     private JSpinner actualTimeSpinner;
     private JPanel container;
     private JLabel taskDescriptionLabel;
 
-    public ActualTimeForm(Project project, String taskDescription) {
+    public ActualTimeForm(Project project, ITask task) {
         super(project, false);
-        taskDescriptionLabel.setText(taskDescription);
-        initForm();
-        init();
-    }
+        taskDescriptionLabel.setText( task.getTitle());
 
-    private void initForm() {
-        SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, 9000, 15);
+        SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 15);
         actualTimeSpinner.setModel(minutesSpinnerModel);
+        actualTimeSpinner.setValue((int) (task.getActualTime() / ONE_MINUTE));
+
+        init();
     }
 
     @Nullable
@@ -53,7 +53,4 @@ public class ActualTimeForm extends DialogWrapper {
         return minutes * ONE_MINUTE;
     }
 
-    public void setActualTime(long actualTime) {
-        actualTimeSpinner.setValue((int) (actualTime / ONE_MINUTE));
-    }
 }
