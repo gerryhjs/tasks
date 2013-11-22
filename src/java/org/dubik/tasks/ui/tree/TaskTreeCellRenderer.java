@@ -149,19 +149,13 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             }
         }
         else {
-            details.append("(");
-            details.append(totalTasks);
-            details.append(" Tasks, ");
-            details.append(makePercentageForTask(task));
-            details.append("% Completed");
+            details.append("(").append(totalTasks).append(" Tasks, ").append(task.getCompletionRatio()).append("% Completed");
             if (estimated != 0) {
-                details.append(", Estimated: ");
-                details.append(makeStringFromTime(estimated));
+                details.append(", Estimated: ").append(makeStringFromTime(estimated));
             }
 
             if (settings.isEnableActualTime() && actual != 0) {
-                details.append(", Actual: ");
-                details.append(makeStringFromTime(actual));
+                details.append(", Actual: ").append(makeStringFromTime(actual));
             }
 
             details.append(")");
@@ -213,10 +207,8 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             timeStr.append("h");
         }
 
-        if (minutes != 0) {
-            timeStr.append(Integer.toString(minutes));
-            timeStr.append("m");
-        }
+        timeStr.append(Integer.toString(minutes));
+        timeStr.append("m");
 
         return timeStr.toString();
     }

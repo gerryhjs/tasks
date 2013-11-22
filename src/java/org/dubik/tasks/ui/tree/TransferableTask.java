@@ -18,23 +18,24 @@ package org.dubik.tasks.ui.tree;
 import org.dubik.tasks.model.ITask;
 
 import java.awt.datatransfer.*;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author Sergiy Dubovik
  */
 public class TransferableTask implements Transferable {
     public static final DataFlavor TASK_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType, "Task");
-    private ITask task;
-    private DataFlavor[] flavors = {TASK_FLAVOR};
+    private static final DataFlavor[] flavors = {TASK_FLAVOR};
 
-    public TransferableTask(ITask tasks) {
-        this.task = tasks;
+    private List<ITask> tasks;
+
+    public TransferableTask(List<ITask> tasks) {
+        this.tasks = new ArrayList<ITask>(tasks);
     }
 
     public synchronized Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
         if (flavor == TASK_FLAVOR) {
-            return task;
+            return tasks;
         }
         else {
             throw new UnsupportedFlavorException(flavor);

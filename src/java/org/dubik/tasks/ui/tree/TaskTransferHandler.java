@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Sergiy Dubovik
@@ -41,7 +42,7 @@ public class TaskTransferHandler extends TransferHandler {
     @Override
     protected Transferable createTransferable(JComponent c) {
         if (taskController.getSelectedTasks().size() > 0) {
-            return new TransferableTask(taskController.getSelectedTasks().get(0));
+            return new TransferableTask(taskController.getSelectedTasks());
         }
         return null;
     }
@@ -58,9 +59,9 @@ public class TaskTransferHandler extends TransferHandler {
         ITask dropTask = (ITask) dropLocation.getPath().getLastPathComponent();
 
         Transferable transferable = support.getTransferable();
-        ITask dragTask = null;
+        List<ITask> dragTask = null;
         try {
-            dragTask = (ITask) transferable.getTransferData(TransferableTask.TASK_FLAVOR);
+            dragTask = (List<ITask>) transferable.getTransferData(TransferableTask.TASK_FLAVOR);
         }
         catch (UnsupportedFlavorException e) {
             e.printStackTrace();
@@ -72,17 +73,22 @@ public class TaskTransferHandler extends TransferHandler {
         Tree tree = (Tree) support.getComponent();
         TaskTreeModel model = (TaskTreeModel) tree.getModel();
 
-        if (dropTask instanceof ITaskGroup && model.getRoot() != dropTask ) {
+        if (dropTask instanceof ITaskGroup && model.getRoot() != dropTask) {
             //don't drop on TaskGroups, except the root
             return false;
         }
-        else if (dropTask == dragTask) {
+        else if (dragTask.contains(dropTask)) {
             //don't drop on self
             return false;
         }
-        else if ( taskController.getSubTasks(dragTask).contains(dropTask)) {
+        else {
             //don't drop on a child.
-            return false;
+            for (ITask iTask : dragTask) {
+                if (taskController.getSubTasks(iTask).contains(dropTask)) {
+                    return false;
+                }
+            }
+
         }
 
         return dropTask != null;
@@ -100,8 +106,16 @@ public class TaskTransferHandler extends TransferHandler {
 
         try {
             Transferable transferable = support.getTransferable();
-            ITask dragTask = (ITask) transferable.getTransferData(TransferableTask.TASK_FLAVOR);
-            taskController.moveTask(dragTask, dropTask, dropLocation.getChildIndex());
+            List<ITask> dragTask = (List<ITask>) transferable.getTransferData(TransferableTask.TASK_FLAVOR);
+            if (dragTask != null) {
+                int dropIndex = dropLocation.getChildIndex();
+                for (ITask iTask : dragTask) {
+                    taskController.moveTask(iTask, dropTask, dropIndex);
+                    if (dropIndex > -1) {
+                        dropIndex++;
+                    }
+                }
+            }
             return true;
         }
         catch (Exception e) {

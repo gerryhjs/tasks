@@ -36,7 +36,7 @@ import java.util.List;
 public class TaskForm extends DialogWrapper {
     public static final int EXIT_ADD_TO_ROOT = NEXT_USER_EXIT_CODE;
     public static final int EXIT_ADD = NEXT_USER_EXIT_CODE + 1;
-    private static long ONE_MINUTE = 60 * 1000L;
+    private static int ONE_MINUTE = 60;
     private JPanel container;
     private JTextField titleTextField;
     private JComboBox<TaskPriority> priorityComboBox;
@@ -53,7 +53,7 @@ public class TaskForm extends DialogWrapper {
         super(project);
         this.forEdit = forEdit;
 
-        setTitle(forEdit ? TasksBundle.message("form.new-task.title") : TasksBundle.message("form.new-task.title"));
+        setTitle(forEdit ? TasksBundle.message("form.edit-task.title") : TasksBundle.message("form.new-task.title"));
 
         SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, 9000, 15);
         minutesSpinner.setModel(minutesSpinnerModel);

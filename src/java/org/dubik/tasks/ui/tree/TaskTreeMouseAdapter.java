@@ -45,7 +45,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
             Project project = DataKeys.PROJECT.getData(context);
 
             TasksTree tree = (TasksTree) e.getComponent();
-            TreePath treePath = tree.getPathForLocation(e.getX(), e.getY());
+            TreePath treePath = tree.getClosestPathForLocation(e.getX(), e.getY());
             if (treePath != null) {
                 ITask clickedTask = (ITask) treePath.getLastPathComponent();
 

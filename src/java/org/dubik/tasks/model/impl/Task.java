@@ -192,10 +192,12 @@ public class Task implements ITask {
 
     public void add(@NotNull ITask task) {
         subTasks.add(task);
+        ((Task)task).setParent(this);
     }
 
     public void add(int index, @NotNull ITask task) {
         subTasks.add(index, task);
+        ((Task) task).setParent(this);
     }
 
     public int size() {
@@ -236,6 +238,5 @@ public class Task implements ITask {
     public void stop() {
         isRunning = false;
         TaskTimer.stopTask(this);
-
     }
 }
