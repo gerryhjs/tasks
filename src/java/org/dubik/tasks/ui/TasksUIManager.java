@@ -159,7 +159,6 @@ public class TasksUIManager {
         return tasksTree;
     }
 
-    @SuppressWarnings({"SameParameterValue"})
     @NotNull
     public static JPopupMenu createTaskTreePopup(String actionGroupId) {
         ActionGroup actionGroup = (ActionGroup) ActionManager.getInstance().getAction(actionGroupId);

@@ -23,6 +23,8 @@ import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.ActualTimeForm;
 
+import java.util.List;
+
 /**
  * @author Sergiy Dubovik
  */
@@ -31,7 +33,7 @@ public class MarkCompletedAction extends BaseTaskAction {
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
             for (ITask selectedTask : selectedTasks) {
                 updateActualTime(e, selectedTask);
                 controller.completeTask(selectedTask);

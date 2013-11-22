@@ -24,13 +24,15 @@ import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.NewChangelistForm;
 
+import java.util.List;
+
 /**
  * @author Sergiy Dubovik
  */
 public class NewChangeListAction extends BaseTaskAction {
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
-        ITask[] selectedTasks = controller.getSelectedTasks();
+        List<ITask> selectedTasks = controller.getSelectedTasks();
 
         String changelist = generateChangelistTitle(selectedTasks);
 
@@ -51,19 +53,19 @@ public class NewChangeListAction extends BaseTaskAction {
         }
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
-        presentation.setEnabled(selectedTasks != null && selectedTasks.length > 0);
+    protected void update(TaskController controller, List<ITask> selectedTasks, Presentation presentation) {
+        presentation.setEnabled(selectedTasks != null && selectedTasks.size() > 0);
     }
 
-    private String generateChangelistTitle(ITask[] selectedTasks) {
-        if (selectedTasks == null || selectedTasks.length == 0) {
+    private String generateChangelistTitle(List<ITask> selectedTasks) {
+        if (selectedTasks == null || selectedTasks.size() == 0) {
             return "";
         }
 
-        StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < selectedTasks.length; i++) {
-            buf.append(selectedTasks[i].getTitle());
-            if (i + 1 < selectedTasks.length) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < selectedTasks.size(); i++) {
+            buf.append(selectedTasks.get(i).getTitle());
+            if (i + 1 < selectedTasks.size()) {
                 buf.append(", ");
             }
         }

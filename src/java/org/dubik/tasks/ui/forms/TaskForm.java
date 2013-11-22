@@ -34,8 +34,8 @@ import java.util.List;
  * @author Sergiy Dubovik
  */
 public class TaskForm extends DialogWrapper {
-    public static final int EXIT_ADD_TO_ROOT = NEXT_USER_EXIT_CODE + 1;
-    public static final int EXIT_ADD = NEXT_USER_EXIT_CODE + 2;
+    public static final int EXIT_ADD_TO_ROOT = NEXT_USER_EXIT_CODE;
+    public static final int EXIT_ADD = NEXT_USER_EXIT_CODE + 1;
     private static long ONE_MINUTE = 60 * 1000L;
     private JPanel container;
     private JTextField titleTextField;
@@ -47,11 +47,13 @@ public class TaskForm extends DialogWrapper {
     private JLabel actualMinutesLabel;
     private JTextPane description;
     private ITask selectedParentTask;
+    private boolean forEdit;
 
-    public TaskForm(Project project, TaskSettings settings) {
+    public TaskForm(Project project, TaskSettings settings, boolean forEdit) {
         super(project);
+        this.forEdit = forEdit;
 
-        setTitle(TasksBundle.message("form.task.title"));
+        setTitle(forEdit ? TasksBundle.message("form.new-task.title") : TasksBundle.message("form.new-task.title"));
 
         SpinnerModel minutesSpinnerModel = new SpinnerNumberModel(0, 0, 9000, 15);
         minutesSpinner.setModel(minutesSpinnerModel);
@@ -81,10 +83,16 @@ public class TaskForm extends DialogWrapper {
 
     @NotNull
     protected Action[] createActions() {
-        Action addAction = new AddAction();
-        Action addToRootAction = new AddToRootAction();
-
-        return new Action[]{addToRootAction, addAction, getCancelAction()};
+        if (forEdit) {
+            return new Action[]{getOKAction(), getCancelAction()};
+        }
+        else {
+            return new Action[]{
+                    new DialogWrapperExitAction(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT),
+                    new DialogWrapperExitAction(TasksBundle.message("actions.add"), EXIT_ADD),
+                    getCancelAction()
+            };
+        }
     }
 
     public JComponent getPreferredFocusedComponent() {
@@ -204,19 +212,6 @@ public class TaskForm extends DialogWrapper {
             ITask task = (ITask) value;
             append(task.getTitle());
             setIcon(TasksUIManager.createIcon(task));
-        }
-    }
-
-    private class AddAction extends DialogWrapperExitAction {
-        public AddAction() {
-            super(TasksBundle.message("actions.add"), EXIT_ADD);
-            putValue(DEFAULT_ACTION, Boolean.TRUE);
-        }
-    }
-
-    private class AddToRootAction extends DialogWrapperExitAction {
-        public AddToRootAction() {
-            super(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT);
         }
     }
 }

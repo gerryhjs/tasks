@@ -22,6 +22,8 @@ import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.TaskHighlightingType;
 import org.dubik.tasks.ui.actions.BaseTaskAction;
 
+import java.util.List;
+
 /**
  * @author Sergiy Dubovik
  */
@@ -30,7 +32,7 @@ public abstract class BaseHighlightTaskAction extends BaseTaskAction {
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
             if (canHighlightOrUnhighlight(selectedTasks, controller)) {
                 for (ITask task : selectedTasks) {
                     controller.setTaskHighlightingType(task, getHightlightingType());
@@ -40,11 +42,11 @@ public abstract class BaseHighlightTaskAction extends BaseTaskAction {
         }
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
-        presentation.setEnabled(canHighlightOrUnhighlight(selectedTasks, controller) && selectedTasks.length != 0);
+    protected void update(TaskController controller, List<ITask> selectedTasks, Presentation presentation) {
+        presentation.setEnabled(canHighlightOrUnhighlight(selectedTasks, controller) && selectedTasks.size() != 0);
     }
 
-    private boolean canHighlightOrUnhighlight(ITask[] tasks, TaskController controller) {
+    private boolean canHighlightOrUnhighlight(List<ITask> tasks, TaskController controller) {
         boolean result = true;
 
         for (ITask task : tasks) {

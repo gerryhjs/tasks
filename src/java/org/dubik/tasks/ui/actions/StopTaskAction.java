@@ -24,25 +24,27 @@ import org.dubik.tasks.TaskSettings;
 import org.dubik.tasks.TasksApplicationComponent;
 import org.dubik.tasks.model.ITask;
 
+import java.util.List;
+
 public class StopTaskAction extends BaseTaskAction {
 
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         TaskController taskController = this.getController(e);
-        ITask[] selectedTasks = taskController.getSelectedTasks();
-        selectedTasks[0].stop();
+        List<ITask> selectedTasks = taskController.getSelectedTasks();
+        selectedTasks.get(0).stop();
     }
 
     @Override
-    protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
+    protected void update(TaskController controller,List<ITask> selectedTasks, Presentation presentation) {
         TasksApplicationComponent appComp = ApplicationManager.getApplication()
                 .getComponent(TasksApplicationComponent.class);
 
         TaskSettings settings = appComp.getSettings();
-        presentation.setEnabled(selectedTasks.length == 1 &&
-                selectedTasks[0].isRunning() &&
-                !selectedTasks[0].isCompleted() &&
+        presentation.setEnabled(selectedTasks.size() == 1 &&
+                selectedTasks.get(0).isRunning() &&
+                !selectedTasks.get(0).isCompleted() &&
                 settings.isEnableActualTime());
 
     }

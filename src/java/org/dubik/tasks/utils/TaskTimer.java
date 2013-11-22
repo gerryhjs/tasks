@@ -53,8 +53,6 @@ public class TaskTimer {
         }
     }
 
-
-
     private static class Runner extends Timer {
         public Runner(final ITask task) {
             super(1000, new ActionListener() {

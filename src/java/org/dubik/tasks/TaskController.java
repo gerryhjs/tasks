@@ -33,7 +33,7 @@ import java.util.List;
  * @author Sergiy Dubovik
  */
 public class TaskController implements TreeSelectionListener {
-    private static final ITask[] EMPTY_SELECTION = new ITask[0];
+    private static final List<ITask> EMPTY_SELECTION = new ArrayList<ITask>();
     private static ITask DUMMY_ROOT_TASK = new ITask() {
 
         public String getTitle() {
@@ -114,7 +114,7 @@ public class TaskController implements TreeSelectionListener {
         }
     };
     private ITaskModel taskModel;
-    private ITask[] selectedTasks;
+    private List<ITask> selectedTasks;
 
 
     /**
@@ -127,7 +127,7 @@ public class TaskController implements TreeSelectionListener {
     }
 
     @NotNull
-    synchronized public ITask[] getSelectedTasks() {
+    synchronized public List<ITask> getSelectedTasks() {
         if (selectedTasks == null) {
             return EMPTY_SELECTION;
         }
@@ -135,8 +135,8 @@ public class TaskController implements TreeSelectionListener {
         return selectedTasks;
     }
 
-    public void setSelectedTasks(ITask[] tasks) {
-        selectedTasks = tasks;
+    public void setSelectedTasks(List<ITask> tasks) {
+        selectedTasks = new ArrayList<ITask>(tasks);
     }
 
     /**
@@ -226,9 +226,9 @@ public class TaskController implements TreeSelectionListener {
             selectedTasks = EMPTY_SELECTION;
         }
         else {
-            selectedTasks = new ITask[selectedPaths.length];
-            for (int i = 0; i < selectedPaths.length; i++) {
-                selectedTasks[i] = (ITask) selectedPaths[i].getLastPathComponent();
+            selectedTasks = new ArrayList<ITask>();
+            for (TreePath selectedPath : selectedPaths) {
+                selectedTasks.add((ITask) selectedPath.getLastPathComponent());
             }
         }
     }

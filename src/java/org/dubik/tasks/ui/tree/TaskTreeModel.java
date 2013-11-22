@@ -21,7 +21,9 @@ import org.dubik.tasks.ui.filters.PriorityFilter;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreePath;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Task tree model. Feeds tree with the data.
@@ -32,7 +34,6 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     private ITaskGroup root;
     private ITaskModel taskModel;
     private ITaskFilter taskFilter;
-    private TreeRefresher refresher;
 
     public TaskTreeModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
@@ -41,10 +42,6 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
 
         root = new TaskGroup("All Tasks");
         root.setTaskModel(taskModel);
-    }
-
-    public void setRefresher(TreeRefresher refresher) {
-        this.refresher = refresher;
     }
 
     public Object getRoot() {
@@ -117,13 +114,7 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     }
 
     private void updateTree() {
-        if (refresher != null) {
-            refresher.refresh();
-        }
-        else {
-            fireTreeStructureChanged(new TreeModelEvent(this, new Object[]{root}));
-        }
-
+        fireTreeStructureChanged(new TreeModelEvent(this, new Object[]{root}));
     }
 
     public void handleAddTaskEvent(TaskChangeEvent event) {

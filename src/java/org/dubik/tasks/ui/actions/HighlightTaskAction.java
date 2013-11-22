@@ -20,6 +20,8 @@ import com.intellij.openapi.actionSystem.Presentation;
 import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
 
+import java.util.List;
+
 /**
  * Highlight task.
  *
@@ -37,7 +39,7 @@ public class HighlightTaskAction extends BaseToggleTaskAction {
     public void setSelected(AnActionEvent e, boolean state) {
         TaskController controller = getTaskController(e);
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
             if (canHighlightOrUnhighlight(selectedTasks, controller)) {
                 for (ITask task : selectedTasks) {
                     if (state) {
@@ -52,8 +54,8 @@ public class HighlightTaskAction extends BaseToggleTaskAction {
 
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
-        if (selectedTasks.length == 0) {
+    protected void update(TaskController controller, List<ITask> selectedTasks, Presentation presentation) {
+        if (selectedTasks.size() == 0) {
             presentation.setEnabled(false);
             return;
         }
@@ -61,18 +63,18 @@ public class HighlightTaskAction extends BaseToggleTaskAction {
         presentation.setEnabled(canHighlightOrUnhighlight(selectedTasks, controller));
     }
 
-    private boolean areAllHighlighted(ITask[] tasks) {
+    private boolean areAllHighlighted(List<ITask> tasks) {
         boolean highlighted = true;
 
-        for (int i = 0; i < tasks.length && highlighted; i++) {
-            ITask task = tasks[i];
+        for (int i = 0; i < tasks.size() && highlighted; i++) {
+            ITask task = tasks.get(i);
             highlighted = task.isHighlighted();
         }
 
         return highlighted;
     }
 
-    private boolean canHighlightOrUnhighlight(ITask[] tasks, TaskController controller) {
+    private boolean canHighlightOrUnhighlight(List<ITask> tasks, TaskController controller) {
         boolean result = true;
 
         for (ITask task : tasks) {

@@ -24,6 +24,8 @@ import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.TaskForm;
 
+import java.util.List;
+
 /**
  * @author Sergiy Dubovik
  */
@@ -34,11 +36,11 @@ public class TaskPropertyAction extends BaseTaskAction {
         Project project = PlatformDataKeys.PROJECT.getData(e.getDataContext());
         if (project != null) {
             TaskController controller = getController(e);
-            ITask[] selectedTasks = controller.getSelectedTasks();
-            if (selectedTasks.length == 1 && controller.canEdit(selectedTasks[0])) {
-                ITask sTask = selectedTasks[0];
+            List<ITask> selectedTasks = controller.getSelectedTasks();
+            if (selectedTasks.size()== 1 && controller.canEdit(selectedTasks.get(0))) {
+                ITask sTask = selectedTasks.get(0);
 
-                TaskForm taskForm = new TaskForm(project, getSettings());
+                TaskForm taskForm = new TaskForm(project, getSettings(), true );
                 taskForm.setTitle(TasksBundle.message("properties.title"));
                 taskForm.setTaskTitle(sTask.getTitle());
                 taskForm.setTaskDescription(sTask.getDescription());
@@ -56,9 +58,10 @@ public class TaskPropertyAction extends BaseTaskAction {
                 taskForm.setParentTasksList(controller.getDummyRootTaskInstance(), controller.findPossibleParents(sTask));
 
                 taskForm.show();
+
                 int exitCode = taskForm.getExitCode();
-                if (exitCode == TaskForm.EXIT_ADD_TO_ROOT || exitCode == TaskForm.EXIT_ADD) {
-                    ITask parent = exitCode == TaskForm.EXIT_ADD_TO_ROOT ? null : taskForm.getSelectedParent();
+                if (exitCode == TaskForm.OK_EXIT_CODE) {
+                    ITask parent = taskForm.getSelectedParent();
 
                     if (parent == controller.getDummyRootTaskInstance()) {
                         //user chose root manually

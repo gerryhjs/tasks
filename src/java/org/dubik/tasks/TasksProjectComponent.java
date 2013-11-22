@@ -32,7 +32,6 @@ import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TreeController;
-import org.dubik.tasks.ui.tree.TreeRefresher;
 import org.dubik.tasks.utils.TaskTimer;
 import org.jetbrains.annotations.NotNull;
 
@@ -87,8 +86,11 @@ public class TasksProjectComponent implements ProjectComponent {
             tasksContainer.add(new JBScrollPane(tasksTree), BorderLayout.CENTER);
 
             treeController = new TreeController(treeModel, tasksTree);
-            treeModel.setRefresher(new TreeRefresher(tasksTree, treeController));
-            settingsChangeListener = new TreeUpdater(treeController);
+            settingsChangeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    treeController.changedTree();
+                }
+            };
             settings.addPropertyChangeListener(settingsChangeListener);
         }
     }
@@ -107,12 +109,10 @@ public class TasksProjectComponent implements ProjectComponent {
     }
 
     public void projectOpened() {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        ToolWindow tasksToolWindow = toolWindowManager.registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
+        ToolWindow tasksToolWindow = ToolWindowManager.getInstance(project).registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
         tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.globaltasks"), true));
 //        tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.projecttasks"), true));
-        Icon icon = IconLoader.getIcon(TasksUIManager.ICON_TASK);
-        tasksToolWindow.setIcon(icon);
+        tasksToolWindow.setIcon(IconLoader.getIcon(TasksUIManager.ICON_TASK));
 
         registerActions();
     }
@@ -144,15 +144,4 @@ public class TasksProjectComponent implements ProjectComponent {
         return treeController;
     }
 
-    class TreeUpdater implements PropertyChangeListener {
-        private TreeController controller;
-
-        public TreeUpdater(TreeController controller) {
-            this.controller = controller;
-        }
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            controller.changedTree();
-        }
-    }
 }

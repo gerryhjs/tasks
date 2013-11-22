@@ -28,7 +28,7 @@ public class MoveTaskUpAction extends BaseTaskAction {
 
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
-        ITask selectedTask = controller.getSelectedTasks()[0];
+        ITask selectedTask = controller.getSelectedTasks().get(0);
         controller.moveUp(selectedTask);
         getTreeController(e).selectObject(selectedTask);
     }

@@ -15,13 +15,21 @@
  */
 package org.dubik.tasks.ui.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import org.dubik.tasks.*;
+import org.dubik.tasks.TaskController;
+import org.dubik.tasks.TaskSettings;
+import org.dubik.tasks.TasksApplicationComponent;
+import org.dubik.tasks.TasksProjectComponent;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Utility class, which provides common objects to other task actions.
@@ -106,7 +114,7 @@ abstract public class BaseTaskAction extends AnAction {
     public void update(AnActionEvent e) {
         TaskController controller = getController(getProject(e));
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
 
             Presentation presentation = e.getPresentation();
             update(controller, selectedTasks, presentation);
@@ -121,7 +129,7 @@ abstract public class BaseTaskAction extends AnAction {
      * @param selectedTasks selected tasks
      * @param presentation  presentation
      */
-    protected void update(TaskController controller, ITask[] selectedTasks,
+    protected void update(TaskController controller, List<ITask> selectedTasks,
                           Presentation presentation) {
     }
 }

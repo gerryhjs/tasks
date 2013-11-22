@@ -29,11 +29,11 @@ import java.util.List;
  */
 class TasksActionUtils {
     static void preselectPriority(TaskController controller, TaskForm form) {
-        ITask[] selectedTask = controller.getSelectedTasks();
-        if (selectedTask.length == 1) {
+        List<ITask> selectedTask = controller.getSelectedTasks();
+        if (selectedTask.size()== 1) {
             //noinspection EmptyCatchBlock
             try {
-                TaskPriority priority = TaskPriority.parse(selectedTask[0].getTitle());
+                TaskPriority priority = TaskPriority.parse(selectedTask.get(0).getTitle());
                 form.setPriority(priority);
             }
             catch (IllegalArgumentException e) {
@@ -43,9 +43,9 @@ class TasksActionUtils {
 
     static void preselectParentTask(TaskController controller, TaskForm form) {
         List<ITask> allTasks = controller.getAllTasks();
-        ITask[] selectedTasks = controller.getSelectedTasks();
-        if (selectedTasks.length == 1 && !(selectedTasks[0] instanceof ITaskGroup)) {
-            ITask selectedTask = selectedTasks[0];
+        List<ITask> selectedTasks = controller.getSelectedTasks();
+        if (selectedTasks.size()== 1 && !(selectedTasks.get(0) instanceof ITaskGroup)) {
+            ITask selectedTask = selectedTasks.get(0);
             List<ITask> subTasks = controller.getSubTasks(selectedTask);
             subTasks.remove(selectedTask);
             allTasks.removeAll(subTasks);

@@ -22,6 +22,8 @@ import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sergiy Dubovik
@@ -31,11 +33,30 @@ public class RemoveTaskAction extends BaseTaskAction {
     public void actionPerformed(AnActionEvent e) {
         TaskController controller = getController(e);
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
+            List<ITask> tasks = new ArrayList<ITask>();
 
-            if (selectedTasks.length > 1) {
-                if (JOptionPane.showConfirmDialog(null, TasksBundle.message("removetask.confirm",
-                        selectedTasks.length), TasksBundle.message("removetask.title"),
+            boolean hasSubTasks = false;
+            for (ITask selectedTask : selectedTasks) {
+                tasks.add(selectedTask);
+                List<ITask> subTasks = controller.getSubTasks(selectedTask);
+                if (subTasks.size() > 0) {
+                    tasks.addAll(subTasks);
+                    hasSubTasks = true;
+                }
+            }
+
+            if (tasks.size() > 1)  {
+
+                String message = null;
+                if (hasSubTasks) {
+                    message = TasksBundle.message("removetask.confirm.subtasks", tasks.size());
+                }
+                else {
+                    message = TasksBundle.message("removetask.confirm", tasks.size());
+                }
+
+                if (JOptionPane.showConfirmDialog(null, message, TasksBundle.message("removetask.title"),
                                                   JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                     deleteTasks(selectedTasks, controller);
                 }
@@ -46,15 +67,15 @@ public class RemoveTaskAction extends BaseTaskAction {
         }
     }
 
-    private void deleteTasks(ITask[] selectedTasks, TaskController controller) {
+    private void deleteTasks(List<ITask> selectedTasks, TaskController controller) {
         for (ITask selectedTask : selectedTasks) {
             controller.deleteTask(selectedTask);
         }
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks,
+    protected void update(TaskController controller, List<ITask> selectedTasks,
                           Presentation presentation) {
-        presentation.setEnabled(selectedTasks.length != 0);
+        presentation.setEnabled(selectedTasks.size() != 0);
 
         for (ITask task : selectedTasks) {
             if (!controller.canDelete(task)) {

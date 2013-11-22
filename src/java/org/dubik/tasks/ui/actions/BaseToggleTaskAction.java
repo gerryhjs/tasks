@@ -23,6 +23,8 @@ import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Utility class, which provides common objects to other task actions.
  *
@@ -108,7 +110,7 @@ abstract public class BaseToggleTaskAction extends ToggleAction {
 
         TaskController controller = getTaskController(getProject(e));
         if (controller != null) {
-            ITask[] selectedTasks = controller.getSelectedTasks();
+            List<ITask> selectedTasks = controller.getSelectedTasks();
 
             Presentation presentation = e.getPresentation();
             update(controller, selectedTasks, presentation);
@@ -123,7 +125,7 @@ abstract public class BaseToggleTaskAction extends ToggleAction {
      * @param selectedTasks selected tasks
      * @param presentation  presentation
      */
-    protected void update(TaskController controller, ITask[] selectedTasks,
+    protected void update(TaskController controller, List<ITask> selectedTasks,
                           Presentation presentation) {
     }
 }

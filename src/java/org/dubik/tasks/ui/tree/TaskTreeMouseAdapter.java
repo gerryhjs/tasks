@@ -49,6 +49,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
             if (treePath != null) {
                 ITask clickedTask = (ITask) treePath.getLastPathComponent();
 
+                assert project != null;
                 TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
                 if ( tasksProject.getTaskController().getSubTasks(clickedTask).size() == 0 ) {
                     AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");

@@ -40,8 +40,8 @@ public class TaskTransferHandler extends TransferHandler {
     @Nullable
     @Override
     protected Transferable createTransferable(JComponent c) {
-        if (taskController.getSelectedTasks().length > 0) {
-            return new TransferableTask(taskController.getSelectedTasks()[0]);
+        if (taskController.getSelectedTasks().size() > 0) {
+            return new TransferableTask(taskController.getSelectedTasks().get(0));
         }
         return null;
     }
