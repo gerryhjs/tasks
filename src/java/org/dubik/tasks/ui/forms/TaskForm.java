@@ -72,7 +72,6 @@ public class TaskForm extends DialogWrapper {
         actualMinutesSpinner.setModel(actualMinutesSpinnerModel);
 
         setActualsVisible(settings.isEnableActualTime());
-
         init();
     }
 
@@ -87,8 +86,10 @@ public class TaskForm extends DialogWrapper {
             return new Action[]{getOKAction(), getCancelAction()};
         }
         else {
+            DialogWrapperExitAction dialogWrapperExitAction = new DialogWrapperExitAction(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT);
+            dialogWrapperExitAction.putValue(DEFAULT_ACTION, Boolean.TRUE);
             return new Action[]{
-                    new DialogWrapperExitAction(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT),
+                    dialogWrapperExitAction,
                     new DialogWrapperExitAction(TasksBundle.message("actions.add"), EXIT_ADD),
                     getCancelAction()
             };

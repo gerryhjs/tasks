@@ -34,6 +34,7 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     private ITaskGroup root;
     private ITaskModel taskModel;
     private ITaskFilter taskFilter;
+    private boolean isGrouped;
 
     public TaskTreeModel(ITaskModel taskModel) {
         this.taskModel = taskModel;
@@ -113,6 +114,10 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
         updateTree();
     }
 
+    public ITaskFilter getTaskFilter() {
+        return taskFilter;
+    }
+
     private void updateTree() {
         fireTreeStructureChanged(new TreeModelEvent(this, new Object[]{root}));
     }
@@ -160,6 +165,8 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     }
 
     public void groupByPriority(boolean group) {
+        isGrouped = group;
+
         ITaskGroup newRoot = new TaskGroup("All Tasks");
 
         if (group) {
@@ -177,5 +184,9 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
 
         root = newRoot;
         updateTree();
+    }
+
+    public boolean isGrouped() {
+        return isGrouped;
     }
 }

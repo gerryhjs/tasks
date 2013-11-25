@@ -49,7 +49,14 @@ public class TaskTransferHandler extends TransferHandler {
 
     @Override
     public boolean canImport(TransferSupport support) {
-        if (!support.isDrop()) {
+        if (!support.isDrop() ) {
+            return false;
+        }
+
+        TasksTree tree = (TasksTree) support.getComponent();
+        TaskTreeModel model = (TaskTreeModel) tree.getModel();
+        if (model.isGrouped() || model.getTaskFilter() != null) {
+            //no dnd when grouped or filtered
             return false;
         }
 
@@ -69,9 +76,6 @@ public class TaskTransferHandler extends TransferHandler {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-        Tree tree = (Tree) support.getComponent();
-        TaskTreeModel model = (TaskTreeModel) tree.getModel();
 
         if (dropTask instanceof ITaskGroup && model.getRoot() != dropTask) {
             //don't drop on TaskGroups, except the root
@@ -99,8 +103,8 @@ public class TaskTransferHandler extends TransferHandler {
         Tree.DropLocation dropLocation = (Tree.DropLocation) support.getDropLocation();
 
         ITask dropTask = (ITask) dropLocation.getPath().getLastPathComponent();
-        if (dropTask instanceof ITaskGroup) {
-            //this must be the root
+        Object root = ((Tree) support.getComponent()).getModel().getRoot();
+        if (dropTask == root) {
             dropTask = null;
         }
 
