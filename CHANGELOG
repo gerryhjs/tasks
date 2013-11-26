@@ -6,9 +6,14 @@ Enhancements
 * Added frequently used functions on the toolbar
 * Tasks now have a long description
 * Start/stop buttons for keeping real-time track of spent time
+* Updated settings storage to Idea12 standards
+* Removed unnecessary code.
+* Made TaskSettings and TaskModel an applicationService
 
 Bugfix
 * updated to IntelliJ IDEA 12
+* Set default button on TaskForm …
+* Disabled DnD when using filters and groups
 
 Other
 * Updated Copyright notice to 2013
