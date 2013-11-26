@@ -16,18 +16,12 @@
 package org.dubik.tasks;
 
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.*;
 import org.dubik.tasks.model.ITaskModel;
-import org.dubik.tasks.model.impl.TaskModel;
-import org.dubik.tasks.ui.TasksUIManager;
-import org.dubik.tasks.ui.forms.TasksSettingsForm;
 import org.dubik.tasks.utils.SerializeSupport;
 import org.jdom.Element;
-import org.jetbrains.annotations.*;
-
-import javax.swing.*;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Task application component.
@@ -38,19 +32,16 @@ import javax.swing.*;
  *
  * @author Sergiy Dubovik
  */
-public class TasksApplicationComponent implements ApplicationComponent, JDOMExternalizable,
-                                                  Configurable {
 
-    private ITaskModel taskModel;
-    private TaskSettings taskSettings;
-    private TasksSettingsForm tasksSettingsForm;
+public class TasksApplicationComponent implements ApplicationComponent, NamedJDOMExternalizable {
+
+    private final ITaskModel taskModel;
 
     /**
      * Creates TasksApplicationComponent.
      */
-    public TasksApplicationComponent() {
-        taskModel = new TaskModel();
-        taskSettings = new TaskSettings();
+    public TasksApplicationComponent(ITaskModel taskModel) {
+        this.taskModel = taskModel;
     }
 
     /**
@@ -75,113 +66,18 @@ public class TasksApplicationComponent implements ApplicationComponent, JDOMExte
         return "TasksComponent";
     }
 
-    /**
-     * Returns task model
-     *
-     * @return task model
-     */
-    @NotNull
-    public ITaskModel getTaskModel() {
-        return taskModel;
-    }
-
-    /**
-     * Returns plugin settings.
-     *
-     * @return settings
-     */
-    @NotNull
-    public TaskSettings getSettings() {
-        return taskSettings;
-    }
-
-    /**
-     * Writes plugin state to the specified element.
-     * It saves tasks and settings.
-     * <p/>
-     * Now <code>NamedTaskStorage</code> is responsible for writting real tasks from it's own
-     * xml file.
-     *
-     * @param element root of the plugin data
-     * @throws WriteExternalException thrown when something unexpected happens
-     * @see org.dubik.tasks.NamedTaskStorage
-     */
-    public void writeExternal(Element element) throws WriteExternalException {
-        SerializeSupport.writeDummy(element);
-    }
-
-    /**
-     * Populates model and plugin settings from specified element.
-     * <p/>
-     * Now <code>NamedTaskStorage</code> is responsible for reading but for compatibility with
-     * old release.
-     *
-     * @param element root of the plugin data
-     * @throws InvalidDataException thrown if element is invalid
-     * @see org.dubik.tasks.NamedTaskStorage
-     */
-    public void readExternal(Element element) throws InvalidDataException {
-        SerializeSupport.readExternal(taskModel, taskSettings, element);
-    }
-
-    /**
-     * Returns plugin settings UI form.
-     *
-     * @return root panel of UI form
-     */
-    public JComponent createComponent() {
-        tasksSettingsForm = new TasksSettingsForm();
-        tasksSettingsForm.setData(taskSettings);
-        return tasksSettingsForm.getContainer();
-    }
-
-    /**
-     * Shows if UI form has be modified.
-     *
-     * @return <code>true</code> if form has been modified, otherwise <code>false</code>
-     */
-    public boolean isModified() {
-        return tasksSettingsForm.isModified(taskSettings);
-    }
-
-    public void apply() throws ConfigurationException {
-        tasksSettingsForm.getData(taskSettings);
-    }
-
-    /**
-     * Resets all changed values in the UI settings form to their previous values.
-     */
-    public void reset() {
-        tasksSettingsForm.setData(taskSettings);
-    }
-
-    /**
-     * Desposes plugin settings form.
-     */
-    public void disposeUIResources() {
-        tasksSettingsForm = null;
-    }
-
-    @Nls
-    /**
-     * This name is displayed in the IntelliJ Settings column
-     */
-    public String getDisplayName() {
-        return TasksBundle.message("application.component.displayname");
-    }
-
-    /**
-     * Returns settings form icon.
-     *
-     * @return settings form icon
-     */
-    public Icon getIcon() {
-        return TasksUIManager.getIcon(TasksUIManager.ICON_BIG_TASK);
-    }
-
-    @Nullable
     @NonNls
-    public String getHelpTopic() {
-        return null;
+    public String getExternalFileName() {
+        return "tasks";
     }
+
+    public void readExternal(Element element) throws InvalidDataException {
+        SerializeSupport.readExternal(taskModel, element);
+    }
+
+    public void writeExternal(Element element) throws WriteExternalException {
+        SerializeSupport.writeExternal(taskModel, element);
+    }
+
+
 }

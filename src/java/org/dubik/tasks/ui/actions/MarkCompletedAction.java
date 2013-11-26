@@ -18,7 +18,7 @@ package org.dubik.tasks.ui.actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import org.dubik.tasks.TaskController;
-import org.dubik.tasks.TaskSettings;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.forms.ActualTimeForm;

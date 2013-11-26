@@ -15,20 +15,16 @@
  */
 package org.dubik.tasks;
 
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.*;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import org.dubik.tasks.model.ITaskModel;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TreeController;
@@ -49,25 +45,22 @@ public class TasksProjectComponent implements ProjectComponent {
     private static final String TASKS_ID = TasksBundle.message("toolwindow.title");
 
     private Project project;
+    private ITaskModel taskModel;
+    private TaskSettings settings;
 
     private JComponent tasksContainer;
 
-    private TaskSettings settings;
     private TaskController taskController;
     private TreeController treeController;
     private PropertyChangeListener settingsChangeListener;
 
-    public TasksProjectComponent(Project project) {
+    public TasksProjectComponent(Project project, ITaskModel taskModel, TaskSettings taskSettings) {
         this.project = project;
+        this.taskModel = taskModel;
+        this.settings = taskSettings;
     }
 
     public void initComponent() {
-        TasksApplicationComponent appComp =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
-
-        settings = appComp.getSettings();
-
-        ITaskModel taskModel = appComp.getTaskModel();
         taskController = new TaskController(taskModel);
 
         if (tasksContainer == null) {
@@ -111,7 +104,6 @@ public class TasksProjectComponent implements ProjectComponent {
     public void projectOpened() {
         ToolWindow tasksToolWindow = ToolWindowManager.getInstance(project).registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
         tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.globaltasks"), true));
-//        tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.projecttasks"), true));
         tasksToolWindow.setIcon(IconLoader.getIcon(TasksUIManager.ICON_TASK));
 
         registerActions();

@@ -18,10 +18,9 @@ package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import org.dubik.tasks.TaskController;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.TasksApplicationComponent;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.model.ITask;
 
 import java.util.List;
@@ -38,10 +37,7 @@ public class StopTaskAction extends BaseTaskAction {
 
     @Override
     protected void update(TaskController controller,List<ITask> selectedTasks, Presentation presentation) {
-        TasksApplicationComponent appComp = ApplicationManager.getApplication()
-                .getComponent(TasksApplicationComponent.class);
-
-        TaskSettings settings = appComp.getSettings();
+        TaskSettings settings = ServiceManager.getService(TaskSettings.class);
         presentation.setEnabled(selectedTasks.size() == 1 &&
                 selectedTasks.get(0).isRunning() &&
                 !selectedTasks.get(0).isCompleted() &&

@@ -16,10 +16,11 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.dubik.tasks.*;
 import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,10 +49,7 @@ abstract public class BaseToggleTaskAction extends ToggleAction {
      */
     @NotNull
     protected TaskSettings getSettings() {
-        TasksApplicationComponent appComp =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
-
-        return appComp.getSettings();
+        return ServiceManager.getService(TaskSettings.class);
     }
 
     /**

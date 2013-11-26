@@ -15,17 +15,12 @@
  */
 package org.dubik.tasks.ui.actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import org.dubik.tasks.TaskController;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.TasksApplicationComponent;
-import org.dubik.tasks.TasksProjectComponent;
+import org.dubik.tasks.*;
 import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,10 +49,7 @@ abstract public class BaseTaskAction extends AnAction {
      */
     @NotNull
     protected TaskSettings getSettings() {
-        TasksApplicationComponent appComp =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
-
-        return appComp.getSettings();
+        return ServiceManager.getService(TaskSettings.class);
     }
 
     /**

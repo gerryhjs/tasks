@@ -15,16 +15,11 @@
  */
 package org.dubik.tasks.ui.tree;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.ui.ColoredTreeCellRenderer;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.SimpleTextAttributes;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.TasksApplicationComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.ui.*;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.TasksBundle;
-import org.dubik.tasks.model.ITask;
-import org.dubik.tasks.model.ITaskGroup;
-import org.dubik.tasks.model.TaskPriority;
+import org.dubik.tasks.model.*;
 import org.dubik.tasks.ui.TasksUIManager;
 
 import javax.swing.*;
@@ -43,9 +38,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     private TaskSettings settings;
 
     public TaskTreeCellRenderer() {
-        TasksApplicationComponent application =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
-        settings = application.getSettings();
+        settings = ServiceManager.getService(TaskSettings.class);
     }
 
     public void customizeCellRenderer(JTree tree, Object value,
@@ -162,13 +155,6 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         }
 
         return details.toString();
-    }
-
-    private String makePercentageForTask(ITask task) {
-        StringBuilder buffer = new StringBuilder();
-        int complInPerc = task.getCompletionRatio();
-        buffer.append(Integer.toString(complInPerc));
-        return buffer.toString();
     }
 
     private String makeDetailsForGroup(ITaskGroup taskGroup) {

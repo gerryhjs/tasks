@@ -1,3 +1,19 @@
+<!--
+  ~ Copyright 2013 Sergiy Dubovik, WarnerJan Veldhuis
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <idea-plugin url="http://www.jetbrains.net/confluence/display/CONTEST/Tasks" version="2">
     <id>org.dubik.tasks.Tasks</id>
     <name>Tasks</name>
@@ -87,7 +103,7 @@
             url="http://www.jetbrains.net/confluence/display/CONTEST/Tasks">
         WarnerJan Veldhuis (Original author: Sergiy Dubovik)
     </vendor>
-    <idea-version since-build="4267" />
+    <idea-version since-build="4267"/>
 
     <resource-bundle>org.dubik.tasks.TasksBundle</resource-bundle>
 
@@ -95,125 +111,123 @@
         <component>
             <implementation-class>org.dubik.tasks.TasksApplicationComponent</implementation-class>
         </component>
-        <component>
-            <implementation-class>org.dubik.tasks.NamedTaskStorage</implementation-class>
-        </component>
     </application-components>
+
     <project-components>
         <component>
-            <interface-class>org.dubik.tasks.TasksProjectComponent</interface-class>
             <implementation-class>org.dubik.tasks.TasksProjectComponent</implementation-class>
+            <loadForDefaultProject/>
         </component>
     </project-components>
 
     <actions>
         <action id="TaskGroupByPriority" class="org.dubik.tasks.ui.actions.GroupByPriorityAction"
-            text="Group by priority" description="Group by priority" />
+                text="Group by priority" description="Group by priority"/>
 
         <action id="MarkCompletedAction" class="org.dubik.tasks.ui.actions.MarkCompletedAction" text="Mark completed"
-            description="Mark task as completed" icon="/org/dubik/tasks/ui/icons/complete_task.png">
-            <keyboard-shortcut first-keystroke="control p" keymap="$default" />
+                description="Mark task as completed" icon="/org/dubik/tasks/ui/icons/complete_task.png">
+            <keyboard-shortcut first-keystroke="control p" keymap="$default"/>
         </action>
 
         <action id="MarkNotCompletedAction" class="org.dubik.tasks.ui.actions.MarkNotCompletedAction"
-            icon="/org/dubik/tasks/ui/icons/task.png" text="Mark as not completed"
-            description="Mark task as not completed">
-            <keyboard-shortcut first-keystroke="control shift p" keymap="$default" />
+                icon="/org/dubik/tasks/ui/icons/task.png" text="Mark as not completed"
+                description="Mark task as not completed">
+            <keyboard-shortcut first-keystroke="control shift p" keymap="$default"/>
         </action>
 
         <action id="HighlightTaskAction" class="org.dubik.tasks.ui.actions.HighlightTaskAction" text="Highlight Task"
-            description="Highlight task" icon="/org/dubik/tasks/ui/icons/star.png">
-            <keyboard-shortcut first-keystroke="SPACE" keymap="$default" />
+                description="Highlight task" icon="/org/dubik/tasks/ui/icons/star.png">
+            <keyboard-shortcut first-keystroke="SPACE" keymap="$default"/>
         </action>
 
         <action id="MoveTaskUpAction" class="org.dubik.tasks.ui.actions.MoveTaskUpAction" text="Move task up"
-            icon="/actions/moveUp.png" description="Move task up">
-            <keyboard-shortcut first-keystroke="alt UP" keymap="$default" />
+                icon="/actions/moveUp.png" description="Move task up">
+            <keyboard-shortcut first-keystroke="alt UP" keymap="$default"/>
         </action>
 
         <action id="MoveTaskDownAction" class="org.dubik.tasks.ui.actions.MoveTaskDownAction" text="Move task down"
-            icon="/actions/moveDown.png" description="Move task down">
-            <keyboard-shortcut first-keystroke="alt DOWN" keymap="$default" />
+                icon="/actions/moveDown.png" description="Move task down">
+            <keyboard-shortcut first-keystroke="alt DOWN" keymap="$default"/>
         </action>
 
         <action id="ToggleCompletedTaskVisibleAction"
-            class="org.dubik.tasks.ui.actions.ToggleCompletedTaskVisibleAction" text="Hide completed tasks"
-            icon="/actions/showHiddens.png" description="Hide/unhide completed tasks" />
+                class="org.dubik.tasks.ui.actions.ToggleCompletedTaskVisibleAction" text="Hide completed tasks"
+                icon="/actions/showHiddens.png" description="Hide/unhide completed tasks"/>
 
         <action id="NewChangelistAction" class="org.dubik.tasks.ui.actions.NewChangeListAction"
-            text="Create New Change List" description="Creates new change list based on the task"
-            icon="/org/dubik/tasks/ui/icons/newchangelist.png">
-            <keyboard-shortcut first-keystroke="alt INSERT" keymap="$default" />
+                text="Create New Change List" description="Creates new change list based on the task"
+                icon="/org/dubik/tasks/ui/icons/newchangelist.png">
+            <keyboard-shortcut first-keystroke="alt INSERT" keymap="$default"/>
         </action>
 
         <action id="ExportToTextFileAction" class="org.dubik.tasks.ui.actions.ExportToTextFileAction"
-            icon="/actions/export.png" text="Export Tasks to File"
-            description="Exports all tasks to a text file or clipboard." />
+                icon="/actions/export.png" text="Export Tasks to File"
+                description="Exports all tasks to a text file or clipboard."/>
 
         <action id="HighlightRedTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightRedTaskAction"
-            text="Red" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_red.png" />
+                text="Red" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_red.png"/>
 
         <action id="HighlightYellowTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightYellowTaskAction"
-            text="Yellow" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_yellow.png" />
+                text="Yellow" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_yellow.png"/>
 
         <action id="HighlightGreenTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightGreenTaskAction"
-            text="Green" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_green.png" />
+                text="Green" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_green.png"/>
 
         <action id="AddNewTask" class="org.dubik.tasks.ui.actions.AddNewTaskAction" text="Add Task..."
-            description="Add new task" icon="/org/dubik/tasks/ui/icons/add_task.png">
-            <keyboard-shortcut first-keystroke="INSERT" keymap="$default" />
+                description="Add new task" icon="/org/dubik/tasks/ui/icons/add_task.png">
+            <keyboard-shortcut first-keystroke="INSERT" keymap="$default"/>
         </action>
 
         <action id="RemoveTaskAction" class="org.dubik.tasks.ui.actions.RemoveTaskAction" text="Remove Task"
-            description="Remove selected task" icon="/org/dubik/tasks/ui/icons/remove_task.png">
-            <keyboard-shortcut first-keystroke="DELETE" keymap="$default" />
+                description="Remove selected task" icon="/org/dubik/tasks/ui/icons/remove_task.png">
+            <keyboard-shortcut first-keystroke="DELETE" keymap="$default"/>
         </action>
 
         <action id="TaskPropertyAction" class="org.dubik.tasks.ui.actions.TaskPropertyAction" text="Task properties"
-            description="Task properties" icon="/actions/properties.png">
-            <keyboard-shortcut first-keystroke="control ENTER" keymap="$default" />
+                description="Task properties" icon="/actions/properties.png">
+            <keyboard-shortcut first-keystroke="control ENTER" keymap="$default"/>
         </action>
 
         <action id="StartTaskAction" class="org.dubik.tasks.ui.actions.StartTaskAction" text="Start Task"
-            description="Starts the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/start.png">
+                description="Starts the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/start.png">
         </action>
 
         <action id="StopTaskAction" class="org.dubik.tasks.ui.actions.StopTaskAction" text="Stop Task"
-            description="Stops the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/stop.png">
+                description="Stops the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/stop.png">
         </action>
 
         <group id="TasksActionGroup" class="com.intellij.openapi.actionSystem.DefaultActionGroup">
-            <reference ref="AddNewTask" />
-            <reference ref="RemoveTaskAction" />
-            <separator />
-            <reference ref="MarkCompletedAction" />
-            <reference ref="MarkNotCompletedAction" />
-            <separator />
-            <reference ref="ToggleCompletedTaskVisibleAction" />
-            <reference ref="ExportToTextFileAction" />
-            <reference ref="TaskPropertyAction" />
+            <reference ref="AddNewTask"/>
+            <reference ref="RemoveTaskAction"/>
+            <separator/>
+            <reference ref="MarkCompletedAction"/>
+            <reference ref="MarkNotCompletedAction"/>
+            <separator/>
+            <reference ref="ToggleCompletedTaskVisibleAction"/>
+            <reference ref="ExportToTextFileAction"/>
+            <reference ref="TaskPropertyAction"/>
         </group>
 
         <group id="TasksPopupGroup">
-            <reference ref="AddNewTask" />
-            <reference ref="RemoveTaskAction" />
-            <reference ref="MarkCompletedAction" />
-            <reference ref="MarkNotCompletedAction" />
-            <separator />
-            <reference ref="HighlightTaskAction" />
-            <separator />
-            <reference ref="TaskGroupByPriority" />
-            <separator />
-            <reference ref="ToggleCompletedTaskVisibleAction" />
-            <reference ref="ExportToTextFileAction" />
-            <separator />
-            <reference ref="TaskPropertyAction" />
+            <reference ref="AddNewTask"/>
+            <reference ref="RemoveTaskAction"/>
+            <reference ref="MarkCompletedAction"/>
+            <reference ref="MarkNotCompletedAction"/>
+            <separator/>
+            <reference ref="HighlightTaskAction"/>
+            <separator/>
+            <reference ref="TaskGroupByPriority"/>
+            <separator/>
+            <reference ref="ToggleCompletedTaskVisibleAction"/>
+            <reference ref="ExportToTextFileAction"/>
+            <separator/>
+            <reference ref="TaskPropertyAction"/>
         </group>
 
         <group id="TasksAdditionalToolBarGroup">
-            <reference ref="MoveTaskUpAction" />
-            <reference ref="MoveTaskDownAction" />
-            <reference ref="NewChangelistAction" />
+            <reference ref="MoveTaskUpAction"/>
+            <reference ref="MoveTaskDownAction"/>
+            <reference ref="NewChangelistAction"/>
             <separator/>
             <reference ref="StartTaskAction"/>
             <reference ref="StopTaskAction"/>
@@ -221,6 +235,10 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettings" serviceImplementation="org.dubik.tasks.settings.TaskSettings" />
+        <applicationService serviceInterface="org.dubik.tasks.model.ITaskModel" serviceImplementation="org.dubik.tasks.model.impl.TaskModel" />
+        <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"  />
+
         <intentionAction>
             <className>org.dubik.tasks.intention.CreateTaskFromTodoIntention</className>
             <categoryKey>intention.familyname</categoryKey>

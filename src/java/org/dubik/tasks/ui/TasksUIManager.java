@@ -16,15 +16,15 @@
 package org.dubik.tasks.ui;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.UIUtil;
-import org.dubik.tasks.*;
+import org.dubik.tasks.TaskController;
+import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.model.*;
 import org.dubik.tasks.ui.tree.*;
-import org.dubik.tasks.ui.tree.TasksTree;
 import org.dubik.tasks.ui.widgets.ProgressTooltipUI;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,9 +82,7 @@ public class TasksUIManager {
 
     @NotNull
     public static Icon findIcon(@NotNull ITask task) {
-        TasksApplicationComponent appCmp =
-                ApplicationManager.getApplication().getComponent(TasksApplicationComponent.class);
-        TaskSettings settings = appCmp.getSettings();
+        TaskSettings settings = ServiceManager.getService(TaskSettings.class);
 
         TaskPriority priority;
 

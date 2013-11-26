@@ -17,6 +17,7 @@ package org.dubik.tasks.ui.tree;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import org.dubik.tasks.TasksProjectComponent;
 import org.dubik.tasks.model.ITask;
@@ -41,7 +42,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
             maybeShowPopup(e);
         }
         else if (e.getClickCount() == 2) {
-            DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
+            final DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
             Project project = DataKeys.PROJECT.getData(context);
 
             TasksTree tree = (TasksTree) e.getComponent();
@@ -52,9 +53,14 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
                 assert project != null;
                 TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
                 if ( tasksProject.getTaskController().getSubTasks(clickedTask).size() == 0 ) {
-                    AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");
-                    AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(), ActionManager.getInstance(), 0);
-                    anAction.actionPerformed(event);
+                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                        public void run() {
+                            AnAction anAction = ActionManager.getInstance().getAction("TaskPropertyAction");
+                            AnActionEvent event = new AnActionEvent(null, context, "", anAction.getTemplatePresentation(), ActionManager.getInstance(), 0);
+                            anAction.actionPerformed(event);
+                        }
+                    });
+
                 }
             }
 

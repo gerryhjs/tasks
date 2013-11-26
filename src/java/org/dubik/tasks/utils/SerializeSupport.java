@@ -18,11 +18,7 @@ package org.dubik.tasks.utils;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import org.dubik.tasks.TaskSettings;
-import org.dubik.tasks.model.ITask;
-import org.dubik.tasks.model.ITaskModel;
-import org.dubik.tasks.model.TaskHighlightingType;
-import org.dubik.tasks.model.TaskPriority;
+import org.dubik.tasks.model.*;
 import org.dubik.tasks.model.impl.TaskBuilder;
 import org.jdom.Element;
 
@@ -44,12 +40,7 @@ public class SerializeSupport {
     private static final String TASK_ACTUAL = "actual";
     private static final String TASK_DESCRIPTION = "description";
 
-    static public void writeDummy(Element element) {
-        Element dummyRoot = new Element(TASKS);
-        element.addContent(dummyRoot);
-    }
-
-    static public void writeExternal(ITaskModel taskModel, TaskSettings taskSettings, Element element)
+    static public void writeExternal(ITaskModel taskModel, Element element)
             throws WriteExternalException {
         Element tasksRoot = new Element(TASKS);
         element.addContent(tasksRoot);
@@ -57,8 +48,6 @@ public class SerializeSupport {
             ITask task = taskModel.getTask(i);
             writeTasksRecursively(tasksRoot, task);
         }
-
-        taskSettings.writeExternal(element);
     }
 
     static private void writeTasksRecursively(Element taskRoot, ITask task) {
@@ -86,8 +75,7 @@ public class SerializeSupport {
         return xTask;
     }
 
-    static public void readExternal(ITaskModel taskModel, TaskSettings taskSettings, Element element)
-            throws InvalidDataException {
+    static public void readExternal(ITaskModel taskModel, Element element) throws InvalidDataException {
         Element tasksRoot = element.getChild(TASKS);
         if (tasksRoot == null) {
             return;
@@ -99,8 +87,6 @@ public class SerializeSupport {
             Element xTask = (Element) taskElem;
             addTasksRecursively(xTask, taskModel, null);
         }
-
-        taskSettings.readExternal(element);
     }
 
     static private void addTasksRecursively(Element taskElem, ITaskModel model, ITask parentTask) {
