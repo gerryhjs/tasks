@@ -21,6 +21,8 @@ import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.ITaskGroup;
 
+import java.util.List;
+
 /**
  * @author Sergiy Dubovik
  */
@@ -33,14 +35,16 @@ public class MoveTaskUpAction extends BaseTaskAction {
         getTreeController(e).selectObject(selectedTask);
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks, Presentation presentation) {
-        if (selectedTasks.length == 1 && selectedTasks[0] instanceof ITask &&
-            !(selectedTasks[0] instanceof ITaskGroup)) {
-            ITask task = selectedTasks[0];
-            presentation.setEnabled(controller.canMoveUp(task));
+    protected void update(TaskController controller, List<ITask> selectedTasks, Presentation presentation) {
+        if (selectedTasks.size() == 1) {
+            ITask task = selectedTasks.get(0);
+            if (selectedTasks.get(0) instanceof ITask && !(selectedTasks.get(0) instanceof ITaskGroup)) {
+                presentation.setEnabled(controller.canMoveUp(task));
+            }
         }
         else {
             presentation.setEnabled(false);
         }
+
     }
 }

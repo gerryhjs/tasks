@@ -15,11 +15,11 @@
  */
 package org.dubik.tasks.ui.forms;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.settings.TaskSettings;
+import org.dubik.tasks.settings.TaskSettingsService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ public class TasksSettingsForm implements Configurable {
     private JCheckBox enableActualTimeFeatureCheckBox;
     private JCheckBox showEnterActualTimeCheckBox;
 
-    private TaskSettings data = ServiceManager.getService(TaskSettings.class);
+    private TaskSettings data = TaskSettingsService.getSettings();
 
     public TasksSettingsForm() {
         ChangeListener changeListener = new ChangeListener() {

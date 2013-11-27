@@ -15,22 +15,12 @@
  */
 package org.dubik.tasks.settings;
 
-import com.intellij.openapi.components.*;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.Nullable;
-
 import java.beans.PropertyChangeSupport;
 
 /**
  * @author Sergiy Dubovik
  */
-@State(
-        name = "TaskSettings",
-        storages = {
-                @Storage(id = "default", file = StoragePathMacros.APP_CONFIG + "/tasksettings.xml")
-        }
-)
-public class TaskSettings extends PropertyChangeSupport implements PersistentStateComponent<TaskSettings> {
+public class TaskSettings extends PropertyChangeSupport  {
     private boolean enableActualTime;
     private boolean askActualWhenCompleteTask;
     private boolean enableTasksScope;
@@ -47,15 +37,10 @@ public class TaskSettings extends PropertyChangeSupport implements PersistentSta
         super(TaskSettings.class);
     }
 
-    @Nullable
-    public TaskSettings getState() {
-        return this;
+    public static TaskSettings getDefaults() {
+        TaskSettings defaults = new TaskSettings();
+        return defaults;
     }
-
-    public void loadState(TaskSettings state) {
-        XmlSerializerUtil.copyBean(state, this);
-    }
-
 
     public boolean isEnableActualTime() {
         return enableActualTime;

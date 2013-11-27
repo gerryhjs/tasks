@@ -25,6 +25,7 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.settings.TaskSettings;
+import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TreeController;
@@ -54,10 +55,10 @@ public class TasksProjectComponent implements ProjectComponent {
     private TreeController treeController;
     private PropertyChangeListener settingsChangeListener;
 
-    public TasksProjectComponent(Project project, ITaskModel taskModel, TaskSettings taskSettings) {
+    public TasksProjectComponent(Project project, ITaskModel taskModel) {
         this.project = project;
         this.taskModel = taskModel;
-        this.settings = taskSettings;
+        this.settings = TaskSettingsService.getSettings();
     }
 
     public void initComponent() {

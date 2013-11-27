@@ -15,11 +15,11 @@
  */
 package org.dubik.tasks.ui.tree;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.*;
-import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.*;
+import org.dubik.tasks.settings.TaskSettings;
+import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.ui.TasksUIManager;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     private TaskSettings settings;
 
     public TaskTreeCellRenderer() {
-        settings = ServiceManager.getService(TaskSettings.class);
+        settings = TaskSettingsService.getSettings();
     }
 
     public void customizeCellRenderer(JTree tree, Object value,

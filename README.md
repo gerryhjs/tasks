@@ -18,7 +18,7 @@ http://confluence.jetbrains.com/display/CONTEST/Tasks
 Description
 ===========
 This plugin will keep track of your daily tasks. Tasks are hierarchical, so it can have subtasks. Tasks have a
-priority and possibly an icon. Time tracking is built in, so you can see how much time you have spent on one
+priority and possibly an icon. Time tracking is built-in, so you can see how much time you have spent on one
 particular task.
 
 Installation

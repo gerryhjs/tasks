@@ -78,8 +78,8 @@ public class TaskPropertyAction extends BaseTaskAction {
         }
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks,
+    protected void update(TaskController controller, List<ITask> selectedTasks,
                           Presentation presentation) {
-        presentation.setEnabled(selectedTasks.length == 1 && controller.canEdit(selectedTasks[0]));
+        presentation.setEnabled(selectedTasks.size() == 1 && controller.canEdit(selectedTasks.get(0)));
     }
 }

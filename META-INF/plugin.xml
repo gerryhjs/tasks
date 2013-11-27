@@ -235,7 +235,7 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettings" serviceImplementation="org.dubik.tasks.settings.TaskSettings" />
+        <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettingsService" serviceImplementation="org.dubik.tasks.settings.TaskSettingsService" />
         <applicationService serviceInterface="org.dubik.tasks.model.ITaskModel" serviceImplementation="org.dubik.tasks.model.impl.TaskModel" />
         <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"  />
 

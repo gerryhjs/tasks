@@ -54,9 +54,9 @@ public class MarkCompletedAction extends BaseTaskAction {
         }
     }
 
-    protected void update(TaskController controller, ITask[] selectedTasks,
+    protected void update(TaskController controller, List<ITask> selectedTasks,
                           Presentation presentation) {
-        presentation.setEnabled(selectedTasks.length != 0);
+        presentation.setEnabled(selectedTasks.size() != 0);
 
         for (ITask task : selectedTasks) {
             if (!controller.canComplete(task)) {

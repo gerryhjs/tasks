@@ -18,10 +18,10 @@ package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.components.ServiceManager;
 import org.dubik.tasks.TaskController;
-import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.settings.TaskSettings;
+import org.dubik.tasks.settings.TaskSettingsService;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class StartTaskAction extends BaseTaskAction {
 
     @Override
     protected void update(TaskController controller, List<ITask> selectedTasks, Presentation presentation) {
-        TaskSettings settings = ServiceManager.getService(TaskSettings.class);
+        TaskSettings settings = TaskSettingsService.getSettings();
         presentation.setEnabled(selectedTasks.size() == 1 &&
                 !selectedTasks.get(0).isRunning() &&
                 !selectedTasks.get(0).isCompleted() &&

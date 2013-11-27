@@ -16,11 +16,12 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import org.dubik.tasks.*;
+import org.dubik.tasks.TaskController;
+import org.dubik.tasks.TasksProjectComponent;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.settings.TaskSettings;
+import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +50,7 @@ abstract public class BaseTaskAction extends AnAction {
      */
     @NotNull
     protected TaskSettings getSettings() {
-        return ServiceManager.getService(TaskSettings.class);
+        return TaskSettingsService.getSettings();
     }
 
     /**
