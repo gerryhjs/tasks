@@ -5,6 +5,7 @@ Intellij IDEA Tasks plugin.
 Author
 ======
 Original author: Sergiy Dubovik
+
 Forked by: WarnerJan Veldhuis
 
 Links
