@@ -7,13 +7,11 @@ Author
 Original author: Sergiy Dubovik
 Forked by: WarnerJan Veldhuis
 
-Download page
-=============
-http://plugins.intellij.net/plugin/?id=1124
+Links
+=====
+Download page: http://plugins.intellij.net/plugin/?id=1124
 
-Comments
-========
-http://confluence.jetbrains.com/display/CONTEST/Tasks
+Comments page: http://confluence.jetbrains.com/display/CONTEST/Tasks
 
 Description
 ===========
@@ -25,7 +23,14 @@ Installation
 ============
 Normally, this plugin would be installed via JetBrains's repository. If you have to install it manually,
 either choose "Install from disk" in IDEA's plugins page, or manually place it in
-$userhome/.IntelliJIdea12/config/plugins/.
 
-The file that is created to store all the tasks can be found in $userhome/.IntelliJIdea12/config/options/tasks.xml.
+    $userhome/.IntelliJIdea12/config/plugins/
+
+The file that keeps all the plugins settings is called tasksettings.xml and is found in 
+
+    $userhome/.IntelliJIdea12/config/options/tasksettings.xml.
+
+The file that holds all the tasks can be found in 
+
+    $userhome/.IntelliJIdea12/config/options/tasks.xml.
 
