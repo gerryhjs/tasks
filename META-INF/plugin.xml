@@ -116,7 +116,6 @@
     <project-components>
         <component>
             <implementation-class>org.dubik.tasks.TasksProjectComponent</implementation-class>
-            <loadForDefaultProject/>
         </component>
     </project-components>
 

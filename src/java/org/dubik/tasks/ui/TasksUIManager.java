@@ -15,23 +15,21 @@
  */
 package org.dubik.tasks.ui;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPopupMenu;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
-import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.ui.UIUtil;
-import org.dubik.tasks.TaskController;
-import org.dubik.tasks.model.*;
+import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.model.TaskHighlightingType;
+import org.dubik.tasks.model.TaskPriority;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
-import org.dubik.tasks.ui.tree.*;
 import org.dubik.tasks.ui.widgets.ProgressTooltipUI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.ToolTipUI;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreeModel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,33 +127,17 @@ public class TasksUIManager {
         for (int i = 0; i < task.size(); i++) {
             ITask subTask = task.get(i);
 
-            if (!onlyFirstLevel) {
-                taskPriority = taskPriority.max(findHighestPriorityRecursively(subTask, false));
+            if (onlyFirstLevel) {
+                taskPriority = taskPriority.max(subTask.getPriority());
             }
             else {
-                taskPriority = taskPriority.max(subTask.getPriority());
+                taskPriority = taskPriority.max(findHighestPriorityRecursively(subTask, false));
             }
         }
 
         return taskPriority;
     }
 
-    @NotNull
-    public static Tree createTaskTree(@NotNull TreeModel model, @NotNull TaskController taskController,
-                                      @NotNull JPopupMenu popupMenu) {
-
-        TasksTree tasksTree = new TasksTree(taskController);
-        UIUtil.setLineStyleAngled(tasksTree);
-        tasksTree.setShowsRootHandles(true);
-        tasksTree.setCellRenderer(createTasksTreeCellRenderer());
-        tasksTree.setRootVisible(false);
-        tasksTree.setModel(model);
-        tasksTree.addMouseListener(new TaskTreeMouseAdapter(popupMenu));
-
-        ToolTipManager.sharedInstance().registerComponent(tasksTree);
-
-        return tasksTree;
-    }
 
     @NotNull
     public static JPopupMenu createTaskTreePopup(String actionGroupId) {
@@ -166,30 +148,6 @@ public class TasksUIManager {
         return popupMenu.getComponent();
     }
 
-    @NotNull
-    public static TaskTreeModel createTaskTreeModel(@NotNull ITaskModel model) {
-        return new TaskTreeModel(model);
-    }
-
-    @NotNull
-    public static TaskTreeModel createModuleTaskTreeModel(@NotNull ITaskModel model) {
-        return new TaskTreeModel(model);
-    }
-
-    @NotNull
-    public static TaskTreeModel createProjectTaskTreeModel(@NotNull ITaskModel model) {
-        return new TaskTreeModel(model);
-    }
-
-    @NotNull
-    public static TaskTreeModel createGlobalTaskTreeModel(@NotNull ITaskModel model) {
-        return new TaskTreeModel(model);
-    }
-
-    @NotNull
-    private static TreeCellRenderer createTasksTreeCellRenderer() {
-        return new TaskTreeCellRenderer();
-    }
 
     @NotNull
     public static ToolTipUI getProgressTooltipUI() {

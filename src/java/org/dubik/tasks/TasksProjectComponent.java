@@ -15,11 +15,15 @@
  */
 package org.dubik.tasks;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.wm.*;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.Tree;
@@ -28,6 +32,7 @@ import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
+import org.dubik.tasks.ui.tree.TasksTree;
 import org.dubik.tasks.ui.tree.TreeController;
 import org.dubik.tasks.utils.TaskTimer;
 import org.jetbrains.annotations.NotNull;
@@ -68,15 +73,9 @@ public class TasksProjectComponent implements ProjectComponent {
             tasksContainer = new JPanel(new BorderLayout(1, 1));
             tasksContainer.setBorder(null);
 
-            TaskTreeModel treeModel = TasksUIManager.createTaskTreeModel(taskModel);
+            TaskTreeModel treeModel = new TaskTreeModel(taskModel);
 
-            Tree tasksTree = TasksUIManager.createTaskTree(
-                    treeModel,
-                    taskController,
-                    TasksUIManager.createTaskTreePopup("TasksPopupGroup")
-            );
-
-            tasksTree.addTreeSelectionListener(taskController);
+            Tree tasksTree = new TasksTree(taskController, treeModel);
             tasksContainer.add(new JBScrollPane(tasksTree), BorderLayout.CENTER);
 
             treeController = new TreeController(treeModel, tasksTree);

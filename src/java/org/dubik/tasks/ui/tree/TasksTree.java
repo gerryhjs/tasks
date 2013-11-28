@@ -16,8 +16,10 @@
 package org.dubik.tasks.ui.tree;
 
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.ui.UIUtil;
 import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.ui.TasksUIManager;
 import org.dubik.tasks.ui.widgets.ProgressTooltip;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,10 +32,23 @@ import java.awt.*;
  */
 public class TasksTree extends Tree {
 
-    public TasksTree(TaskController taskController) {
+    public TasksTree(TaskController taskController, TaskTreeModel taskModel) {
         setTransferHandler( new TaskTransferHandler(taskController));
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
+
+        UIUtil.setLineStyleAngled(this);
+        setShowsRootHandles(true);
+        setRootVisible(false);
+        setCellRenderer( new TaskTreeCellRenderer());
+
+        addTreeSelectionListener(taskController);
+        addMouseListener(new TaskTreeMouseAdapter(TasksUIManager.createTaskTreePopup("TasksPopupGroup")));
+
+        setModel(taskModel);
+
+        ToolTipManager.sharedInstance().registerComponent(this);
+
     }
 
     public JToolTip createToolTip() {
