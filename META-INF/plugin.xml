@@ -195,16 +195,27 @@
                 description="Stops the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/stop.png">
         </action>
 
+        <action id="ExpandAllTasks" class="org.dubik.tasks.ui.actions.ExpandAllAction" text="Expand all"
+                description="Expands all nodes in the tree" icon="/actions/expandall.png">
+        </action>
+
+        <action id="CollapseAllTasks" class="org.dubik.tasks.ui.actions.CollapseAllAction" text="Collapse all"
+                description="Collapses all nodes in the tree" icon="/actions/collapseall.png">
+        </action>
+
         <group id="TasksActionGroup" class="com.intellij.openapi.actionSystem.DefaultActionGroup">
             <reference ref="AddNewTask"/>
             <reference ref="RemoveTaskAction"/>
+            <reference ref="TaskPropertyAction"/>
             <separator/>
             <reference ref="MarkCompletedAction"/>
             <reference ref="MarkNotCompletedAction"/>
-            <separator/>
             <reference ref="ToggleCompletedTaskVisibleAction"/>
+            <separator/>
+            <reference ref="ExpandAllTasks"/>
+            <reference ref="CollapseAllTasks"/>
+            <separator/>
             <reference ref="ExportToTextFileAction"/>
-            <reference ref="TaskPropertyAction"/>
         </group>
 
         <group id="TasksPopupGroup">
@@ -212,13 +223,10 @@
             <reference ref="RemoveTaskAction"/>
             <reference ref="MarkCompletedAction"/>
             <reference ref="MarkNotCompletedAction"/>
+            <reference ref="ToggleCompletedTaskVisibleAction"/>
             <separator/>
             <reference ref="HighlightTaskAction"/>
-            <separator/>
             <reference ref="TaskGroupByPriority"/>
-            <separator/>
-            <reference ref="ToggleCompletedTaskVisibleAction"/>
-            <reference ref="ExportToTextFileAction"/>
             <separator/>
             <reference ref="TaskPropertyAction"/>
         </group>

@@ -16,6 +16,7 @@
 package org.dubik.tasks.ui.tree;
 
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.ui.tree.TreeUtil;
 import org.dubik.tasks.ui.filters.HideCompletedFilter;
 
 import javax.swing.event.TreeModelEvent;
@@ -127,6 +128,19 @@ public class TreeController {
     public void setSelections(TreePath[] treePaths) {
         for (TreePath path : treePaths) {
             tree.setSelectionPath(path);
+        }
+    }
+
+    public void expandAll() {
+        TreeUtil.expandAll(tree);
+    }
+
+    public void collapseAll() {
+        //Do no use TreeUtil.collapseAll(...) since it assumes all the objects in a tree are instances of javax.swing.tree.DefaultMutableTreeNode.
+        int row = tree.getRowCount() - 1;
+        while (row >= 0) {
+            tree.collapseRow(row);
+            row--;
         }
     }
 }

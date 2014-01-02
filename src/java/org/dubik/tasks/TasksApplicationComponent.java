@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Sergiy Dubovik
  */
 
-public class TasksApplicationComponent implements ApplicationComponent, NamedJDOMExternalizable {
+public class TasksApplicationComponent implements ApplicationComponent, NamedJDOMExternalizable{
 
     private final ITaskModel taskModel;
 
@@ -78,6 +78,4 @@ public class TasksApplicationComponent implements ApplicationComponent, NamedJDO
     public void writeExternal(Element element) throws WriteExternalException {
         SerializeSupport.writeExternal(taskModel, element);
     }
-
-
 }
