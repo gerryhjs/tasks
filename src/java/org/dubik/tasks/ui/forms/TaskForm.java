@@ -23,7 +23,7 @@ import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.model.TaskPriority;
-import org.dubik.tasks.ui.TasksUIManager;
+import org.dubik.tasks.utils.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,11 +86,13 @@ public class TaskForm extends DialogWrapper {
             return new Action[]{getOKAction(), getCancelAction()};
         }
         else {
-            DialogWrapperExitAction dialogWrapperExitAction = new DialogWrapperExitAction(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT);
-            dialogWrapperExitAction.putValue(DEFAULT_ACTION, Boolean.TRUE);
+            DialogWrapperExitAction addToRootAction = new DialogWrapperExitAction(TasksBundle.message("actions.add-to-root"), EXIT_ADD_TO_ROOT);
+            DialogWrapperExitAction addAction = new DialogWrapperExitAction(TasksBundle.message("actions.add"), EXIT_ADD);
+            addAction.putValue(DEFAULT_ACTION, Boolean.TRUE);
+
             return new Action[]{
-                    dialogWrapperExitAction,
-                    new DialogWrapperExitAction(TasksBundle.message("actions.add"), EXIT_ADD),
+                    addToRootAction,
+                    addAction,
                     getCancelAction()
             };
         }
@@ -194,7 +196,7 @@ public class TaskForm extends DialogWrapper {
         @Override
         protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             TaskPriority priority = (TaskPriority) value;
-            setIcon(TasksUIManager.findIcon(priority));
+            setIcon(UIUtil.findIcon(priority));
             append(priority.toString());
         }
     }
@@ -211,7 +213,7 @@ public class TaskForm extends DialogWrapper {
         protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             ITask task = (ITask) value;
             append(task.getTitle());
-            setIcon(TasksUIManager.createIcon(task));
+            setIcon(UIUtil.createIcon(task));
         }
     }
 }

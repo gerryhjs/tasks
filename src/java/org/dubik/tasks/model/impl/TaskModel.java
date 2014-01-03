@@ -70,12 +70,19 @@ public class TaskModel implements ITaskModel {
 
     public void moveTask(ITask task, ITask newParent, int index) {
         Task currentParent = (Task) task.getParent();
+
+        int oldIndex;
+
         if (currentParent != null) {
+            oldIndex = currentParent.indexOf(task);
             currentParent.remove(task);
         }
         else {
+            oldIndex= tasks.indexOf(task);
             tasks.remove(task);
         }
+
+        fireDeleteTaskEvent(task, oldIndex);
 
         //when moving a task to the end of a node, the index is too big, since
         //the original node is already removed.
@@ -101,11 +108,10 @@ public class TaskModel implements ITaskModel {
             }
         }
 
+        fireAddTaskEvent(task);
+
         Task mutableTask = (Task) task;
         mutableTask.setParent(newParent);
-
-        fireChangeTaskEvent(task);
-
 
     }
 
@@ -124,16 +130,21 @@ public class TaskModel implements ITaskModel {
     public void deleteTask(ITask task) {
         assert task != null;
 
+        int index = -1;
+
         firePreDeleteTaskEvent(task);
         ITask parent = task.getParent();
         if (parent == null) {
+            index = tasks.indexOf(task);
             tasks.remove(task);
         }
         else {
             Task mutableParent = (Task) parent;
+            index = mutableParent.indexOf(task);
             mutableParent.remove(task);
         }
-        fireDeleteTaskEvent(task);
+
+        fireDeleteTaskEvent(task, index);
     }
 
     public void completeTask(ITask task) {
@@ -213,7 +224,7 @@ public class TaskModel implements ITaskModel {
             int index = tasks.indexOf(task);
             if (index > 0) {
                 tasks.remove(index);
-                fireDeleteTaskEvent(task);
+                fireDeleteTaskEvent(task, index);
                 tasks.add(index - 1, task);
             }
         }
@@ -221,7 +232,7 @@ public class TaskModel implements ITaskModel {
             int index = parent.indexOf(task);
             if (index > 0) {
                 parent.remove(task);
-                fireDeleteTaskEvent(task);
+                fireDeleteTaskEvent(task, index);
                 parent.add(index - 1, task);
             }
         }
@@ -238,7 +249,7 @@ public class TaskModel implements ITaskModel {
             int index = tasks.indexOf(task);
             if (index < tasks.size() - 1) {
                 tasks.remove(index);
-                fireDeleteTaskEvent(task);
+                fireDeleteTaskEvent(task, index);
                 tasks.add(index + 1, task);
             }
         }
@@ -246,7 +257,7 @@ public class TaskModel implements ITaskModel {
             int index = parent.indexOf(task);
             if (index < parent.size() - 1) {
                 parent.remove(task);
-                fireDeleteTaskEvent(task);
+                fireDeleteTaskEvent(task, index);
                 parent.add(index + 1, task);
             }
         }
@@ -287,35 +298,35 @@ public class TaskModel implements ITaskModel {
     }
 
     private void fireAddTaskEvent(ITask task) {
-        TaskChangeEvent event = new TaskChangeEvent(task);
+        TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, task.getParent() == null ? tasks.indexOf(task) : task.getParent().indexOf(task) );
         for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleAddTaskEvent(event);
         }
     }
 
     private void firePreDeleteTaskEvent(ITask task) {
-        TaskChangeEvent event = new TaskChangeEvent(task);
+        TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, task.getParent() == null ? tasks.indexOf(task) : task.getParent().indexOf(task));
         for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handlePreDeleteTaskEvent(event);
         }
     }
 
-    private void fireDeleteTaskEvent(ITask task) {
-        TaskChangeEvent event = new TaskChangeEvent(task);
+    private void fireDeleteTaskEvent(ITask task, int index) {
+        TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, index);
         for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleDeleteTaskEvent(event);
         }
     }
 
     private void firePreChangeTaskEvent(ITask task) {
-        TaskChangeEvent event = new TaskChangeEvent(task);
+        TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, task.getParent() == null ? tasks.indexOf(task) : task.getParent().indexOf(task));
         for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handlePreChangeTaskEvent(event);
         }
     }
 
     private void fireChangeTaskEvent(ITask task) {
-        TaskChangeEvent event = new TaskChangeEvent(task);
+        TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, task.getParent() == null ? tasks.indexOf(task) : task.getParent().indexOf(task));
         for (ITaskModelChangeListener listener : listeners.getListeners(ITaskModelChangeListener.class)) {
             listener.handleChangeTaskEvent(event);
         }

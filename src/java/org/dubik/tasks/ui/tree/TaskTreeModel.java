@@ -109,11 +109,12 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
-        if ( !isGrouped() && getTaskFilter() == null  && path.getLastPathComponent() instanceof Task) {
+        if (!isGrouped() && getTaskFilter() == null && path.getLastPathComponent() instanceof Task) {
             Task task = (Task) path.getLastPathComponent();
             if (!task.getTitle().equals(newValue)) {
                 task.setTitle((String) newValue);
-                fireTreeNodesChanged(new TreeModelEvent(this, path.getParentPath(), new int[]{getIndexOfChild(task.getParent(), task)}, new Object[]{task}));
+                TaskChangeEvent event = new TaskChangeEvent(task.getParent(), task, task.getParent() == null ? root.indexOf(task) : task.getParent().indexOf(task));
+                handleChangeTaskEvent(event);
             }
         }
     }
@@ -142,21 +143,38 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public void handleAddTaskEvent(TaskChangeEvent event) {
-        updateTree();
+        ITask task = event.getTask();
+        Object[] pathToObject = findPathToObject(root, task);
+        TreePath path = new TreePath(pathToObject);
+
+        fireTreeNodesInserted(new TreeModelEvent(this, path, new int[]{event.getIndex()}, new Object[]{task}));
     }
 
     public void handlePreDeleteTaskEvent(TaskChangeEvent event) {
     }
 
     public void handleDeleteTaskEvent(TaskChangeEvent event) {
-        updateTree();
+        ITask task = event.getTask();
+        ITask parent = event.getParent();
+        Object[] pathToObject = parent == null ? new Object[]{root} : findPathToObject(root, parent);
+        TreePath path = new TreePath(pathToObject);
+
+        if (parent != null) {
+            path = path.pathByAddingChild(parent);
+        }
+
+        fireTreeNodesRemoved(new TreeModelEvent(this, path, new int[]{event.getIndex()}, new Object[]{task}));
     }
 
     public void handlePreChangeTaskEvent(TaskChangeEvent event) {
     }
 
     public void handleChangeTaskEvent(TaskChangeEvent event) {
-        updateTree();
+        ITask task = event.getTask();
+        Object[] pathToObject = findPathToObject(root, task);
+        TreePath path = new TreePath(pathToObject);
+
+        fireTreeNodesChanged(new TreeModelEvent(this, path, new int[]{event.getIndex()}, new Object[]{task}));
     }
 
     public Object[] findPathToObject(Object root, Object task) {

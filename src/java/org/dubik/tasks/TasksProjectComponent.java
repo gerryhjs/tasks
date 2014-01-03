@@ -30,7 +30,7 @@ import com.intellij.ui.treeStructure.Tree;
 import org.dubik.tasks.model.ITaskModel;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
-import org.dubik.tasks.ui.TasksUIManager;
+import org.dubik.tasks.utils.UIUtil;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TasksTree;
 import org.dubik.tasks.ui.tree.TreeController;
@@ -104,7 +104,7 @@ public class TasksProjectComponent implements ProjectComponent {
     public void projectOpened() {
         ToolWindow tasksToolWindow = ToolWindowManager.getInstance(project).registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
         tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.globaltasks"), true));
-        tasksToolWindow.setIcon(IconLoader.getIcon(TasksUIManager.ICON_TASK));
+        tasksToolWindow.setIcon(IconLoader.getIcon(UIUtil.ICON_TASK));
 
         registerActions();
     }

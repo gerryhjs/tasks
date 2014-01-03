@@ -16,9 +16,8 @@
 package org.dubik.tasks.ui.tree;
 
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.ui.UIUtil;
 import org.dubik.tasks.TaskController;
-import org.dubik.tasks.ui.TasksUIManager;
+import org.dubik.tasks.utils.UIUtil;
 
 import javax.swing.*;
 
@@ -32,7 +31,7 @@ public class TasksTree extends Tree {
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
 
-        UIUtil.setLineStyleAngled(this);
+        com.intellij.util.ui.UIUtil.setLineStyleAngled(this);
         setShowsRootHandles(true);
         setRootVisible(false);
         setCellRenderer(new TaskTreeCellRenderer());
@@ -40,7 +39,7 @@ public class TasksTree extends Tree {
         setInvokesStopCellEditing(true);
 
         addTreeSelectionListener(taskController);
-        addMouseListener(new TaskTreeMouseAdapter(TasksUIManager.createTaskTreePopup("TasksPopupGroup")));
+        addMouseListener(new TaskTreeMouseAdapter(UIUtil.createTaskTreePopup("TasksPopupGroup")));
 
         setModel(taskModel);
 

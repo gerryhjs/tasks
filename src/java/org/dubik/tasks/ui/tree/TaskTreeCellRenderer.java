@@ -20,7 +20,7 @@ import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.*;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
-import org.dubik.tasks.ui.TasksUIManager;
+import org.dubik.tasks.utils.UIUtil;
 
 import javax.swing.*;
 
@@ -67,10 +67,10 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             ITaskGroup taskGroup = (ITaskGroup) value;
             try {
                 TaskPriority groupPriority = TaskPriority.parse(taskGroup.getTitle());
-                setIcon(TasksUIManager.findIcon(groupPriority));
+                setIcon(UIUtil.findIcon(groupPriority));
             }
             catch (IllegalArgumentException e) {
-                setIcon(TasksUIManager.getIcon(TasksUIManager.ICON_TASK));
+                setIcon(UIUtil.getIcon(UIUtil.ICON_TASK));
             }
 
             append(task.getTitle(), groupTitleAttr);
@@ -79,7 +79,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             append(details, restAttr);
         }
         else {
-            setIcon(TasksUIManager.createIcon(task));
+            setIcon(UIUtil.createIcon(task));
             append(task.getTitle(), titleAttr);
             String details = makeDetailsForTask(task);
             if (details.length() != 0) {

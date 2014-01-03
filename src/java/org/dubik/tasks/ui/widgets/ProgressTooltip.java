@@ -15,7 +15,7 @@
  */
 package org.dubik.tasks.ui.widgets;
 
-import org.dubik.tasks.ui.TasksUIManager;
+import org.dubik.tasks.utils.UIUtil;
 
 import javax.swing.*;
 
@@ -26,7 +26,7 @@ public class ProgressTooltip extends JToolTip {
     private double percentage;
 
     public ProgressTooltip(double percentage) {
-        setUI(TasksUIManager.getProgressTooltipUI());
+        setUI(UIUtil.getProgressTooltipUI());
         this.percentage = percentage;
     }
 

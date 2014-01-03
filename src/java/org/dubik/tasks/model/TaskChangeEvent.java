@@ -21,15 +21,15 @@ package org.dubik.tasks.model;
  * @author Sergiy Dubovik
  */
 public class TaskChangeEvent {
-    private ITask task;
 
-    /**
-     * Creates change event for specified task.
-     *
-     * @param task task
-     */
-    public TaskChangeEvent(ITask task) {
+    private ITask parent;
+    private ITask task;
+    private int index;
+
+    public TaskChangeEvent(ITask parent, ITask task, int index) {
+        this.parent = parent;
         this.task = task;
+        this.index = index;
     }
 
     /**
@@ -39,5 +39,13 @@ public class TaskChangeEvent {
      */
     public ITask getTask() {
         return task;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public ITask getParent() {
+        return parent;
     }
 }

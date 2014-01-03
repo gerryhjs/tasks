@@ -174,7 +174,7 @@
 
         <action id="AddNewTask" class="org.dubik.tasks.ui.actions.AddNewTaskAction" text="Add Task..."
                 description="Add new task" icon="/org/dubik/tasks/ui/icons/add_task.png">
-            <keyboard-shortcut first-keystroke="INSERT" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="INSERT" keymap="$default"/>-->
         </action>
 
         <action id="RemoveTaskAction" class="org.dubik.tasks.ui.actions.RemoveTaskAction" text="Remove Task"
