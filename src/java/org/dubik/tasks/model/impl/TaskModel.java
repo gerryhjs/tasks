@@ -108,10 +108,11 @@ public class TaskModel implements ITaskModel {
             }
         }
 
-        fireAddTaskEvent(task);
 
         Task mutableTask = (Task) task;
         mutableTask.setParent(newParent);
+
+        fireAddTaskEvent(task);
 
     }
 
