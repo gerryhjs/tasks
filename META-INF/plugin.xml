@@ -125,28 +125,28 @@
 
         <action id="MarkCompletedAction" class="org.dubik.tasks.ui.actions.MarkCompletedAction" text="Mark completed"
                 description="Mark task as completed" icon="/org/dubik/tasks/ui/icons/complete_task.png">
-            <keyboard-shortcut first-keystroke="control p" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="control p" keymap="$default"/>-->
         </action>
 
         <action id="MarkNotCompletedAction" class="org.dubik.tasks.ui.actions.MarkNotCompletedAction"
                 icon="/org/dubik/tasks/ui/icons/task.png" text="Mark as not completed"
                 description="Mark task as not completed">
-            <keyboard-shortcut first-keystroke="control shift p" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="control shift p" keymap="$default"/>-->
         </action>
 
         <action id="HighlightTaskAction" class="org.dubik.tasks.ui.actions.HighlightTaskAction" text="Highlight Task"
                 description="Highlight task" icon="/org/dubik/tasks/ui/icons/star.png">
-            <keyboard-shortcut first-keystroke="SPACE" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="SPACE" keymap="$default"/>-->
         </action>
 
         <action id="MoveTaskUpAction" class="org.dubik.tasks.ui.actions.MoveTaskUpAction" text="Move task up"
                 icon="/actions/moveUp.png" description="Move task up">
-            <keyboard-shortcut first-keystroke="alt UP" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="alt UP" keymap="$default"/>-->
         </action>
 
         <action id="MoveTaskDownAction" class="org.dubik.tasks.ui.actions.MoveTaskDownAction" text="Move task down"
                 icon="/actions/moveDown.png" description="Move task down">
-            <keyboard-shortcut first-keystroke="alt DOWN" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="alt DOWN" keymap="$default"/>-->
         </action>
 
         <action id="ToggleCompletedTaskVisibleAction"
@@ -156,7 +156,7 @@
         <action id="NewChangelistAction" class="org.dubik.tasks.ui.actions.NewChangeListAction"
                 text="Create New Change List" description="Creates new change list based on the task"
                 icon="/org/dubik/tasks/ui/icons/newchangelist.png">
-            <keyboard-shortcut first-keystroke="alt INSERT" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="alt INSERT" keymap="$default"/>-->
         </action>
 
         <action id="ExportToTextFileAction" class="org.dubik.tasks.ui.actions.ExportToTextFileAction"
@@ -179,12 +179,12 @@
 
         <action id="RemoveTaskAction" class="org.dubik.tasks.ui.actions.RemoveTaskAction" text="Remove Task"
                 description="Remove selected task" icon="/org/dubik/tasks/ui/icons/remove_task.png">
-            <keyboard-shortcut first-keystroke="DELETE" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="DELETE" keymap="$default"/>-->
         </action>
 
         <action id="TaskPropertyAction" class="org.dubik.tasks.ui.actions.TaskPropertyAction" text="Task properties"
                 description="Task properties" icon="/actions/properties.png">
-            <keyboard-shortcut first-keystroke="control ENTER" keymap="$default"/>
+            <!--<keyboard-shortcut first-keystroke="control ENTER" keymap="$default"/>-->
         </action>
 
         <action id="StartTaskAction" class="org.dubik.tasks.ui.actions.StartTaskAction" text="Start Task"

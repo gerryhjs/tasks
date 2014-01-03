@@ -18,14 +18,9 @@ package org.dubik.tasks.ui.tree;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.UIUtil;
 import org.dubik.tasks.TaskController;
-import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.ui.TasksUIManager;
-import org.dubik.tasks.ui.widgets.ProgressTooltip;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.tree.TreePath;
-import java.awt.*;
 
 /**
  * @author Sergiy Dubovik
@@ -33,53 +28,20 @@ import java.awt.*;
 public class TasksTree extends Tree {
 
     public TasksTree(TaskController taskController, TaskTreeModel taskModel) {
-        setTransferHandler( new TaskTransferHandler(taskController));
+        setTransferHandler(new TaskTransferHandler(taskController));
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
 
         UIUtil.setLineStyleAngled(this);
         setShowsRootHandles(true);
         setRootVisible(false);
-        setCellRenderer( new TaskTreeCellRenderer());
+        setCellRenderer(new TaskTreeCellRenderer());
 
         addTreeSelectionListener(taskController);
         addMouseListener(new TaskTreeMouseAdapter(TasksUIManager.createTaskTreePopup("TasksPopupGroup")));
 
         setModel(taskModel);
 
-        ToolTipManager.sharedInstance().registerComponent(this);
-
     }
 
-    public JToolTip createToolTip() {
-        Point pos = getMousePosition();
-        JToolTip tooltip = super.createToolTip();
-
-        if (pos != null) {
-            TreePath treePath = getPathForLocation(pos.x, pos.y);
-            if (treePath != null) {
-                Object lastComponent = treePath.getLastPathComponent();
-                if (lastComponent != null) {
-                    ITask task = (ITask) lastComponent;
-                    if (task.size() != 0) {
-                        tooltip = new ProgressTooltip((float) completed(task) / (float) task.size());
-                    }
-                }
-            }
-        }
-
-        tooltip.setComponent(this);
-        return tooltip;
-    }
-
-    private int completed(@NotNull ITask task) {
-        int completed = 0;
-        for (int i = 0; i < task.size(); i++) {
-            if (task.get(i).isCompleted()) {
-                completed++;
-            }
-        }
-
-        return completed;
-    }
 }
