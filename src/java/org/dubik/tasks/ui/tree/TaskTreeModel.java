@@ -19,18 +19,18 @@ import org.dubik.tasks.model.*;
 import org.dubik.tasks.model.impl.TaskGroup;
 import org.dubik.tasks.ui.filters.PriorityFilter;
 
-import javax.swing.event.TreeModelEvent;
+import javax.swing.event.*;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Task tree model. Feeds tree with the data.
  *
  * @author Sergiy Dubovik
  */
-public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChangeListener {
+public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
+    private EventListenerList listeners = new EventListenerList();
     private ITaskGroup root;
     private ITaskModel taskModel;
     private ITaskFilter taskFilter;
@@ -189,4 +189,38 @@ public class TaskTreeModel extends AbstractTreeModel implements ITaskModelChange
     public boolean isGrouped() {
         return isGrouped;
     }
+
+
+    public void addTreeModelListener(TreeModelListener listener) {
+        listeners.add(TreeModelListener.class, listener);
+    }
+
+    public void removeTreeModelListener(TreeModelListener listener) {
+        listeners.remove(TreeModelListener.class, listener);
+    }
+
+    public void fireTreeNodesChanged(TreeModelEvent e) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
+            listener.treeNodesChanged(e);
+        }
+    }
+
+    public void fireTreeNodesInserted(TreeModelEvent e) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
+            listener.treeNodesInserted(e);
+        }
+    }
+
+    public void fireTreeNodesRemoved(TreeModelEvent e) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
+            listener.treeNodesRemoved(e);
+        }
+    }
+
+    public void fireTreeStructureChanged(TreeModelEvent e) {
+        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
+            listener.treeStructureChanged(e);
+        }
+    }
+
 }

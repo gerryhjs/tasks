@@ -63,7 +63,8 @@ public class TasksApplicationComponent implements ApplicationComponent, NamedJDO
      */
     @NotNull
     public String getComponentName() {
-        return "TasksComponent";
+        //this name is registered in the tasks.xml so we cannot change it for backwards compatibility
+        return "TaskStorage";
     }
 
     @NonNls
