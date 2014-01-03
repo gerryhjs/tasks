@@ -51,29 +51,33 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public Object getChild(Object parent, int index) {
-        if (parent instanceof ITask) {
+        ITask task;
 
-            ITask task = (ITask) parent;
-
-            if (taskFilter != null) {
-                int taskIndex;
-
-                for (taskIndex = 0; taskIndex < task.size(); taskIndex++) {
-                    if (taskFilter.accept(task.get(taskIndex))) {
-                        if (index == 0) {
-                            return task.get(taskIndex);
-                        }
-
-                        index--;
-                    }
-                }
-            }
-            else {
-                return task.get(index);
-            }
+        if (parent == null) {
+            task = root;
+        }
+        else {
+            task = (ITask) parent;
         }
 
-        return "Null";
+        if (taskFilter != null) {
+            int taskIndex;
+
+            for (taskIndex = 0; taskIndex < task.size(); taskIndex++) {
+                if (taskFilter.accept(task.get(taskIndex))) {
+                    if (index == 0) {
+                        return task.get(taskIndex);
+                    }
+
+                    index--;
+                }
+            }
+        }
+        else {
+            return task.get(index);
+        }
+
+        return null;
     }
 
     public int getChildCount(Object parent) {
@@ -105,10 +109,12 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
-        Task task = (Task) path.getLastPathComponent();
-        if (!task.getTitle().equals(newValue)) {
-            task.setTitle((String) newValue);
-            fireTreeNodesChanged(new TreeModelEvent(this, path, new int[]{getIndexOfChild(task.getParent(), task)}, new Object[]{task}));
+        if ( !isGrouped() && getTaskFilter() == null  && path.getLastPathComponent() instanceof Task) {
+            Task task = (Task) path.getLastPathComponent();
+            if (!task.getTitle().equals(newValue)) {
+                task.setTitle((String) newValue);
+                fireTreeNodesChanged(new TreeModelEvent(this, path.getParentPath(), new int[]{getIndexOfChild(task.getParent(), task)}, new Object[]{task}));
+            }
         }
     }
 

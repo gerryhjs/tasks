@@ -176,7 +176,6 @@ public class TaskForm extends DialogWrapper {
     @Nullable
     @Override
     protected ValidationInfo doValidate() {
-        System.out.println("titleTextField = " + titleTextField.getText());
         if (titleTextField.getText().trim().isEmpty()) {
             return new ValidationInfo(TasksBundle.message("error.no-title", titleTextField));
         }
