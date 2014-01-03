@@ -1,7 +1,7 @@
 What's new in version 1.8:
 
 Enhancements
-* Drag and Drop support
+* Full Drag and Drop support
 * Button for "Mark uncompleted"
 * Added frequently used functions on the toolbar
 * Tasks now have a long description
@@ -9,11 +9,14 @@ Enhancements
 * Updated settings storage to Idea12 standards
 * Removed unnecessary code.
 * Made TaskSettings and TaskModel an applicationService
+* Expand/Collapse All buttons
+* Title can be edited directly in the tree by pressing F2
 
 Bugfix
 * updated to IntelliJ IDEA 12
 * Set default button on TaskForm
 * Disabled DnD when using filters and groups
+* Tree is updated per node, instead of an entire update
 
 Other
 * Updated Copyright notice to 2013
