@@ -36,11 +36,14 @@ public class TasksTree extends Tree {
         setShowsRootHandles(true);
         setRootVisible(false);
         setCellRenderer(new TaskTreeCellRenderer());
+        setEditable(true);
+        setInvokesStopCellEditing(true);
 
         addTreeSelectionListener(taskController);
         addMouseListener(new TaskTreeMouseAdapter(TasksUIManager.createTaskTreePopup("TasksPopupGroup")));
 
         setModel(taskModel);
+
 
     }
 

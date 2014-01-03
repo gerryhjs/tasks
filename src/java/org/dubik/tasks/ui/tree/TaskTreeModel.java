@@ -16,6 +16,7 @@
 package org.dubik.tasks.ui.tree;
 
 import org.dubik.tasks.model.*;
+import org.dubik.tasks.model.impl.Task;
 import org.dubik.tasks.model.impl.TaskGroup;
 import org.dubik.tasks.ui.filters.PriorityFilter;
 
@@ -77,17 +78,24 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
 
     public int getChildCount(Object parent) {
         int size = 0;
+        ITask task = null;
+
+        if (parent == null) {
+            task = root;
+        }
         if (parent instanceof ITask) {
-            ITask task = (ITask) parent;
-            size = task.size();
-            if (taskFilter != null) {
-                for (int i = 0; i < task.size(); i++) {
-                    if (!taskFilter.accept(task.get(i))) {
-                        size--;
-                    }
+            task = (ITask) parent;
+        }
+
+        size = task.size();
+        if (taskFilter != null) {
+            for (int i = 0; i < task.size(); i++) {
+                if (!taskFilter.accept(task.get(i))) {
+                    size--;
                 }
             }
         }
+
 
         return size;
     }
@@ -97,6 +105,11 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public void valueForPathChanged(TreePath path, Object newValue) {
+        Task task = (Task) path.getLastPathComponent();
+        if (!task.getTitle().equals(newValue)) {
+            task.setTitle((String) newValue);
+            fireTreeNodesChanged(new TreeModelEvent(this, path, new int[]{getIndexOfChild(task.getParent(), task)}, new Object[]{task}));
+        }
     }
 
     public int getIndexOfChild(Object parent, Object child) {
