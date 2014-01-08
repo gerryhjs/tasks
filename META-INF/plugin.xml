@@ -14,93 +14,51 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin url="http://www.jetbrains.net/confluence/display/CONTEST/Tasks" version="2">
+<idea-plugin url="http://plugins.jetbrains.com/plugin/1124" version="2">
     <id>org.dubik.tasks.Tasks</id>
     <name>Tasks</name>
     <description>
         <![CDATA[
-        <p>A plugin for creating and editing list of daily tasks.</p>
-        <p>Since I used this plugin in the past, and it wasn't updated, I asked permission of
-        the original author Sergiy Dubovik if I could continue development. He was kind enough
-        to let me, so I forked it.</p>
-
+        <p>A plugin for keeping a list of tasks.</p>
+        <p>This plugin is a fork of the original plugin with permission of Sergiy Dubovik</p>
         <p>To contact me directly: nlsurfman@hotmail.com</p>
-        <p>Bugs can be reported here: https://github.com/NLSurfMan/tasks/issues</p>
-        <p>Comments can be left here: http://confluence.jetbrains.com/display/CONTEST/Tasks</p>
+        <p>Bugs can be reported here: <a href="https://github.com/NLSurfMan/tasks/issues">https://github.com/NLSurfMan/tasks/issues</a></p>
+        <p>Comments can be left here: <a href="http://confluence.jetbrains.com/display/CONTEST/Tasks">http://confluence.jetbrains.com/display/CONTEST/Tasks</a></p>
         ]]>
     </description>
     <change-notes>
         <![CDATA[
         <p><u><b>Version 1.8 changes</b></u></p>
-         //Todo: update for final release!
-
-        <p><u><b>Version 1.7 changes</b></u></p>
+        <p>Enhancements</p>
         <ul>
-            <li>Tooltip shows overview of hovered task if it has sub-tasks.</li>
-            <li>Shortcuts added for task manipulation. Settings->Keymap->Plugins->Tasks or open
-                popup menu.</li>
-            <li>Priority can now be propagated to upper tasks, you have to switch that feature on
-                in Settings->Tasks->Propagate priority to upper task.</li>
-            <li>Tasks can be exported to a file or a clipboard.</li>
-            <li>Tasks stored in separate file (tasks.xml) in IntelliJ IDEA config directory.</li>
-            <li>Task can be highlighted using red, yellow and red star.</li>
+            <li>Full Drag and Drop support</li>
+            <li>Button for "Mark uncompleted"</li>
+            <li>Added frequently used functions on the toolbar</li>
+            <li>Tasks now have a long description</li>
+            <li>Start/stop buttons for keeping real-time track of spent time</li>
+            <li>Updated settings storage to Idea12 standards</li>
+            <li>Removed unnecessary code.</li>
+            <li>Made TaskSettings and TaskModel an applicationService</li>
+            <li>Expand/Collapse All buttons</li>
+            <li>Title can be edited directly in the tree by pressing F2</li>
+            <li>Changed e.isRightMouseButton() to e.isPopupTrigger()</li>
         </ul>
-        
-        <p><u><b>Version 1.6 changes</b></u></p>
+        <p>Bugfix</p>
         <ul>
-            <li>Added new action: Create new change list with the title of selected task(s).
-                If several tasks are selected then titles will be concatanated and separated by comma.</li>
-            <li>Tasks can be reordered.</li>*
-            <li>Completed tasks can be hidden.</li>
-            <li>Added "Add to Root" button when create new task.</li>
+            <li>updated to IntelliJ IDEA 12</li>
+            <li>Set default button on TaskForm</li>
+            <li>Disabled DnD when using filters and groups</li>
+            <li>Tree is updated per node, instead of an entire update</li>
         </ul>
-        
-        <p><u><b>Version 1.5 changes</b></u></p>
+        <p>Other</p>
         <ul>
-            <li>FIXED: Assertion failure when updating task properties</li>
-            <li>Added debug info generation to build.xml and to plugin binaries</li>
+            <li>Updated Copyright notice to 2013</li>
         </ul>
-
-        <p><u><b>Version 1.4 changes</b></u></p>
-        <ul>
-            <li>Removed unused classes</li>
-            <li>Added build.xml to source package</li>
-            <li>Documentation added</li>
-        </ul>
-        
-        <p><u><b>Version 1.3 changes</b></u></p>
-        <ul>
-            <li>Tasks can have sub-tasks. Depth level is not limited. Completions, estimated and actual time are
-                propagated to the upper level task</li>
-            <li>Actual time is implemented, after you complete a task you can specify how long did it take.
-                It's not used anywhere though, but you may wish to track your taks estimation accuracy.</li>
-            <li>Actual time feature is disabled by default, to enable it go to IntelliJ Idea settings and open
-                Tasks configuration panel</li>
-            <li>If you delete more then 1 task you will be asked for a confirmation</li>
-            <li>Create Task from TODO intention. If you have a todo item and place a cursor on it, you will be able
-                create a task with todo text (alt+enter).</li>
-        </ul>
-
-        <p><u><b>Version 1.2 changes</b></u></p>
-        <ul>
-            <li>Scroll bars appear if content of Tasks's tree can't fit tool window</li>
-            <li>Task(s) can be highlighted, i.e. small star appears right in front of it(them)</li>
-            <li>Estimation time for a task can be set up to 150h (9000minutes)</li>
-            <li>When tasks a grouped by priority important group comes first</li>
-            <li>"Not sure" priority changed to "Low", "Important" changed to "High", added icon for low priority task</li>
-            <li>When you group by priority tree is expended by default</li>
-            <li>UI cleanup, some borders removed, spaces added</li>
-        </ul>
-        
-		<p><u><b>Version 1.1 changes</b></u></p>
-		<ul>
-		    <li>Urls and contact information updated.</li>
-	    </ul>
         ]]>
     </change-notes>
     <version>1.8</version>
     <vendor logo="/org/dubik/tasks/ui/icons/task.png" email="nlsurfman@hotmail.com"
-            url="http://www.jetbrains.net/confluence/display/CONTEST/Tasks">
+            url="https://github.com/NLSurfMan/tasks">
         WarnerJan Veldhuis (Original author: Sergiy Dubovik)
     </vendor>
     <idea-version since-build="4267"/>
@@ -242,9 +200,9 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettingsService" serviceImplementation="org.dubik.tasks.settings.TaskSettingsService" />
-        <applicationService serviceInterface="org.dubik.tasks.model.ITaskModel" serviceImplementation="org.dubik.tasks.model.impl.TaskModel" />
-        <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"  />
+        <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettingsService" serviceImplementation="org.dubik.tasks.settings.TaskSettingsService"/>
+        <applicationService serviceInterface="org.dubik.tasks.model.ITaskModel" serviceImplementation="org.dubik.tasks.model.impl.TaskModel"/>
+        <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"/>
 
         <intentionAction>
             <className>org.dubik.tasks.intention.CreateTaskFromTodoIntention</className>

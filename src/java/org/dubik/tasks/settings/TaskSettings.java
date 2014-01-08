@@ -38,8 +38,7 @@ public class TaskSettings extends PropertyChangeSupport  {
     }
 
     public static TaskSettings getDefaults() {
-        TaskSettings defaults = new TaskSettings();
-        return defaults;
+        return new TaskSettings();
     }
 
     public boolean isEnableActualTime() {
