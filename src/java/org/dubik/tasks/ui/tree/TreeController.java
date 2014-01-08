@@ -17,6 +17,8 @@ package org.dubik.tasks.ui.tree;
 
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.tree.TreeUtil;
+import org.dubik.tasks.model.ITask;
+import org.dubik.tasks.model.TaskChangeEvent;
 import org.dubik.tasks.ui.filters.HideCompletedFilter;
 
 import javax.swing.event.TreeModelEvent;
@@ -142,5 +144,9 @@ public class TreeController {
             tree.collapseRow(row);
             row--;
         }
+    }
+
+    public void taskChanged(ITask task) {
+        treeModel.handleChangeTaskEvent(new TaskChangeEvent(task.getParent(), task, treeModel.getIndexOfChild(task.getParent(), task)));
     }
 }

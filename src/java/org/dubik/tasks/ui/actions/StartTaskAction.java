@@ -22,6 +22,7 @@ import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
+import org.dubik.tasks.ui.tree.TreeController;
 
 import java.util.List;
 
@@ -31,8 +32,11 @@ public class StartTaskAction extends BaseTaskAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         TaskController taskController = this.getController(e);
+        TreeController treeController = this.getTreeController(e);
         List<ITask> selectedTasks = taskController.getSelectedTasks();
-        selectedTasks.get(0).start();
+        ITask task = selectedTasks.get(0);
+        task.start();
+        treeController.taskChanged(task);
     }
 
     @Override
