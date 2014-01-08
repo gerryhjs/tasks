@@ -88,8 +88,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             }
         }
 
-        String tooltip = makeTooltipFromTask(task);
-        setToolTipText(tooltip);
+        setToolTipText(makeTooltipFromTask(task));
 
         setIconTextGap(3);
 
@@ -204,9 +203,11 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             int subTasks = task.size();
             int complete = completed(task);
             int incomplete = subTasks - complete;
-            return TasksBundle.message("tree.tooltip.template", task.getTitle(), task.size(), complete, incomplete);
+            return TasksBundle.message("tree.tooltip.template", task.getTitle(), task.size(), complete, incomplete, task.getDescription());
         }
-        return null;
+        else {
+            return task.getDescription();
+        }
     }
 
     private int completed(ITask task) {

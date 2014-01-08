@@ -31,7 +31,7 @@ public class TasksTree extends Tree {
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
 
-        com.intellij.util.ui.UIUtil.setLineStyleAngled(this);
+        setLineStyleAngled();
         setShowsRootHandles(true);
         setRootVisible(false);
         setCellRenderer(new TaskTreeCellRenderer());

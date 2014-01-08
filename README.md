@@ -6,13 +6,13 @@ Author
 ======
 Original author: Sergiy Dubovik
 
-Forked by: WarnerJan Veldhuis
+Forked by: WarnerJan Veldhuis (<nlsurfman@hotmail.com>)
 
 Links
 =====
-Download page: http://plugins.intellij.net/plugin/?id=1124
+Download page: <http://plugins.intellij.net/plugin/?id=1124>
 
-Comments page: http://confluence.jetbrains.com/display/CONTEST/Tasks
+Comments page: <http://confluence.jetbrains.com/display/CONTEST/Tasks>
 
 Description
 ===========

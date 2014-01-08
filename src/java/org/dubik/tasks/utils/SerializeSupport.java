@@ -109,6 +109,9 @@ public class SerializeSupport {
         }
 
         String description = StringUtil.unescapeXml(taskElem.getAttributeValue(TASK_DESCRIPTION));
+        if (description != null && description.isEmpty()) {
+            description = null;
+        }
 
         ITask task = new TaskBuilder()
                 .setTitle(title)
