@@ -11,6 +11,7 @@ Enhancements
 * Made TaskSettings and TaskModel an applicationService
 * Expand/Collapse All buttons
 * Title can be edited directly in the tree by pressing F2
+* Changed e.isRightMouseButton() to e.isPopupTrigger()
 
 Bugfix
 * updated to IntelliJ IDEA 12
