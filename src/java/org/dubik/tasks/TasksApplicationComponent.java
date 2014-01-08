@@ -24,16 +24,13 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Task application component.
- * Responsible for tasks and ui settings persistancy.
- * Contributes option dialog to IntelliJ global options.
  * It contains task model, since task model is global and
  * there is always only one instance of it.
  *
  * @author Sergiy Dubovik
  */
 
-public class TasksApplicationComponent implements ApplicationComponent, NamedJDOMExternalizable{
+public class TasksApplicationComponent implements ApplicationComponent, NamedJDOMExternalizable {
 
     private final ITaskModel taskModel;
 

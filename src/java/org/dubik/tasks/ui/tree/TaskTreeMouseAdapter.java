@@ -38,7 +38,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (SwingUtilities.isRightMouseButton(e)) {
+        if (e.isPopupTrigger()) {
             maybeShowPopup(e);
         }
         else if (e.getClickCount() == 2) {
@@ -68,7 +68,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (SwingUtilities.isRightMouseButton(e)) {
+        if (e.isPopupTrigger()) {
             maybeShowPopup(e);
         }
     }
