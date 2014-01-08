@@ -15,7 +15,7 @@
   -->
 
 <idea-plugin url="http://plugins.jetbrains.com/plugin/1124" version="2">
-    <id>org.dubik.tasks.Tasks</id>
+    <id>Tasks</id>
     <name>Tasks</name>
     <description>
         <![CDATA[
