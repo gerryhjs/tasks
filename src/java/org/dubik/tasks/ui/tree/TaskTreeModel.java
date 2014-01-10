@@ -147,7 +147,13 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
         Object[] pathToObject = findPathToObject(root, task);
         TreePath path = new TreePath(pathToObject);
 
-        fireTreeNodesInserted(new TreeModelEvent(this, path, new int[]{event.getIndex()}, new Object[]{task}));
+        TreeModelEvent treeModelEvent = new TreeModelEvent(this, path, new int[]{event.getIndex()}, new Object[]{task});
+        if (getChildCount(getRoot()) == 1 ) {
+            fireTreeStructureChanged(treeModelEvent);
+        }
+        else {
+            fireTreeNodesInserted(treeModelEvent);
+        }
     }
 
     public void handlePreDeleteTaskEvent(TaskChangeEvent event) {

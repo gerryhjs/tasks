@@ -39,9 +39,9 @@ public class TaskForm extends DialogWrapper {
     private static int ONE_MINUTE = 60;
     private JPanel container;
     private JTextField titleTextField;
-    private JComboBox<TaskPriority> priorityComboBox;
+    private JComboBox priorityComboBox;
     private JSpinner minutesSpinner;
-    private JComboBox<ITask> parentTasksComboBox;
+    private JComboBox parentTasksComboBox;
     private JSpinner actualMinutesSpinner;
     private JLabel actualTimeLabel;
     private JLabel actualMinutesLabel;
