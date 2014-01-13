@@ -19,6 +19,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.ui.SimpleTextAttributes;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.TasksBundle;
 import org.dubik.tasks.model.ITask;
@@ -197,7 +198,7 @@ public class TaskForm extends DialogWrapper {
         protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             TaskPriority priority = (TaskPriority) value;
             setIcon(UIUtil.findIcon(priority));
-            append(priority.toString());
+            append(priority.toString(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, getForeground()));
         }
     }
 
@@ -212,7 +213,7 @@ public class TaskForm extends DialogWrapper {
         @Override
         protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             ITask task = (ITask) value;
-            append(task.getTitle());
+            append(task.getTitle(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, getForeground()));
             setIcon(UIUtil.createIcon(task));
         }
     }
