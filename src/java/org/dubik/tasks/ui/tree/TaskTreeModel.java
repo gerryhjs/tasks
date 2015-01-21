@@ -20,10 +20,14 @@ import org.dubik.tasks.model.impl.Task;
 import org.dubik.tasks.model.impl.TaskGroup;
 import org.dubik.tasks.ui.filters.PriorityFilter;
 
-import javax.swing.event.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Task tree model. Feeds tree with the data.
@@ -202,6 +206,7 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
                 path.add(parent);
                 return true;
             }
+
         }
 
         return false;

@@ -20,9 +20,9 @@ import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-        name = "TaskSettings",
+        name = "TaskPluginSettings",
         storages = {
-                @Storage(id = "default", file = StoragePathMacros.APP_CONFIG + "/tasksettings.xml")
+                @Storage(id = "default", file = StoragePathMacros.APP_CONFIG + "/taskpluginsettings.xml")
         }
 )
 public class TaskSettingsService implements PersistentStateComponent<TaskSettings> {
