@@ -16,7 +16,7 @@ This plugin will keep track of your daily tasks. Tasks are hierarchical, so it c
 priority and possibly an icon. Time tracking is built-in, so you can see how much time you have spent on one
 particular task.
 
-#Installation
+# Installation
 
 Normally, this plugin would be installed via JetBrains's repository. If you have to install it manually,
 either choose "Install from disk" in IDEA's plugins page, or manually place it in
