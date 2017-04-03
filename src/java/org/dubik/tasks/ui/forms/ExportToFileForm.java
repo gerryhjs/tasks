@@ -34,11 +34,8 @@ import java.io.File;
  */
 public class ExportToFileForm extends DialogWrapper {
     private Project project;
-    private JTextArea previewTextArea;
     private JPanel container;
-    private JLabel errorLabel;
     private TextFieldWithBrowseButton browse;
-    private Action exportToClipboardAction;
     private boolean exportToClipboard;
 
     public ExportToFileForm(Project project) {
@@ -75,12 +72,10 @@ public class ExportToFileForm extends DialogWrapper {
     private void validateForm() {
         File file = getFile();
         if (file.isDirectory()) {
-            errorLabel.setText( TasksBundle.message("form.export.not-valid"));
-            getOKAction().setEnabled(false);
+            setErrorText( TasksBundle.message("form.export.not-valid"));
         }
         else {
-            errorLabel.setText("");
-            getOKAction().setEnabled(true);
+            setErrorText(null);
         }
     }
 
@@ -93,37 +88,27 @@ public class ExportToFileForm extends DialogWrapper {
         return container;
     }
 
-    public void setPreview(@Nullable String preview) {
-        previewTextArea.setText(preview);
-    }
-
     private void exportToClipboard() {
         exportToClipboard = true;
     }
 
-    protected void createDefaultActions() {
-        super.createDefaultActions();
-
-        exportToClipboardAction = new ExportToClipboardAction();
-    }
-
     @NotNull
     protected Action[] createActions() {
-        return new Action[]{exportToClipboardAction, getOKAction(), getCancelAction()};
+        return new Action[]{new ExportToClipboardAction(), getOKAction(), getCancelAction()};
     }
 
     public File getFile() {
         return new File(browse.getText());
     }
 
-    class ExportToClipboardAction extends AbstractAction {
-        public ExportToClipboardAction() {
+    private class ExportToClipboardAction extends AbstractAction {
+        ExportToClipboardAction() {
             super(TasksBundle.message("form.export.copy-to-clipboard"));
         }
 
         public void actionPerformed(ActionEvent event) {
             exportToClipboard();
-            doOKAction();
+            close(OK_EXIT_CODE);
         }
     }
 }

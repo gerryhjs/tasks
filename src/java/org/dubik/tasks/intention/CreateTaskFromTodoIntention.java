@@ -17,12 +17,12 @@ package org.dubik.tasks.intention;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.search.PsiTodoSearchHelper;
 import com.intellij.psi.search.TodoItem;
 import com.intellij.util.IncorrectOperationException;
@@ -89,16 +89,22 @@ public class CreateTaskFromTodoIntention implements IntentionAction {
      * @param file    current file
      * @throws IncorrectOperationException can be thrown if operation is incorrect :)
      */
-    public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         int offset = editor.getCaretModel().getOffset();
         final PsiElement element = file.findElementAt(offset);
         if (element instanceof PsiComment) {
             PsiComment psiComment = (PsiComment) element;
             TodoItem todoItem = getTodoItem(file, psiComment, offset);
-            String todoText = todoItem.getTextRange().substring(editor.getDocument().getText());
+            final String todoText = todoItem.getTextRange().substring(editor.getDocument().getText());
 
-            AddNewTaskAction anAction = (AddNewTaskAction) ActionManager.getInstance().getAction("AddNewTask");
-            anAction.actionPerformed(project, todoText);
+            Application application = ApplicationManager.getApplication();
+            application.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    AddNewTaskAction anAction = (AddNewTaskAction) ActionManager.getInstance().getAction("AddNewTask");
+                    anAction.actionPerformed(project, todoText);
+                }
+            });
         }
     }
 

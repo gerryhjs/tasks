@@ -22,7 +22,7 @@ import org.dubik.tasks.TasksProjectComponent;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
-import org.dubik.tasks.ui.tree.TreeController;
+import org.dubik.tasks.ui.tree.TaskTreeController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -40,7 +40,7 @@ abstract public class BaseTaskAction extends AnAction {
      * @return project
      */
     protected Project getProject(AnActionEvent e) {
-        return DataKeys.PROJECT.getData(e.getDataContext());
+        return e.getData(PlatformDataKeys.PROJECT);
     }
 
     /**
@@ -87,19 +87,19 @@ abstract public class BaseTaskAction extends AnAction {
      * @param project project associated with an action
      * @return tree controller
      */
-    protected TreeController getTreeController(Project project) {
-        TreeController controller = null;
+    protected TaskTreeController getTreeController(Project project) {
+        TaskTreeController controller = null;
         if (project != null) {
             TasksProjectComponent tasksProject = project.getComponent(TasksProjectComponent.class);
             if (tasksProject != null) {
-                controller = tasksProject.getTreeController();
+                controller = tasksProject.getTaskTreeController();
             }
         }
 
         return controller;
     }
 
-    protected TreeController getTreeController(AnActionEvent e) {
+    protected TaskTreeController getTreeController(AnActionEvent e) {
         Project project = DataKeys.PROJECT.getData(e.getDataContext());
         return getTreeController(project);
     }

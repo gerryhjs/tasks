@@ -31,7 +31,7 @@ public class TaskModel implements ITaskModel {
     private EventListenerList listeners;
 
     public TaskModel() {
-        tasks = new ArrayList<ITask>();
+        tasks = new ArrayList<>();
         listeners = new EventListenerList();
     }
 

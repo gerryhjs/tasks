@@ -21,6 +21,7 @@ import org.dubik.tasks.model.*;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.utils.UIUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -32,8 +33,7 @@ import javax.swing.*;
 public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
     private static final SimpleTextAttributes STRIKEOUT_REGULAR_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
     private static final SimpleTextAttributes STRIKEOUT_GRAY_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_STRIKEOUT, JBColor.GRAY);
-    private static final SimpleTextAttributes BOLD = new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD,
-            SimpleTextAttributes.REGULAR_ATTRIBUTES.getFgColor());
+    private static final SimpleTextAttributes BOLD = new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD, SimpleTextAttributes.REGULAR_ATTRIBUTES.getFgColor());
 
     private TaskSettings settings;
 
@@ -41,7 +41,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         settings = TaskSettingsService.getSettings();
     }
 
-    public void customizeCellRenderer(JTree tree, Object value,
+    public void customizeCellRenderer(@NotNull JTree tree, Object value,
                                       boolean selected, boolean expanded,
                                       boolean leaf, int row, boolean hasFocus) {
         if (!(value instanceof ITask)) {
@@ -100,7 +100,6 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
         }
 
         setBorder(isDropCell ? BorderFactory.createLineBorder(JBColor.RED) : null);
-
     }
 
     private String makeDetailsForTask(ITask task) {
@@ -203,7 +202,7 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             int subTasks = task.size();
             int complete = completed(task);
             int incomplete = subTasks - complete;
-            return TasksBundle.message("tree.tooltip.template", task.getTitle(), task.size(), complete, incomplete, task.getDescription());
+            return TasksBundle.message("tree.tooltip.template", task.getTitle(), task.size(), complete, incomplete, task.getDescription() == null? "" : task.getDescription());
         }
         else {
             return task.getDescription();

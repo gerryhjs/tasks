@@ -33,7 +33,7 @@ import org.dubik.tasks.settings.TaskSettingsService;
 import org.dubik.tasks.utils.UIUtil;
 import org.dubik.tasks.ui.tree.TaskTreeModel;
 import org.dubik.tasks.ui.tree.TasksTree;
-import org.dubik.tasks.ui.tree.TreeController;
+import org.dubik.tasks.ui.tree.TaskTreeController;
 import org.dubik.tasks.utils.TaskTimer;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +57,7 @@ public class TasksProjectComponent implements ProjectComponent {
     private JComponent tasksContainer;
 
     private TaskController taskController;
-    private TreeController treeController;
+    private TaskTreeController taskTreeController;
     private PropertyChangeListener settingsChangeListener;
 
     public TasksProjectComponent(Project project, ITaskModel taskModel) {
@@ -78,10 +78,10 @@ public class TasksProjectComponent implements ProjectComponent {
             Tree tasksTree = new TasksTree(taskController, treeModel);
             tasksContainer.add(new JBScrollPane(tasksTree), BorderLayout.CENTER);
 
-            treeController = new TreeController(treeModel, tasksTree);
+            taskTreeController = new TaskTreeController(treeModel, tasksTree);
             settingsChangeListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
-                    treeController.changedTree();
+                    taskTreeController.changedTree();
                 }
             };
             settings.addPropertyChangeListener(settingsChangeListener);
@@ -102,11 +102,14 @@ public class TasksProjectComponent implements ProjectComponent {
     }
 
     public void projectOpened() {
+        registerToolWindow();
+        registerActions();
+    }
+
+    private void registerToolWindow() {
         ToolWindow tasksToolWindow = ToolWindowManager.getInstance(project).registerToolWindow(TasksProjectComponent.TASKS_ID, false, ToolWindowAnchor.BOTTOM);
         tasksToolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(tasksContainer, TasksBundle.message("toolwindow.globaltasks"), true));
         tasksToolWindow.setIcon(IconLoader.getIcon(UIUtil.ICON_TASK));
-
-        registerActions();
     }
 
     private void registerActions() {
@@ -132,8 +135,8 @@ public class TasksProjectComponent implements ProjectComponent {
         return taskController;
     }
 
-    public TreeController getTreeController() {
-        return treeController;
+    public TaskTreeController getTaskTreeController() {
+        return taskTreeController;
     }
 
 }

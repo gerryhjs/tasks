@@ -16,7 +16,7 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.dubik.tasks.ui.tree.TreeController;
+import org.dubik.tasks.ui.tree.TaskTreeController;
 
 /**
  * @author Sergiy Dubovik
@@ -25,8 +25,8 @@ public class ToggleCompletedTaskVisibleAction extends BaseToggleTaskAction {
 
     @Override
     public boolean isSelected(AnActionEvent e) {
-        TreeController treeController = getTreeController(e);
-        return treeController != null && treeController.isHideCompletedTasks();
+        TaskTreeController taskTreeController = getTreeController(e);
+        return taskTreeController != null && taskTreeController.isHideCompletedTasks();
 
     }
 

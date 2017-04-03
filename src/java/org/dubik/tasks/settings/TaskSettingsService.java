@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 @State(
         name = "TaskPluginSettings",
         storages = {
-                @Storage(id = "default", file = StoragePathMacros.APP_CONFIG + "/taskpluginsettings.xml")
+                @Storage(value = "/taskpluginsettings.xml")
         }
 )
 public class TaskSettingsService implements PersistentStateComponent<TaskSettings> {

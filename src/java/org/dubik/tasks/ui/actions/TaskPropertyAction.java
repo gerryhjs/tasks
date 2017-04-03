@@ -16,7 +16,6 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
 import org.dubik.tasks.TaskController;
@@ -33,7 +32,7 @@ import java.util.List;
 public class TaskPropertyAction extends BaseTaskAction {
 
     public void actionPerformed(AnActionEvent e) {
-        Project project = PlatformDataKeys.PROJECT.getData(e.getDataContext());
+        Project project = getProject(e);
         if (project != null) {
             TaskController controller = getController(e);
             List<ITask> selectedTasks = controller.getSelectedTasks();

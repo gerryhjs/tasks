@@ -16,7 +16,7 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.dubik.tasks.ui.tree.TreeController;
+import org.dubik.tasks.ui.tree.TaskTreeController;
 
 /**
  * @author Sergiy Dubovik
@@ -30,9 +30,9 @@ public class GroupByPriorityAction extends BaseToggleTaskAction {
 
     @Override
     public void setSelected(AnActionEvent e, boolean state) {
-        TreeController treeController = getTreeController(getProject(e));
-        if (treeController != null) {
-            treeController.groupByPriority(state);
+        TaskTreeController taskTreeController = getTreeController(getProject(e));
+        if (taskTreeController != null) {
+            taskTreeController.groupByPriority(state);
         }
 
     }

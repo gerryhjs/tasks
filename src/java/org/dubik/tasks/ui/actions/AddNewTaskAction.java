@@ -16,7 +16,7 @@
 package org.dubik.tasks.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import org.dubik.tasks.TaskController;
 import org.dubik.tasks.model.ITask;
@@ -31,7 +31,7 @@ import org.dubik.tasks.ui.forms.TaskForm;
 public class AddNewTaskAction extends BaseTaskAction {
 
     public void actionPerformed(AnActionEvent e) {
-        Project project = DataKeys.PROJECT.getData(e.getDataContext());
+        Project project = e.getData(PlatformDataKeys.PROJECT);
         actionPerformed(project, null);
     }
 

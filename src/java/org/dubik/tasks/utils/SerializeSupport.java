@@ -40,8 +40,7 @@ public class SerializeSupport {
     private static final String TASK_ACTUAL = "actual";
     private static final String TASK_DESCRIPTION = "description";
 
-    static public void writeExternal(ITaskModel taskModel, Element element)
-            throws WriteExternalException {
+    static public void writeExternal(ITaskModel taskModel, Element element) throws WriteExternalException {
         Element tasksRoot = new Element(TASKS);
         element.addContent(tasksRoot);
         for (int i = 0; i < taskModel.size(); i++) {

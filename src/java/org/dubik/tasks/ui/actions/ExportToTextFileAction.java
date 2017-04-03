@@ -40,8 +40,6 @@ public class ExportToTextFileAction extends BaseTaskAction {
         OutputStream os = new ByteArrayOutputStream();
         writeTasks(model, os);
 
-        form.setPreview(os.toString());
-
         form.show();
         if (form.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
             if (!form.isExportToClipboard()) {

@@ -30,7 +30,7 @@ public class TransferableTask implements Transferable {
     private List<ITask> tasks;
 
     public TransferableTask(List<ITask> tasks) {
-        this.tasks = new ArrayList<ITask>(tasks);
+        this.tasks = new ArrayList<>(tasks);
     }
 
     public synchronized Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
