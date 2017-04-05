@@ -34,10 +34,6 @@
         <ul>
             <li>Updated to IntelliJ IDEA 2017.1</li>
         </ul>
-        <p>Enhancements</p>
-        <ul>
-
-        </ul>
         <p>Bugfixes</p>
         <ul>
             <li>Intention: switched content of before.java.template and after.java.template</li>

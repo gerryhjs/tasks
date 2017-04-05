@@ -1,25 +1,31 @@
-What's new in version 1.8:
++ Enhancement
+* Bugfix
+- Other
 
-Enhancements
-* Full Drag and Drop support
-* Button for "Mark uncompleted"
-* Added frequently used functions on the toolbar
-* Tasks now have a long description
-* Start/stop buttons for keeping real-time track of spent time
-* Updated settings storage to Idea12 standards
-* Removed unnecessary code.
-* Made TaskSettings and TaskModel an applicationService
-* Expand/Collapse All buttons
-* Title can be edited directly in the tree by pressing F2
-* Changed e.isRightMouseButton() to e.isPopupTrigger()
+Version 1.8.3 changes:
++ Updated to IntelliJ 2017.1
+* Intention: switched content of before.java.template and after.java.template
+* Removed null from tooltip
+* AWT events are not allowed inside write action (https://github.com/NLSurfMan/tasks/issues/27)
 
-Bugfix
-* updated to IntelliJ IDEA 12
+Version 1.8.1 changes:
+* "TaskSettings" appeared to be a reserved name. Had to change it to "TaskPluginSettings". Because of the name change, you will have to redo your settings.
+
+Version 1.8.1 changes:
++ Full Drag and Drop support
++ Button for "Mark uncompleted"
++ Added frequently used functions on the toolbar
++ Tasks now have a long description
++ Start/stop buttons for keeping real-time track of spent time
++ Updated settings storage to Idea12 standards
++ Removed unnecessary code.
++ Made TaskSettings and TaskModel an applicationService
++ Expand/Collapse All buttons
++ Title can be edited directly in the tree by pressing F2
++ Changed e.isRightMouseButton() to e.isPopupTrigger()
+* Updated to IntelliJ IDEA 12
 * Set default button on TaskForm
 * Disabled DnD when using filters and groups
 * Tree is updated per node, instead of an entire update
-
-Other
-* Updated Copyright notice to 2013
 
 
