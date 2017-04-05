@@ -18,7 +18,8 @@ package org.dubik.tasks.ui.actions;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import org.dubik.tasks.*;
+import org.dubik.tasks.TaskController;
+import org.dubik.tasks.TasksProjectComponent;
 import org.dubik.tasks.model.ITask;
 import org.dubik.tasks.settings.TaskSettings;
 import org.dubik.tasks.ui.tree.TaskTreeController;
@@ -39,7 +40,7 @@ abstract public class BaseToggleTaskAction extends ToggleAction {
      * @return project
      */
     protected Project getProject(AnActionEvent e) {
-        return e.getData(PlatformDataKeys.PROJECT);
+        return PlatformDataKeys.PROJECT.getData(e.getDataContext());
     }
 
     /**
@@ -99,7 +100,7 @@ abstract public class BaseToggleTaskAction extends ToggleAction {
     }
 
     protected TaskTreeController getTreeController(AnActionEvent e) {
-        Project project = DataKeys.PROJECT.getData(e.getDataContext());
+        Project project = PlatformDataKeys.PROJECT.getData(e.getDataContext());
         return getTreeController(project);
     }
 

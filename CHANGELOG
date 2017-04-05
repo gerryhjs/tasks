@@ -2,6 +2,9 @@
 * Bugfix
 - Other
 
+Version 1.8.4 changes:
++ Updated the plugin to work with other applications built on the IntelliJ platform. (Tested with PyCharm 2017 and CLion 2017) (https://github.com/NLSurfMan/tasks/issues/26)
+
 Version 1.8.3 changes:
 + Updated to IntelliJ 2017.1
 * Intention: switched content of before.java.template and after.java.template

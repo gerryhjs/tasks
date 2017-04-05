@@ -31,7 +31,7 @@ import org.dubik.tasks.ui.forms.TaskForm;
 public class AddNewTaskAction extends BaseTaskAction {
 
     public void actionPerformed(AnActionEvent e) {
-        Project project = e.getData(PlatformDataKeys.PROJECT);
+        Project project = PlatformDataKeys.PROJECT.getData(e.getDataContext());
         actionPerformed(project, null);
     }
 

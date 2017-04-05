@@ -100,7 +100,7 @@ abstract public class BaseTaskAction extends AnAction {
     }
 
     protected TaskTreeController getTreeController(AnActionEvent e) {
-        Project project = DataKeys.PROJECT.getData(e.getDataContext());
+        Project project = PlatformDataKeys.PROJECT.getData(e.getDataContext());
         return getTreeController(project);
     }
 

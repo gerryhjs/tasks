@@ -21,7 +21,7 @@
         <![CDATA[
         <p>I am considering rewriting this plugin from scratch. If you like to contribute some ideas, let me know on Github.</p>
         <p/>
-        <p>A plugin for keeping a list of tasks.</p>
+        <p>A plugin for keeping a list of tasks. A todo-list if you like.</p>
         <p>This plugin is a fork of the original plugin with permission of Sergiy Dubovik</p>
         <p>To contact me directly: nlsurfman@hotmail.com</p>
         <p>Bugs can be reported here: <a href="https://github.com/NLSurfMan/tasks/issues">https://github.com/NLSurfMan/tasks/issues</a></p>
@@ -29,6 +29,12 @@
     </description>
     <change-notes>
         <![CDATA[
+        <p><u><b>Version 1.8.4 changes</b></u></p>
+        <p>Enhancements
+        <ul>
+            <li>Updated the plugin to work with other applications built on the IntelliJ platform. (Tested with PyCharm 2017 and CLion 2017)</li>
+        </ul>
+
         <p><u><b>Version 1.8.3 changes</b></u></p>
         <p>Changes</p>
         <ul>
@@ -74,12 +80,13 @@
         </ul>
         ]]>
     </change-notes>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
     <vendor email="nlsurfman@hotmail.com" url="https://github.com/NLSurfMan/tasks">
         WarnerJan Veldhuis (Original author: Sergiy Dubovik)
     </vendor>
 
     <idea-version since-build="145.0"/>
+    <depends>com.intellij.modules.lang</depends>
 
     <resource-bundle>org.dubik.tasks.TasksBundle</resource-bundle>
 

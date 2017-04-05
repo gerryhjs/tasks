@@ -43,7 +43,7 @@ public class TaskTreeMouseAdapter extends MouseAdapter {
         }
         else if (e.getClickCount() == 2) {
             final DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
-            Project project = DataKeys.PROJECT.getData(context);
+            Project project = PlatformDataKeys.PROJECT.getData(context);
 
             TasksTree tree = (TasksTree) e.getComponent();
             TreePath treePath = tree.getClosestPathForLocation(e.getX(), e.getY());
