@@ -103,25 +103,25 @@
     </project-components>
 
     <actions>
-        <action id="TaskGroupByPriority" class="org.dubik.tasks.ui.actions.GroupByPriorityAction" text="Group by priority" description="Group by priority"/>
-        <action id="MarkCompletedAction" class="org.dubik.tasks.ui.actions.MarkCompletedAction" text="Mark completed" description="Mark task as completed" icon="/org/dubik/tasks/ui/icons/complete_task.png"/>
-        <action id="MarkNotCompletedAction" class="org.dubik.tasks.ui.actions.MarkNotCompletedAction" icon="/org/dubik/tasks/ui/icons/task.png" text="Mark as not completed" description="Mark task as not completed"/>
-        <action id="HighlightTaskAction" class="org.dubik.tasks.ui.actions.HighlightTaskAction" text="Highlight Task" description="Highlight task" icon="/org/dubik/tasks/ui/icons/star.png"/>
-        <action id="MoveTaskUpAction" class="org.dubik.tasks.ui.actions.MoveTaskUpAction" text="Move task up" icon="/actions/moveUp.png" description="Move task up"/>
-        <action id="MoveTaskDownAction" class="org.dubik.tasks.ui.actions.MoveTaskDownAction" text="Move task down" icon="/actions/moveDown.png" description="Move task down"/>
-        <action id="ToggleCompletedTaskVisibleAction" class="org.dubik.tasks.ui.actions.ToggleCompletedTaskVisibleAction" text="Hide completed tasks" icon="/actions/showHiddens.png" description="Hide/unhide completed tasks"/>
-        <action id="NewChangelistAction" class="org.dubik.tasks.ui.actions.NewChangeListAction" text="Create New Change List" description="Creates new change list based on the task" icon="/org/dubik/tasks/ui/icons/newchangelist.png"/>
-        <action id="ExportToTextFileAction" class="org.dubik.tasks.ui.actions.ExportToTextFileAction" icon="/actions/export.png" text="Export Tasks to File" description="Exports all tasks to a text file or clipboard."/>
-        <action id="HighlightRedTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightRedTaskAction" text="Red" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_red.png"/>
-        <action id="HighlightYellowTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightYellowTaskAction" text="Yellow" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_yellow.png"/>
-        <action id="HighlightGreenTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightGreenTaskAction" text="Green" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_green.png"/>
-        <action id="AddNewTask" class="org.dubik.tasks.ui.actions.AddNewTaskAction" text="Add Task..." description="Add new task" icon="/org/dubik/tasks/ui/icons/add_task.png"/>
-        <action id="RemoveTaskAction" class="org.dubik.tasks.ui.actions.RemoveTaskAction" text="Remove Task" description="Remove selected task" icon="/org/dubik/tasks/ui/icons/remove_task.png"/>
-        <action id="TaskPropertyAction" class="org.dubik.tasks.ui.actions.TaskPropertyAction" text="Task properties" description="Task properties" icon="/actions/properties.png"/>
-        <action id="StartTaskAction" class="org.dubik.tasks.ui.actions.StartTaskAction" text="Start Task" description="Starts the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/start.png"/>
-        <action id="StopTaskAction" class="org.dubik.tasks.ui.actions.StopTaskAction" text="Stop Task" description="Stops the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/stop.png"/>
-        <action id="ExpandAllTasks" class="org.dubik.tasks.ui.actions.ExpandAllAction" text="Expand all" description="Expands all nodes in the tree" icon="/actions/expandall.png"/>
-        <action id="CollapseAllTasks" class="org.dubik.tasks.ui.actions.CollapseAllAction" text="Collapse all" description="Collapses all nodes in the tree" icon="/actions/collapseall.png"/>
+        <action id="TaskGroupByPriority" class="org.dubik.tasks.ui.actions.GroupByPriorityAction" text="按优先度排序" description="Group by priority"/>
+        <action id="MarkCompletedAction" class="org.dubik.tasks.ui.actions.MarkCompletedAction" text="标记为已解决" description="Mark task as completed" icon="/org/dubik/tasks/ui/icons/complete_task.png"/>
+        <action id="MarkNotCompletedAction" class="org.dubik.tasks.ui.actions.MarkNotCompletedAction" icon="/org/dubik/tasks/ui/icons/task.png" text="标记为未解决" description="Mark task as not completed"/>
+        <action id="HighlightTaskAction" class="org.dubik.tasks.ui.actions.HighlightTaskAction" text="高亮任务" description="Highlight task" icon="/org/dubik/tasks/ui/icons/star.png"/>
+        <action id="MoveTaskUpAction" class="org.dubik.tasks.ui.actions.MoveTaskUpAction" text="向上移动" icon="/actions/moveUp.png" description="Move task up"/>
+        <action id="MoveTaskDownAction" class="org.dubik.tasks.ui.actions.MoveTaskDownAction" text="向下移动" icon="/actions/moveDown.png" description="Move task down"/>
+        <action id="ToggleCompletedTaskVisibleAction" class="org.dubik.tasks.ui.actions.ToggleCompletedTaskVisibleAction" text="隐藏已解决的任务" icon="/actions/showHiddens.png" description="Hide/unhide completed tasks"/>
+        <action id="NewChangelistAction" class="org.dubik.tasks.ui.actions.NewChangeListAction" text="Create New Change List" description="根据任务创建新的更改列表" icon="/org/dubik/tasks/ui/icons/newchangelist.png"/>
+        <action id="ExportToTextFileAction" class="org.dubik.tasks.ui.actions.ExportToTextFileAction" icon="/actions/export.png" text="导出任务列表" description="Exports all tasks to a text file or clipboard."/>
+        <action id="HighlightRedTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightRedTaskAction" text="高亮任务显示为红色" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_red.png"/>
+        <action id="HighlightYellowTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightYellowTaskAction" text="高亮任务显示为黄色" description="Highlight task with yellow star" icon="/org/dubik/tasks/ui/icons/star_yellow.png"/>
+        <action id="HighlightGreenTaskAction" class="org.dubik.tasks.ui.actions.highlight.HighlightGreenTaskAction" text="高亮任务显示为绿色" description="Highlight task with red star" icon="/org/dubik/tasks/ui/icons/star_green.png"/>
+        <action id="AddNewTask" class="org.dubik.tasks.ui.actions.AddNewTaskAction" text="添加任务..." description="Add new task" icon="/org/dubik/tasks/ui/icons/add_task.png"/>
+        <action id="RemoveTaskAction" class="org.dubik.tasks.ui.actions.RemoveTaskAction" text="删除任务" description="Remove selected task" icon="/org/dubik/tasks/ui/icons/remove_task.png"/>
+        <action id="TaskPropertyAction" class="org.dubik.tasks.ui.actions.TaskPropertyAction" text="编辑任务" description="Task properties" icon="/actions/properties.png"/>
+        <action id="StartTaskAction" class="org.dubik.tasks.ui.actions.StartTaskAction" text="开始任务" description="Starts the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/start.png"/>
+        <action id="StopTaskAction" class="org.dubik.tasks.ui.actions.StopTaskAction" text="结束任务" description="Stops the actual time for the selected task" icon="/org/dubik/tasks/ui/icons/stop.png"/>
+        <action id="ExpandAllTasks" class="org.dubik.tasks.ui.actions.ExpandAllAction" text="全部展开" description="Expands all nodes in the tree" icon="/actions/expandall.png"/>
+        <action id="CollapseAllTasks" class="org.dubik.tasks.ui.actions.CollapseAllAction" text="全部收起" description="Collapses all nodes in the tree" icon="/actions/collapseall.png"/>
 
         <group id="TasksActionGroup">
             <reference ref="AddNewTask"/>
