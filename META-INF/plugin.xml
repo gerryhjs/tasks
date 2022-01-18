@@ -164,7 +164,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceInterface="org.dubik.tasks.settings.TaskSettingsService" serviceImplementation="org.dubik.tasks.settings.TaskSettingsService"/>
         <applicationService serviceInterface="org.dubik.tasks.model.ITaskModel" serviceImplementation="org.dubik.tasks.model.impl.TaskModel"/>
-        <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"/>
+<!--        <applicationConfigurable instance="org.dubik.tasks.ui.forms.TasksSettingsForm"/>-->
 
         <intentionAction>
             <className>org.dubik.tasks.intention.CreateTaskFromTodoIntention</className>

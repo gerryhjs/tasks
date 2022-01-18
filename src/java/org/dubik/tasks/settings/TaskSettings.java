@@ -42,7 +42,7 @@ public class TaskSettings extends PropertyChangeSupport  {
     }
 
     public boolean isEnableActualTime() {
-        return enableActualTime;
+        return true;
     }
 
     public void setEnableActualTime(boolean enableActualTime) {
