@@ -111,25 +111,16 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             if (settings.isEnableActualTime()) {
                 if (estimated != 0 || actual != 0) {
                     details.append("(");
-                }
-
-                if (estimated != 0) {
-                    details.append("Estimated: ");
-                    details.append(makeStringFromTime(estimated));
-                    if (actual != 0) {
-                        details.append(", ");
-                    }
-                }
-
-                if (actual != 0) {
-                    details.append("Actual: ");
                     details.append(makeStringFromTime(actual));
-                }
 
-                if (estimated != 0 || actual != 0) {
+
+                    if (estimated != 0) {
+                        details.append("/");
+                        details.append(makeStringFromTime(estimated));
+                    }
+
                     details.append(")");
                 }
-
             }
             else {
                 if (estimated != 0) {
@@ -140,14 +131,15 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             }
         }
         else {
-            details.append("(").append(totalTasks).append(" Tasks, ").append(task.getCompletionRatio()).append("% Completed");
-            if (estimated != 0) {
-                details.append(", Estimated: ").append(makeStringFromTime(estimated));
-            }
+            details.append("(").append(totalTasks).append("个任务, 完成: ").append(task.getCompletionRatio()).append("%");
 
-            if (settings.isEnableActualTime() && actual != 0) {
-                details.append(", Actual: ").append(makeStringFromTime(actual));
-            }
+
+//            if (estimated != 0 || actual != 0) {
+//                details.append(", ").append(makeStringFromTime(actual));
+//                if (estimated != 0) {
+//                    details.append("/").append(makeStringFromTime(estimated));
+//                }
+//            }
 
             details.append(")");
         }
@@ -190,10 +182,10 @@ public class TaskTreeCellRenderer extends ColoredTreeCellRenderer {
             timeStr.append(Integer.toString(hours));
             timeStr.append("h");
         }
-
-        timeStr.append(Integer.toString(minutes));
-        timeStr.append("m");
-
+        if ((minutes != 0) || (inMinutes == 0)) {
+            timeStr.append(Integer.toString(minutes));
+            timeStr.append("m");
+        }
         return timeStr.toString();
     }
 
