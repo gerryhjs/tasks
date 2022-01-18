@@ -127,8 +127,12 @@ public class TasksProjectComponent implements ProjectComponent {
     }
 
     public void projectClosed() {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        toolWindowManager.unregisterToolWindow(TasksProjectComponent.TASKS_ID);
+        try {
+            ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+            toolWindowManager.unregisterToolWindow(TasksProjectComponent.TASKS_ID);
+        }catch (Exception ignored){
+
+        }
     }
 
     public TaskController getTaskController() {

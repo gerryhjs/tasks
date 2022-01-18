@@ -254,8 +254,12 @@ public class TaskTreeModel implements TreeModel, ITaskModelChangeListener {
     }
 
     public void fireTreeNodesInserted(TreeModelEvent e) {
-        for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
-            listener.treeNodesInserted(e);
+        try {
+            for (TreeModelListener listener : listeners.getListeners(TreeModelListener.class)) {
+                listener.treeNodesInserted(e);
+            }
+        }catch (Exception ignored){
+
         }
     }
 
