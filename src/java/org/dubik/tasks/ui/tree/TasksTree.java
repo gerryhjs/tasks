@@ -35,7 +35,7 @@ public class TasksTree extends Tree {
         setShowsRootHandles(true);
         setRootVisible(false);
         setCellRenderer(new TaskTreeCellRenderer());
-        setEditable(true);
+        setEditable(false);
         setInvokesStopCellEditing(true);
 
         addTreeSelectionListener(taskController);
